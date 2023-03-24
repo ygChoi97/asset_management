@@ -1,0 +1,51 @@
+.underline {
+    width: 200px;
+    height: 2em;
+    border: 1px solid;
+    border-left-width:0;
+    border-right-width:0;
+    border-top-width:0;
+    border-bottom-width:1;
+    margin:20px 50px;
+     outline: none;
+}
+
+.selectItem {
+  width : 205px; /* 원하는 너비설정 */
+  padding: 1em .5em; /* 여백으로 높이 설정 */
+  font-family: inherit;  /* 폰트 상속 */
+  background: url(dropdown.jfif) no-repeat 95% 50%; /* 네이티브 화살표 대체 */  
+  border-left-width:0;
+  border-right-width:0;
+  border-top-width:0;
+  border-bottom-width:2px;
+  outline: none;
+  -webkit-appearance: none; /* 네이티브 외형 감추기 */
+  -moz-appearance: none;
+  appearance: none;
+  margin:0px 50px;
+}
+
+.btnSearch {
+    width: 10em;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+    background-color: rgba(54, 54, 207, 0.911);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 1rem 1rem;
+    transition: background-color 0.1s ease;
+}
+
+.btnSearch:hover {
+    background-color: rgba(0, 0, 139, 0.712);
+  }
+
+.btnSearch:active {
+    background-color: rgb(80, 124, 201);
+    transform: translateY(2px);
+  }
