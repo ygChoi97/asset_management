@@ -1,7 +1,15 @@
+body {
+    padding-top: 50px;
+}
 .menu {
+    position: fixed;
+    top: 0;
+    /* width: 100% */
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: center;
-    background-color: #bb2e2e;
+    background-color: #8f4288;
 }
 
 .menu-list {
@@ -12,7 +20,7 @@
 }
 
 .menu-item {
-    margin-right: 24px;
+    margin: 0 100px;
 }
 
 .menu-link {

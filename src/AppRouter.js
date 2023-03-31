@@ -1,10 +1,9 @@
 import React from "react";
-// 라우팅에 사용할 라이브러리
 import { Routes, Route } from "react-router-dom";
-import App from "./App";
 import Menu from "./Menu";
-import Start from "./Start";
-
+import Provision from "./Provision";
+import Pws from "./Pws";
+import Return from "./Return";
 
 const AppRouter = () => {
 
@@ -13,10 +12,10 @@ const AppRouter = () => {
             <Menu />
             <Routes>
                 {/* '/' 경로로 요청하면 App컴포넌트를 렌더링하세요 */}
-                <Route exact path="/" element={<Start />} />
+                <Route exact path="/" element={<Pws />} />
                 {/* '/login' 경로로 요청하면 Login컴포넌트를 렌더링하세요 */}
-                <Route path="/provide" element={<App />} />
-                <Route path="/return" element={<App />} />
+                <Route path="/provision" element={<Provision />} />
+                <Route path="/return" element={<Return />} />
 
             </Routes>    
         </>

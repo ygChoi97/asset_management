@@ -11,23 +11,23 @@ export default function Menu() {
                         to="/"
                         className={`menu-link${location.pathname === '/' ? ' menu-link--active' : ''}`}
                     >
-                        Home
+                        조회
                     </Link>
                 </li>
                 <li className="menu-item">
                     <Link
-                        to="/about"
-                        className={`menu-link${location.pathname === '/about' ? ' menu-link--active' : ''}`}
+                        to="/provision"
+                        className={`menu-link${location.pathname === '/provision' ? ' menu-link--active' : ''}`}
                     >
-                        About
+                        지급
                     </Link>
                 </li>
                 <li className="menu-item">
                     <Link
-                        to="/contact"
-                        className={`menu-link${location.pathname === '/contact' ? ' menu-link--active' : ''}`}
+                        to="/return"
+                        className={`menu-link${location.pathname === '/return' ? ' menu-link--active' : ''}`}
                     >
-                        Contact
+                        반납
                     </Link>
                 </li>
             </ul>

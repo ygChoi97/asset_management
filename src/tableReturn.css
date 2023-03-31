@@ -1,21 +1,25 @@
-.styled-table {
+body {
+  height: 100%;
+}
+
+.return-table {
   border-collapse: collapse;
-  margin: 25px 0;
+  margin: 0 0;
   font-size: 0.9rem;
   font-family: sans-serif;
-  width: 200%;
+  width: 100%;
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
  
-.styled-table thead tr {
+.return-table thead tr {
   background-color: #009879;
   color: #ffffff;
   text-align: left;
-  height: 50px;
+  height: 30px;
 }
 
-.styled-table th {
+.return-table th {
   border: 1px solid #dddddd;
   padding: 8px;
   text-align: center;
@@ -27,119 +31,87 @@
   background-color: #009879 !important;
 }
 
-.styled-table td {
+.return-table td {
     padding: 12px 15px;
     border: 1px solid #dddddd;
     font-size: 0.7rem;
 }
 
-/* 사용구분 */
-.styled-table td:nth-child(1) {
-  width: 40px;
+/* 번호 */
+.return-table td:nth-child(1) {
+  width: 30px;
 }
-/* 회사 */
-.styled-table td:nth-child(2) {
-  width: 40px;
+/* 인계팀 */
+.return-table td:nth-child(2) {
+  width: 90px;
 }
-/* 본부 */
-.styled-table td:nth-child(3) {
-  width: 80px;
-}
-/* 센터 */
-.styled-table td:nth-child(4) {
-  width: 100px;
-}
-/* 관리부서 */
-.styled-table td:nth-child(5) {
-  width: 100px;
-}
-/* 사용자 */
-.styled-table td:nth-child(6) {
+/* 인계자 */
+.return-table td:nth-child(3) {
   width: 50px;
 }
-/* 사용자ID */
-.styled-table td:nth-child(7) {
-  width: 65px;
+/* 인계자 사번 */
+.return-table td:nth-child(4) {
+  width: 70px;
 }
-/* 코트트센터CD */
-.styled-table td:nth-child(8) {
-  width: 120px;
+/* 인수팀 */
+.return-table td:nth-child(5) {
+  width: 90px;
 }
-/* 모델명 */
-.styled-table td:nth-child(9) {
+/* 담당자 */
+.return-table td:nth-child(6) {
   width: 50px;
 }
 /* 자산번호 */
-.styled-table td:nth-child(10) {
-  width: 55px;
+.return-table td:nth-child(7) {
+  width: 50px;
 }
 /* 자산관리번호 */
-.styled-table td:nth-child(11) { 
-  width: 90px;
+.return-table td:nth-child(8) {
+  width: 80px;
 }
 /* S/N */
-.styled-table td:nth-child(12) {
+.return-table td:nth-child(9) {
+  width: 30px;
+}
+/* 모델명 */
+.return-table td:nth-child(10) {
   width: 40px;
 }
-/* 그래픽카드 */
-.styled-table td:nth-child(13) {
-  width: 100px;
+/* 현재위치 */
+.return-table td:nth-child(11) { 
+  width: 70px;
 }
-/* 모니터 */
-.styled-table td:nth-child(14) {
-  width: 60px;
-}
-/* 지역 */
-.styled-table td:nth-child(15) {
-  width: 65px;
-}
-/* 건물명 */
-.styled-table td:nth-child(16) {
-  width: 120px;
-}
-/* 층수 */
-.styled-table td:nth-child(17) {
-  width: 40px;
-}
-/* 상세위치 */
-.styled-table td:nth-child(18) {
-  width: 90px;
-}
-/* 구매용도 */
-.styled-table td:nth-child(19) {
-  width: 80px;
-}
-/* 사용용도 */
-.styled-table td:nth-child(20) {
-  width: 80px;
-}
-/* 상세업무 */
-.styled-table td:nth-child(21) {
-  width: 200px;
-}
-/* 도입년월 */
-.styled-table td:nth-child(22) {
-  width: 90px;
+/* 반납사유 */
+.return-table td:nth-child(12) {
+  width: 55px;
 }
 /* 비고 */
-.styled-table td:nth-child(23) {
-  width: 130px;
+.return-table td:nth-child(13) {
+  width: 100px;
+}
+/* 퇴직일 */
+.return-table td:nth-child(14) {
+  width: 70px;
+}
+/* 반납일자 */
+.return-table td:nth-child(15) {
+  width: 70px;
 }
 
-.styled-table tbody tr {
+.return-table tbody tr {
   border-bottom: 1px solid #dddddd;
-  height: 50px;
+  height: 30px;
 }
 
-.styled-table tbody tr:nth-of-type(even) {
+.return-table tbody tr:nth-of-type(even) {
   background-color: #f3f3f3;
 }
 
-.styled-table tbody tr:last-of-type {
+.return-table tbody tr:last-of-type {
   border-bottom: 2px solid #009879;
 }
 
-.styled-table tbody tr.active-row {
+.return-table tbody tr.active-row {
   font-weight: bold;
   color: #009879;
 }

@@ -6,13 +6,13 @@
     border-right-width:0;
     border-top-width:0;
     border-bottom-width:1;
-    margin:20px 50px;
+    margin:0.5rem 50px;
      outline: none;
 }
 
 .selectItem {
   width : 205px; /* 원하는 너비설정 */
-  padding: 1em .5em; /* 여백으로 높이 설정 */
+  padding: 0.5rem .5rem; /* 여백으로 높이 설정 */
   font-family: inherit;  /* 폰트 상속 */
   background: url(dropdown.jfif) no-repeat 95% 50%; /* 네이티브 화살표 대체 */  
   border-left-width:0;

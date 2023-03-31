@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
-import { Search, Search2 } from "./Search";
-import "./styles.css";
+import { Search, SearchProvision, SearchPws } from "./Search";
+import "./tableProvision.css";
 
-function Table({ columns, data, dataWasFiltered }) {
+function TableProvision({ columns, data, dataWasFiltered }) {
     
     const {
         getTableProps,
@@ -38,13 +38,13 @@ function Table({ columns, data, dataWasFiltered }) {
     useEffect(() => { dataWasFiltered(rows);}, [rows, dataWasFiltered]);
 
    
-    console.log('Table 랜더링');
+    console.log('Provision Table 랜더링');
     return (
         <>
-            {/* <Search onSubmit={setGlobalFilter} /> */}
-            <Search2 column1={'department'} column2={'model'} column3={'uptake'} column4={'userid'} column5={'idasset'} column6={'area'} column7={'username'} column8={'sn'} onSubmit={setFilter}/>
+            <SearchProvision column1={'id'} column2={'department'} column3={'realname'} column4={'idasset'} column5={'sn'} column6={'areainstall'} column7={'model'} column8={'provisiondate'} onSubmit={setFilter}/>
             {/* {searchs} */}
-            <table className="styled-table" {...getTableProps()}>
+            <div style={{width:'100%', height: '52vh', overflow: 'auto'}}>
+            <table className="provision-table" {...getTableProps()}>
                 <thead>
                     {/* <tr>            
                         <th
@@ -96,6 +96,7 @@ function Table({ columns, data, dataWasFiltered }) {
                     })}
                 </tbody>
             </table>
+            </div>
             <div style={{ display: 'flex', justifyContent: 'center', margin: '0.3em' }}>
                 <button className="btnPageSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
                     {"<<"}
@@ -147,4 +148,4 @@ function Table({ columns, data, dataWasFiltered }) {
     );
 }
 
-export default Table;
+export default TableProvision;

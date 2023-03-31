@@ -1,9 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Start from './Start';
 import { BrowserRouter } from 'react-router-dom';
 import AppRouter from './AppRouter';
 {/* <React.StrictMode>

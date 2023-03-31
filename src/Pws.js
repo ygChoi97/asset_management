@@ -1,14 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import "./start.css";
-import faker from "faker";
-import Table from "./Table";
-
-faker.seed(100);
-faker.locale = 'ar';
+import { useEffect, useRef, useState } from "react";
+import "./btnImportExport.css";
+import { SearchPws } from "./Search";
+import TablePws from "./TablePws";
 
 const BASE_URL = 'http://localhost:8181/api/pws';
 
-function Start() {
+function Pws() {
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
 
@@ -19,35 +16,6 @@ function Start() {
   const [filtered, setFiltered] = useState(null);
   
   let filteredData = null;
-  /* const columns = useMemo(
-    () => [
-      {
-        accessor: "name",
-        Header: "Name",
-      },
-      {
-        accessor: "email",
-        Header: "Email",
-      },
-      {
-        accessor: "phone",
-        Header: "Phone",
-      },
-    ],
-    []
-  ); */
-
-  /* const data = useMemo(
-    () =>
-      Array(1000)
-        .fill()
-        .map(() => ({
-          name: faker.name.lastName() + faker.name.firstName(),
-          email: faker.address.cityName(),
-          phone: faker.phone.phoneNumber(),
-        })),
-    []
-  ); */
 
   function dateFormat(date) {
     let month = date.getMonth() + 1;
@@ -68,6 +36,7 @@ function Start() {
   useEffect(() => {
     fetch(BASE_URL + `/menu`)
       .then(res => {
+        console.log(res);
         if (!res.ok) {
           throw new Error(res.status);
         }
@@ -139,7 +108,7 @@ function Start() {
         workbook.eachSheet((sheet, id) => {        
           for(let c=1; c<=sheet.getRow(1).cellCount; c++) {
             if(columns[c-1].Header !== sheet.getRow(1).getCell(c).toString()) {
-              console.log('You had selected wrong excel file.');
+              alert('You had selected wrong excel file.');
               return;
             }
           }
@@ -189,30 +158,7 @@ function Start() {
     }
   }
 
-  /* useEffect(() => {
-    fetch(BASE_URL  + `/import`, {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify(dbData)
-    })
-      .then(res => {
-        if (!res.ok) {
-          throw new Error(res.status);
-        }
-        else {
-          return res.json();
-        }
-      })
-      .then(json => {
-        console.log(json);
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  }, [dbData]); */
-
   const importHandler = e => {
-    // const $fileInput = document.getElementById('profileImg');
     $fileInput.current.click();
   };
 
@@ -300,17 +246,10 @@ function Start() {
         col.font = {name: 'Arial Black', size: 9};
       }
 
-      
-
       workbook.xlsx.writeBuffer().then((data) => {
         const blob = new Blob([data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
-        const url = window.URL.createObjectURL(blob);
-        console.log(url);
-        const anchor = document.createElement('a');
-        anchor.href = url;
-        anchor.download = `테스트.xlsx`;
-        anchor.click();
-        window.URL.revokeObjectURL(url);
+        saveFile(blob, 'pwsList');
+
       })
 
     } catch (error) {
@@ -319,23 +258,33 @@ function Start() {
 
   };
   
-  // const dataWasFiltered = x => setFiltered(x);
+  async function saveFile(blob, filename) {
+    const opts = {
+        types: [{
+          description: 'Excel file',
+          accept: { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ['.xlsx'] },
+        }],
+        suggestedName: 'pwsList',
+      };
+      let handle = await window.showSaveFilePicker(opts);
+      let writable = await handle.createWritable();
+      await writable.write(blob);
+      writable.close();
+    
+  }
   
   const dataWasFiltered = x => {
     filteredData = [...x];
   };
 
-  //const dataWasFiltered = useCallback((x) => setFiltered(x), [filtered]);
-  // useEffect(()=>{dataWasFiltered();},[dataWasFiltered]);
-
   return (
-    <>
+    <div style={{}}>
       <button className="btnImport" onClick={importHandler}>Import data to DB</button>
       <button className="btnImport" onClick={exportHandler}>Export excel from DB</button>
-      <input type="file" accept=".xls,.xlsx" onChange={readExcel} ref={$fileInput} hidden></input>
-      <Table columns={columns} data={data} dataWasFiltered = { dataWasFiltered }/>
-    </>
+      <input type="file" accept=".xls,.xlsx" onChange={readExcel} ref={$fileInput} hidden></input>      
+      <TablePws columns={columns} data={data} dataWasFiltered = { dataWasFiltered }/>
+    </div>
   );
 }
 
-export default Start;
+export default Pws;
