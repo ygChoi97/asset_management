@@ -1,10 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import "./btnImportExport.css";
+import "../css/btnImportExport.css";
 import TableProvision from "./TableProvision";
+import UseConfirm from "./UseConfirm";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const BASE_URL = 'http://localhost:8181/api/provision';
 
 function Provision() {
+    const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
+
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
 
@@ -13,7 +17,7 @@ function Provision() {
     const $fileInput = useRef();
 
     const [filtered, setFiltered] = useState(null);
-
+    const [, , getConfirmationOK, ConfirmationOK] = UseConfirm();
     let filteredData = null;
 
     function dateFormat(date) {
@@ -32,8 +36,13 @@ function Provision() {
         return date.getFullYear() + '-' + month + '-' + day;
     }
 
-    const getAllDataFromDB= () => {
-        fetch(BASE_URL)
+    const getAllDataFromDB = () => {
+        fetch(BASE_URL, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + ACCESS_TOKEN
+            }
+        })
             .then(res => {
                 if (!res.ok) {
                     throw new Error(res.status);
@@ -46,7 +55,6 @@ function Provision() {
                 console.log(json);
                 let copyDatas = [];
                 for (let i = 0; i < json.count; i++) {
-                    console.log(json.pwsProvisionDtos[i]);
                     let copyData = {};
                     copyData = json.pwsProvisionDtos[i];
                     if (json.pwsProvisionDtos[i].period != null || json.pwsProvisionDtos[i].period != undefined) {
@@ -78,9 +86,21 @@ function Provision() {
             });
     }
     useEffect(() => {
-        fetch(BASE_URL + `/menu`)
+        fetch(BASE_URL + `/menu`, {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + ACCESS_TOKEN
+            }
+        })
             .then(res => {
-                if (!res.ok) {
+                if (res.status === 403) {
+                    setTimeout(() => {
+                        // alert('로그인이 필요한 서비스입니다.');
+                        // window.location.href = '/signin';
+                        // navigate('/signin')
+                    }, 500)
+                    return;
+                } else if (!res.ok) {
                     throw new Error(res.status);
                 }
                 else {
@@ -91,8 +111,10 @@ function Provision() {
 
                 let copyColumns = [];
                 for (let i = 0; i < json.length; i++) {
-                    let copyColumn = { accessor: '', Header: '' };
+                    let copyColumn = { accessor: '', Header: '', filter: '' };
                     copyColumn.accessor = json[i].column_name;
+                    if (copyColumn.accessor === 'areainstall')
+                        copyColumn.filter = 'equals';
                     copyColumn.Header = json[i].column_comment;
                     copyColumns.push(copyColumn);
                 }
@@ -119,7 +141,7 @@ function Provision() {
                 workbook.eachSheet((sheet, id) => {
                     for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
                         if (columns[c - 1].Header !== sheet.getRow(1).getCell(c).toString()) {
-                            alert('You had selected wrong excel file.');
+                            getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
                             return;
                         }
                     }
@@ -163,7 +185,10 @@ function Provision() {
 
                     fetch(BASE_URL + `/import`, {
                         method: 'POST',
-                        headers: { 'Content-type': 'application/json' },
+                        headers: {
+                            'Content-type': 'application/json',
+                            'Authorization': 'Bearer ' + ACCESS_TOKEN
+                        },
                         body: JSON.stringify(tempDbData)
                     })
                         .then(res => {
@@ -176,6 +201,7 @@ function Provision() {
                         })
                         .then(json => {
                             getAllDataFromDB();
+                            getConfirmationOK(`${file1.name} 를 DB에 정상적으로 업데이트했습니다.`);
                             console.log(json);
                         })
                         .catch(error => {
@@ -213,10 +239,10 @@ function Provision() {
 
             // addWorksheet() 함수를 사용하여 엑셀 시트를 추가한다.
             // 엑셀 시트는 순차적으로 생성된다.
-            workbook.addWorksheet('반납');
+            workbook.addWorksheet('PWS지급');
 
             // 1. getWorksheet() 함수에서 시트 명칭 전달
-            const sheetOne = workbook.getWorksheet('반납');
+            const sheetOne = workbook.getWorksheet('PWS지급');
 
             sheetOne.columns = columns.map(item => {
                 let obj = {};
@@ -276,7 +302,7 @@ function Provision() {
 
             workbook.xlsx.writeBuffer().then((data) => {
                 const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-                saveFile(blob, 'pws장비지급리스트');
+                saveFile(blob, 'PWS지급리스트');
 
             })
 
@@ -292,7 +318,7 @@ function Provision() {
                 description: 'Excel file',
                 accept: { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ['.xlsx'] },
             }],
-            suggestedName: 'pws장비지급리스트',
+            suggestedName: 'PWS지급리스트',
         };
         let handle = await window.showSaveFilePicker(opts);
         let writable = await handle.createWritable();
@@ -307,11 +333,13 @@ function Provision() {
 
     return (
         <>
+            <ConfirmationOK />
             <button className="btnImport" onClick={importHandler}>Import data to DB</button>
             <button className="btnImport" onClick={exportHandler}>Export excel from DB</button>
             <input type="file" accept=".xls,.xlsx" onChange={readExcel} ref={$fileInput} hidden></input>
             <TableProvision columns={columns} data={data} dataWasFiltered={dataWasFiltered} />
         </>
+
     );
 }
 

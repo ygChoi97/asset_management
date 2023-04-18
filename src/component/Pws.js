@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import "./btnImportExport.css";
-import { SearchPws } from "./Search";
+import "../css/btnImportExport.css";
 import TablePws from "./TablePws";
+import UseConfirm from "./UseConfirm";
+import { Navigate, useNavigate } from "react-router-dom";
+import Menu from "./Menu";
+import FileOpen from "./open-file_40455.png"
 
 const BASE_URL = 'http://localhost:8181/api/pws';
 
 function Pws() {
+  const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
+
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
 
@@ -14,7 +19,7 @@ function Pws() {
   const $fileInput = useRef();
 
   const [filtered, setFiltered] = useState(null);
-  
+  const [, , getConfirmationOK, ConfirmationOK] = UseConfirm();
   let filteredData = null;
 
   function dateFormat(date) {
@@ -33,31 +38,13 @@ function Pws() {
     return date.getFullYear() + '-' + month + '-' + day;
   }
 
-  useEffect(() => {
-    fetch(BASE_URL + `/menu`)
-      .then(res => {
-        console.log(res);
-        if (!res.ok) {
-          throw new Error(res.status);
+  const getAllDataFromDB = () => {
+    fetch(BASE_URL, {
+        method: 'GET',
+        headers: {
+           'Authorization': 'Bearer ' + ACCESS_TOKEN 
         }
-        else {
-          return res.json();
-        }
-      })
-      .then(json => {
-        
-        let copyColumns = [];
-        for (let i = 0; i < json.length; i++) {
-          let copyColumn = { accessor: '', Header: '' };
-          copyColumn.accessor = json[i].column_name;
-          copyColumn.Header = json[i].column_comment;
-          copyColumns.push(copyColumn);
-        }
-        setColumns(copyColumns);
-        console.log('useEffect() fetch - /menu', copyColumns);
-      });
-
-    fetch(BASE_URL)
+     })
       .then(res => {
         if (!res.ok) {
           throw new Error(res.status);
@@ -80,16 +67,57 @@ function Pws() {
           copyDatas.push(copyData);
         }
         setData(copyDatas);
-
-        //setLoading(false);
-        //setContents(json.pwsDtos);
-        // console.log(copyContents[0]);
-        // console.log(copyContents[json.count-1]);
         console.log('all data : ', copyDatas);
       })
       .catch(error => {
         console.log(error);
       });
+  }
+
+  useEffect(() => {
+    fetch(BASE_URL + `/menu`, {
+      method: 'GET',
+      headers: {
+         'Authorization': 'Bearer ' + ACCESS_TOKEN 
+      }
+   })
+      .then(res => {
+        console.log(res);
+        
+        if (res.status === 403) {
+          
+          setTimeout(() => {
+            
+            alert('로그인이 필요한 서비스입니다.');
+            // window.location.href = '/login';
+            // navigate('/login')
+          }, 500)
+          return;
+        } else if (!res.ok) {
+          throw new Error(res.status);
+        }
+        else {
+          return res.json();
+        }
+      })
+      .then(json => {
+        
+        let copyColumns = [];
+        for (let i = 0; i < json.length; i++) {
+          if(json[i].column_name === 'id') continue;
+          let copyColumn = { accessor: '', Header: '', filter: '' };
+          copyColumn.accessor = json[i].column_name;
+          copyColumn.accessor = json[i].column_name;
+          if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area')
+            copyColumn.filter = 'equals';
+          copyColumn.Header = json[i].column_comment;
+          copyColumns.push(copyColumn);
+        }
+        setColumns(copyColumns);
+        console.log('useEffect() fetch - /menu', copyColumns);
+      });
+
+    getAllDataFromDB();
   }, []);
 
   const readExcel = async (e) => {
@@ -100,43 +128,44 @@ function Pws() {
     const wb = new ExcelJS.Workbook();
     const reader = new FileReader();
     reader.readAsArrayBuffer(file1);
-    
+
     reader.onload = () => {
       const buffer = reader.result;
       wb.xlsx.load(buffer).then(workbook => {
         console.log(workbook, 'workbook instance')
-        workbook.eachSheet((sheet, id) => {        
-          for(let c=1; c<=sheet.getRow(1).cellCount; c++) {
-            if(columns[c-1].Header !== sheet.getRow(1).getCell(c).toString()) {
-              alert('You had selected wrong excel file.');
+        workbook.eachSheet((sheet, id) => {
+          for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
+            if (columns[c - 1].Header !== sheet.getRow(1).getCell(c).toString()) {
+              getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
               return;
             }
           }
 
           let tempDbData = [];
-          for(let r=2; r<=sheet.rowCount; r++ ) {
+          for (let r = 2; r <= sheet.rowCount; r++) {
             let obj = {};
-            for(let c=1; c<=sheet.getRow(1).cellCount; c++) {
-              if(columns[c-1].accessor === 'introductiondate')
-                if(sheet.getRow(r).getCell(c).toString() !== '') {
-                  obj[columns[c-1].accessor] = new Date(sheet.getRow(r).getCell(c));
+            for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
+              if (columns[c - 1].accessor === 'introductiondate')
+                if (sheet.getRow(r).getCell(c).toString() !== '') {
+                  obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
                 }
                 else
-                  obj[columns[c-1].accessor] = null;
-                
-              else if(sheet.getRow(r).getCell(c).toString() == '_x000d_' || sheet.getRow(r).getCell(c).toString() == '')
-                obj[columns[c-1].accessor] = null;
+                  obj[columns[c - 1].accessor] = null;
+
+              else if (sheet.getRow(r).getCell(c).toString() == '_x000d_' || sheet.getRow(r).getCell(c).toString() == '')
+                obj[columns[c - 1].accessor] = null;
               else
-                obj[columns[c-1].accessor] = sheet.getRow(r).getCell(c).toString();              
+                obj[columns[c - 1].accessor] = sheet.getRow(r).getCell(c).toString();
             }
             tempDbData.push(obj);
           }
           console.log(tempDbData);
           //setDbData(tempDbData);
-          
-          fetch(BASE_URL  + `/import`, {
+
+          fetch(BASE_URL + `/import`, {
             method: 'POST',
-            headers: { 'Content-type': 'application/json' },
+            headers: { 'Content-type': 'application/json',
+                      'Authorization': 'Bearer ' + ACCESS_TOKEN },
             body: JSON.stringify(tempDbData)
           })
             .then(res => {
@@ -148,6 +177,8 @@ function Pws() {
               }
             })
             .then(json => {
+              getAllDataFromDB();
+              getConfirmationOK(`${file1.name} 를 DB에 정상적으로 업데이트했습니다.`)
               console.log(json);
             })
             .catch(error => {
@@ -163,7 +194,7 @@ function Pws() {
   };
 
   const exportHandler = e => {
-    const datas = filteredData.map(item=>item.values);
+    const datas = filteredData.map(item => item.values);
     console.log(datas);
 
     const Excel = require("exceljs");
@@ -185,27 +216,27 @@ function Pws() {
 
       // addWorksheet() 함수를 사용하여 엑셀 시트를 추가한다.
       // 엑셀 시트는 순차적으로 생성된다.
-      workbook.addWorksheet('pws list');
+      workbook.addWorksheet('PWS현황');
 
       // 1. getWorksheet() 함수에서 시트 명칭 전달
-      const sheetOne = workbook.getWorksheet('pws list');
+      const sheetOne = workbook.getWorksheet('PWS현황');
 
-      sheetOne.columns = columns.map(item=> {
-        let obj ={};
+      sheetOne.columns = columns.map(item => {
+        let obj = {};
         obj.header = item.Header;
         obj.key = item.accessor;
         obj.width = 20;
         // 스타일 설정
         obj.style = {
           // Font 설정
-          font: {name: 'Arial Black', size: 10},
+          font: { name: 'Arial Black', size: 10 },
           // 정렬 설정
           alignment: {
             vertical: 'middle',
             horizontal: 'center',
             wrapText: true
           },
-          
+
           // Borders 설정
           // border: {
           //   top: {style:'thin'},
@@ -229,26 +260,26 @@ function Pws() {
         bottom: { style: 'thin' },
         right: { style: 'thin' }
       };
-      
-      datas.map((item, index)=> {
+
+      datas.map((item, index) => {
         sheetOne.addRow(item);
-      // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
-      for(let loop = 1; loop <= columns.length; loop++) {
-        const col = sheetOne.getRow(index + 1).getCell(loop);
-        col.border = borderStyle;
-        col.font = {name: 'Arial Black', size: 9};
-      }
+        // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
+        for (let loop = 1; loop <= columns.length; loop++) {
+          const col = sheetOne.getRow(index + 1).getCell(loop);
+          col.border = borderStyle;
+          col.font = { name: 'Arial Black', size: 9 };
+        }
       });
 
-      for(let loop = 1; loop <= columns.length; loop++) {
+      for (let loop = 1; loop <= columns.length; loop++) {
         const col = sheetOne.getRow(sheetOne.rowCount).getCell(loop);
         col.border = borderStyle;
-        col.font = {name: 'Arial Black', size: 9};
+        col.font = { name: 'Arial Black', size: 9 };
       }
 
       workbook.xlsx.writeBuffer().then((data) => {
-        const blob = new Blob([data], {type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
-        saveFile(blob, 'pwsList');
+        const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+        saveFile(blob, 'PWS현황리스트');
 
       })
 
@@ -257,33 +288,40 @@ function Pws() {
     }
 
   };
-  
+
   async function saveFile(blob, filename) {
     const opts = {
-        types: [{
-          description: 'Excel file',
-          accept: { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ['.xlsx'] },
-        }],
-        suggestedName: 'pwsList',
-      };
-      let handle = await window.showSaveFilePicker(opts);
-      let writable = await handle.createWritable();
-      await writable.write(blob);
-      writable.close();
-    
+      types: [{
+        description: 'Excel file',
+        accept: { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ['.xlsx'] },
+      }],
+      suggestedName: 'PWS현황리스트',
+    };
+    let handle = await window.showSaveFilePicker(opts);
+    let writable = await handle.createWritable();
+    await writable.write(blob);
+    writable.close();
+
   }
-  
+
   const dataWasFiltered = x => {
     filteredData = [...x];
   };
 
   return (
-    <div style={{}}>
-      <button className="btnImport" onClick={importHandler}>Import data to DB</button>
-      <button className="btnImport" onClick={exportHandler}>Export excel from DB</button>
-      <input type="file" accept=".xls,.xlsx" onChange={readExcel} ref={$fileInput} hidden></input>      
-      <TablePws columns={columns} data={data} dataWasFiltered = { dataWasFiltered }/>
-    </div>
+    <>
+
+          <ConfirmationOK />
+          <button className="btnImport" onClick={importHandler}>
+            {/* <img style={{width: '100%'}} src={FileOpen} alt="Image" /> */}
+            <span>Import data to DB</span>
+          </button>
+          <button className="btnImport" onClick={exportHandler}>Export excel from DB</button>
+          <input type="file" accept=".xls,.xlsx" onChange={readExcel} ref={$fileInput} hidden></input>
+          <TablePws columns={columns} data={data} dataWasFiltered={dataWasFiltered} />
+        </>
+
+
   );
 }
 

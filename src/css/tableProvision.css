@@ -2,28 +2,28 @@ body {
   height: 100%;
 }
 
-.return-table {
+.provision-table {
   border-collapse: collapse;
   margin: 0 0;
   font-size: 0.9rem;
   font-family: sans-serif;
-  width: 100%;
+  width: 200%;
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
  
-.return-table thead tr {
+.provision-table thead tr {
   background-color: #009879;
   color: #ffffff;
   text-align: left;
   height: 30px;
 }
 
-.return-table th {
+.provision-table th {
   border: 1px solid #dddddd;
   padding: 8px;
   text-align: center;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   /* min-width: 20%;
   max-width: 20%; */
   position: sticky;
@@ -31,87 +31,116 @@ body {
   background-color: #009879 !important;
 }
 
-.return-table td {
-    padding: 12px 15px;
+.provision-table td {
+    padding: 4px 10px;
     border: 1px solid #dddddd;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
 }
 
 /* 번호 */
-.return-table td:nth-child(1) {
+.provision-table td:nth-child(1) {
   width: 30px;
 }
-/* 인계팀 */
-.return-table td:nth-child(2) {
-  width: 90px;
+/* 부서명 */
+.provision-table td:nth-child(2) {
+  width: 100px;
 }
-/* 인계자 */
-.return-table td:nth-child(3) {
+/* 코트트센터CD */
+.provision-table td:nth-child(3) {
+  width: 100px;
+}
+/* 실명 */
+.provision-table td:nth-child(4) {
   width: 50px;
 }
-/* 인계자 사번 */
-.return-table td:nth-child(4) {
-  width: 70px;
+/* 센터 */
+.provision-table td:nth-child(5) {
+  width: 80px;
 }
-/* 인수팀 */
-.return-table td:nth-child(5) {
-  width: 90px;
+/* 본부 */
+.provision-table td:nth-child(6) {
+  width: 80px;
 }
-/* 담당자 */
-.return-table td:nth-child(6) {
-  width: 50px;
+/* 전산담당자 */
+.provision-table td:nth-child(7) {
+  width: 60px;
+}
+/* 사번 */
+.provision-table td:nth-child(8) {
+  width: 40px;
 }
 /* 자산번호 */
-.return-table td:nth-child(7) {
+.provision-table td:nth-child(9) {
   width: 50px;
 }
 /* 자산관리번호 */
-.return-table td:nth-child(8) {
-  width: 80px;
+.provision-table td:nth-child(10) {
+  width: 75px;
 }
+
 /* S/N */
-.return-table td:nth-child(9) {
-  width: 30px;
-}
-/* 모델명 */
-.return-table td:nth-child(10) {
+.provision-table td:nth-child(11) {
   width: 40px;
 }
-/* 현재위치 */
-.return-table td:nth-child(11) { 
-  width: 70px;
+/* 담당자 */
+.provision-table td:nth-child(12) {
+  width: 50px;
 }
-/* 반납사유 */
-.return-table td:nth-child(12) {
-  width: 55px;
+/* 사번 */
+.provision-table td:nth-child(13) {
+  width: 40px;
+}
+/* 설치지역 */
+.provision-table td:nth-child(14) {
+  width: 50px;
+}
+/* 설치장소 */
+.provision-table td:nth-child(15) {
+  width: 80px;
+}
+/* 모델명 */
+.provision-table td:nth-child(16) {
+  width: 30px;
+}
+/* 대여기간 */
+.provision-table td:nth-child(17) {
+  width: 40px;
+}
+/* 지급사유 */
+.provision-table td:nth-child(18) {
+  width: 35px;
+}
+/* 입사일 */
+.provision-table td:nth-child(19) {
+  width: 40px;
+}
+/* 신청일 */
+.provision-table td:nth-child(20) {
+  width: 40px;
+}
+/* 지급일자 */
+.provision-table td:nth-child(21) {
+  width: 40px;
 }
 /* 비고 */
-.return-table td:nth-child(13) {
-  width: 100px;
-}
-/* 퇴직일 */
-.return-table td:nth-child(14) {
-  width: 70px;
-}
-/* 반납일자 */
-.return-table td:nth-child(15) {
-  width: 70px;
+.provision-table td:nth-child(22) {
+  width: 130px;
 }
 
-.return-table tbody tr {
+.provision-table tbody tr {
   border-bottom: 1px solid #dddddd;
-  height: 30px;
+  height: 23px;
 }
 
-.return-table tbody tr:nth-of-type(even) {
+.provision-table tbody tr:nth-of-type(even) {
   background-color: #f3f3f3;
 }
 
-.return-table tbody tr:last-of-type {
+.provision-table tbody tr:last-of-type {
   border-bottom: 2px solid #009879;
 }
 
-.return-table tbody tr.active-row {
+.provision-table tbody tr.active-row {
   font-weight: bold;
   color: #009879;
 }

@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
-import { Search, SearchPws } from "./Search";
-import "./tablePws.css";
+import { Search, SearchProvision, SearchPws } from "./Search";
+import "../css/tableProvision.css";
 
-function TablePws({ columns, data, dataWasFiltered }) {
+function TableProvision({ columns, data, dataWasFiltered }) {
     
     const {
         getTableProps,
@@ -27,7 +27,7 @@ function TablePws({ columns, data, dataWasFiltered }) {
         preGlobalFilteredRows,
         // setFilter is the key!!!
         setFilter,
-    } = useTable({ columns, data, initialState: { pageIndex: 0 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
+    } = useTable({ columns, data, initialState: { pageIndex: 0, pageSize: 15 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
 
     const { pageIndex, pageSize } = state;
 
@@ -38,14 +38,13 @@ function TablePws({ columns, data, dataWasFiltered }) {
     useEffect(() => { dataWasFiltered(rows);}, [rows, dataWasFiltered]);
 
    
-    console.log('Pws Table 랜더링');
+    console.log('Provision Table 랜더링');
     return (
         <>
-            {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchPws column1={'department'} column2={'model'} column3={'uptake'} column4={'userid'} column5={'idasset'} column6={'area'} column7={'username'} column8={'sn'} onSubmit={setFilter}/>
+            <SearchProvision column1={'assetno'} column2={'department'} column3={'headquarters'} column4={'idasset'} column5={'sn'} column6={'areainstall'} column7={'model'} column8={'provisiondate'} onSubmit={setFilter}/>
             {/* {searchs} */}
-            <div style={{width:'100%', height: '52vh', overflow: 'auto'}}>
-            <table className="pws-table" {...getTableProps()}>
+            <div style={{width:'100%', height: '58vh', overflow: 'auto'}}>
+            <table className="provision-table" {...getTableProps()}>
                 <thead>
                     {/* <tr>            
                         <th
@@ -98,7 +97,7 @@ function TablePws({ columns, data, dataWasFiltered }) {
                 </tbody>
             </table>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', margin: '0.3rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '0.3em' }}>
                 <button className="btnPageSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
                     {"<<"}
                 </button>
@@ -137,7 +136,7 @@ function TablePws({ columns, data, dataWasFiltered }) {
                     value={pageSize}
                     onChange={(e) => setPageSize(Number(e.target.value))}
                 >
-                    {[5, 10, 25, 50, 100].map((pageSize) => (
+                    {[10, 15, 30, 50, 100].map((pageSize) => (
                         <option key={pageSize} value={pageSize}>
                             페이지당 {pageSize}
                         </option>
@@ -149,4 +148,4 @@ function TablePws({ columns, data, dataWasFiltered }) {
     );
 }
 
-export default TablePws;
+export default TableProvision;

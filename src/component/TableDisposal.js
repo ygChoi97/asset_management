@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
-import { Search, SearchPws, SearchReturn } from "./Search";
-import "./tableReturn.css";
+import { Search, SearchPwsDisposal } from "./Search";
+import "../css/tablePws.css";
 
-function TableReturn({ columns, data, dataWasFiltered }) {
+function TableDisposal({ columns, data, dataWasFiltered }) {
     
     const {
         getTableProps,
@@ -27,7 +27,7 @@ function TableReturn({ columns, data, dataWasFiltered }) {
         preGlobalFilteredRows,
         // setFilter is the key!!!
         setFilter,
-    } = useTable({ columns, data, initialState: { pageIndex: 0 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
+    } = useTable({ columns, data, initialState: { pageIndex: 0, pageSize: 15 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
 
     const { pageIndex, pageSize } = state;
 
@@ -38,14 +38,14 @@ function TableReturn({ columns, data, dataWasFiltered }) {
     useEffect(() => { dataWasFiltered(rows);}, [rows, dataWasFiltered]);
 
    
-    console.log('Return Table 랜더링');
+    console.log('Pws Table 랜더링');
     return (
         <>
             {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchReturn column1={'id'} column2={'hoteam'} column3={'housername'} column4={'idasset'} column5={'sn'} column6={'model'} column7={'resigndate'} column8={'returndate'} onSubmit={setFilter}/>
+            <SearchPwsDisposal column1={'department'} column2={'model'} column3={'uptake'} column4={'userid'} column5={'idasset'} column6={'area'} column7={'username'} column8={'sn'} onSubmit={setFilter}/>
             {/* {searchs} */}
-            <div style={{width:'100%', height: '52vh', overflow: 'auto'}}>
-            <table className="return-table" {...getTableProps()}>
+            <div style={{width:'100%', height: '58vh', overflow: 'auto'}}>
+            <table className="pws-table" {...getTableProps()}>
                 <thead>
                     {/* <tr>            
                         <th
@@ -98,7 +98,7 @@ function TableReturn({ columns, data, dataWasFiltered }) {
                 </tbody>
             </table>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', margin: '0.3em' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', margin: '0.3rem' }}>
                 <button className="btnPageSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
                     {"<<"}
                 </button>
@@ -137,7 +137,7 @@ function TableReturn({ columns, data, dataWasFiltered }) {
                     value={pageSize}
                     onChange={(e) => setPageSize(Number(e.target.value))}
                 >
-                    {[5, 10, 25, 50, 100].map((pageSize) => (
+                    {[10, 15, 30, 50, 100].map((pageSize) => (
                         <option key={pageSize} value={pageSize}>
                             페이지당 {pageSize}
                         </option>
@@ -149,4 +149,4 @@ function TableReturn({ columns, data, dataWasFiltered }) {
     );
 }
 
-export default TableReturn;
+export default TableDisposal;
