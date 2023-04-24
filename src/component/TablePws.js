@@ -3,6 +3,7 @@ import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from 
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
 import { Search, SearchPws } from "./Search";
 import "../css/tablePws.css";
+import "../css/pagination.css";
 
 function TablePws({ columns, data, dataWasFiltered }) {
     
@@ -98,7 +99,7 @@ function TablePws({ columns, data, dataWasFiltered }) {
                 </tbody>
             </table>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', margin: '0.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',margin: '0.5rem' }}>
                 <button className="btnPagePwsSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
                     {"<<"}
                 </button>
@@ -130,10 +131,10 @@ function TablePws({ columns, data, dataWasFiltered }) {
                                 : 0;
                             gotoPage(pageNumber);
                         }}
-                        style={{ width: "50px", height: '20px', marginRight: '5px' }}
+                        style={{ width: "50px", height: '1.5rem', marginRight: '5px' }}
                     />
                 </span>{" "}
-                <select
+                <select className="selectPageItem"
                     value={pageSize}
                     onChange={(e) => setPageSize(Number(e.target.value))}
                 >

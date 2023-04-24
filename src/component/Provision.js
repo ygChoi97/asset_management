@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import "../css/btnImportExport.css";
 import TableProvision from "./TableProvision";
 import UseConfirm from "./UseConfirm";
-import { Navigate, useNavigate } from "react-router-dom";
+import ExcelDB from "../excel_db.png";
+import ExcelToDB from "../exceltodb2.png";
+import DBToExcel from "../dbtoexcel2.png";
+import { useDetectOutsideClick } from "./useDetectOutsideClick";
+import jwt_decode from "jwt-decode";
 
 const BASE_URL = 'http://localhost:8181/api/provision';
 
@@ -19,6 +23,9 @@ function Provision() {
     const [filtered, setFiltered] = useState(null);
     const [, , getConfirmationOK, ConfirmationOK] = UseConfirm();
     let filteredData = null;
+
+    const dropdownRef = useRef(null);
+    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
 
     function dateFormat(date) {
         let month = date.getMonth() + 1;
@@ -94,13 +101,9 @@ function Provision() {
         })
             .then(res => {
                 if (res.status === 403) {
-                    setTimeout(() => {
-                        // alert('로그인이 필요한 서비스입니다.');
-                        // window.location.href = '/signin';
-                        // navigate('/signin')
-                    }, 500)
-                    return;
-                } else if (!res.ok) {
+                    throw new Error('로그인 토큰이 만료되었습니다.\n로그인 페이지로 이동합니다.');
+                  }
+                   else if (!res.ok) {
                     throw new Error(res.status);
                 }
                 else {
@@ -108,7 +111,7 @@ function Provision() {
                 }
             })
             .then(json => {
-
+                if (json != null) {
                 let copyColumns = [];
                 for (let i = 0; i < json.length; i++) {
                     let copyColumn = { accessor: '', Header: '', filter: '' };
@@ -120,10 +123,32 @@ function Provision() {
                 }
                 setColumns(copyColumns);
                 console.log('useEffect() fetch - /menu', copyColumns);
+            }
+            })
+            .catch(err => {
+              const token = localStorage.getItem('ACCESS_TOKEN');
+              if (token) {
+                const isExpired = isTokenExpired(token);
+                if (isExpired) {
+                  console.log('Expired');
+                  alert(err.message);
+                  window.location.href = '/login';
+                } else {
+                  console.log('no Expired');
+                  alert(`Error message : ${err.message}\n\n서버 점검이 필요합니다.`);
+                }
+              }
             });
+
         getAllDataFromDB();
 
     }, []);
+
+    const isTokenExpired = (token) => {
+        const decodedToken = jwt_decode(token);
+        const currentTime = Date.now() / 1000;
+        return decodedToken.exp < currentTime;
+      };
 
     const readExcel = async (e) => {
         let input = e.target;
@@ -214,6 +239,7 @@ function Provision() {
 
     const importHandler = e => {
         $fileInput.current.click();
+        setIsActive(false);
     };
 
     const exportHandler = e => {
@@ -303,9 +329,8 @@ function Provision() {
             workbook.xlsx.writeBuffer().then((data) => {
                 const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
                 saveFile(blob, 'PWS지급리스트');
-
             })
-
+            setIsActive(false);
         } catch (error) {
             console.error(error);
         }
@@ -331,11 +356,53 @@ function Provision() {
         filteredData = [...x];
     };
 
+    useEffect(() => {
+        // 브라우저가 종료될 때
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => {
+            window.removeEventListener('beforeunload', handleBeforeUnload);
+        };
+    }, []);
+
+    const handleBeforeUnload = () => {
+        // 로컬 스토리지에서 데이터 삭제
+        localStorage.removeItem('ACCESS_TOKEN');
+        localStorage.removeItem('LOGIN_USERNAME');
+    };
+
     return (
         <>
-            <ConfirmationOK />
-            <button className="btnImport" onClick={importHandler}>Import data to DB</button>
-            <button className="btnImport" onClick={exportHandler}>Export excel from DB</button>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <ConfirmationOK />
+        <div className="container">
+          <div ref={dropdownRef} className="menu-container">
+            <button onClick={() => { setIsActive(!isActive) }} className="menu-trigger">
+              <span>Excel 연동</span>
+              <img
+                src={ExcelDB}
+                alt="ExcelDB"
+                width='50px'
+              />
+            </button>
+            <nav className={`menu ${isActive ? "active" : "inactive"}`}>
+              <ul>
+                <li>
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                    <img src={ExcelToDB} alt="ExcelToDB" width='20%'/>
+                    <button className="btnImport" onClick={importHandler}> Import data to DB</button>
+                  </div>
+                </li>
+                <li>
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                    <img src={DBToExcel} alt="DBToExcel" width='20%' />
+                    <button className="btnImport" onClick={exportHandler}>Export excel from DB</button>
+                  </div>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
             <input type="file" accept=".xls,.xlsx" onChange={readExcel} ref={$fileInput} hidden></input>
             <TableProvision columns={columns} data={data} dataWasFiltered={dataWasFiltered} />
         </>

@@ -3,6 +3,7 @@ import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from 
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
 import { Search, SearchProvision, SearchPws } from "./Search";
 import "../css/tableProvision.css";
+import "../css/pagination.css";
 
 function TableProvision({ columns, data, dataWasFiltered }) {
     
@@ -97,27 +98,27 @@ function TableProvision({ columns, data, dataWasFiltered }) {
                 </tbody>
             </table>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', margin: '0.3em' }}>
-                <button className="btnPageSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',margin: '0.5rem' }}>
+                <button className="btnPagePwsSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
                     {"<<"}
                 </button>
-                <button className="btnPage" onClick={() => previousPage()} disabled={!canPreviousPage}>
+                <button className="btnPagePws" onClick={() => previousPage()} disabled={!canPreviousPage}>
                     Previous
                 </button>
-                <button className="btnPage" onClick={() => nextPage()} disabled={!canNextPage}>
+                <button className="btnPagePws" onClick={() => nextPage()} disabled={!canNextPage}>
                     Next
                 </button>
-                <button className="btnPageSE" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                <button className="btnPagePwsSE" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
                     {">>"}
                 </button>
-                <span>
+                <span style={{margin: '0 1rem'}}>
                     Page{" "}
                     <strong>
                         {pageIndex + 1} of {pageOptions.length}
                     </strong>
                 </span>
                 <span style={{ marginLeft: '5px' }}>
-                    | Go to page:{" "}
+                    Go to page:{" "}
                     <input
                         type="number"
                         min='1'
@@ -129,10 +130,10 @@ function TableProvision({ columns, data, dataWasFiltered }) {
                                 : 0;
                             gotoPage(pageNumber);
                         }}
-                        style={{ width: "50px", height: '20px', marginRight: '5px' }}
+                        style={{ width: "50px", height: '1.5rem', marginRight: '5px' }}
                     />
                 </span>{" "}
-                <select
+                <select className="selectPageItem"
                     value={pageSize}
                     onChange={(e) => setPageSize(Number(e.target.value))}
                 >
