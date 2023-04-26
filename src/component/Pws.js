@@ -60,7 +60,7 @@ function Pws() {
         }
       })
       .then(json => {
-        let copyDatas = [...data];
+        let copyDatas = [];
         for (let i = 0; i < json.count; i++) {
           //console.log(json.pwsDtos[i]);
           let copyData = {};
@@ -347,7 +347,7 @@ function Pws() {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+      <div style={{display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
         <ConfirmationOK />
         <div className="container">
           <div ref={dropdownRef} className="menu-container">

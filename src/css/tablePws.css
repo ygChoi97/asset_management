@@ -28,7 +28,7 @@ body {
   max-width: 20%; */
   position: sticky;
   top: 0px;
-  background-color: #009879 !important;
+  background-color: #34343b !important;
 }
 
 .pws-table td {
@@ -39,11 +39,11 @@ body {
 
 /* 사용구분 */
 .pws-table td:nth-child(1) {
-  width: 45px;
+  width: 55px;
 }
 /* 회사 */
 .pws-table td:nth-child(2) {
-  width: 40px;
+  width: 60px;
 }
 /* 본부 */
 .pws-table td:nth-child(3) {
@@ -59,11 +59,11 @@ body {
 }
 /* 사용자 */
 .pws-table td:nth-child(6) {
-  width: 50px;
+  width: 80px;
 }
 /* 사용자ID */
 .pws-table td:nth-child(7) {
-  width: 65px;
+  width: 60px;
 }
 /* 코트트센터CD */
 .pws-table td:nth-child(8) {
@@ -79,11 +79,11 @@ body {
 }
 /* 자산관리번호 */
 .pws-table td:nth-child(11) { 
-  width: 90px;
+  width: 75px;
 }
 /* S/N */
 .pws-table td:nth-child(12) {
-  width: 40px;
+  width: 80px;
 }
 /* 그래픽카드 */
 .pws-table td:nth-child(13) {
@@ -95,7 +95,7 @@ body {
 }
 /* 모니터 */
 .pws-table td:nth-child(15) {
-  width: 60px;
+  width: 70px;
 }
 /* 지역 */
 .pws-table td:nth-child(16) {
@@ -123,15 +123,15 @@ body {
 }
 /* 상세업무 */
 .pws-table td:nth-child(22) {
-  width: 200px;
+  width: 120px;
 }
 /* 도입년월 */
 .pws-table td:nth-child(23) {
-  width: 90px;
+  width: 60px;
 }
 /* 비고 */
 .pws-table td:nth-child(24) {
-  width: 130px;
+  width: 200px;
 }
 
 .pws-table tbody tr {
@@ -144,7 +144,7 @@ body {
 }
 
 .pws-table tbody tr:last-of-type {
-  border-bottom: 2px solid #009879;
+  border-bottom: 2px solid #34343b;
 }
 
 .pws-table tbody tr.active-row {

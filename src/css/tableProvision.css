@@ -28,7 +28,7 @@ body {
   max-width: 20%; */
   position: sticky;
   top: 0px;
-  background-color: #009879 !important;
+  background-color: #34343b !important;
 }
 
 .provision-table td {
@@ -51,7 +51,7 @@ body {
 }
 /* 실명 */
 .provision-table td:nth-child(4) {
-  width: 50px;
+  width: 100px;
 }
 /* 센터 */
 .provision-table td:nth-child(5) {
@@ -100,7 +100,7 @@ body {
 }
 /* 모델명 */
 .provision-table td:nth-child(16) {
-  width: 30px;
+  width: 50px;
 }
 /* 대여기간 */
 .provision-table td:nth-child(17) {
@@ -108,7 +108,7 @@ body {
 }
 /* 지급사유 */
 .provision-table td:nth-child(18) {
-  width: 35px;
+  width: 45px;
 }
 /* 입사일 */
 .provision-table td:nth-child(19) {
@@ -137,58 +137,10 @@ body {
 }
 
 .provision-table tbody tr:last-of-type {
-  border-bottom: 2px solid #009879;
+  border-bottom: 2px solid #34343b;
 }
 
 .provision-table tbody tr.active-row {
   font-weight: bold;
   color: #009879;
-}
-
-.btnPage {
-  width: 5em;
-  height: 2em;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-
-  background-color: rgba(255, 0, 140, 0.884);
-  color: white;
-  border: none;
-  margin: 0 2px;
-  transition: background-color 0.1s ease;
-}
-
-.btnPage:hover {
-  background-color: rgb(240, 10, 117);
-}
-
-.btnPage:active {
-  background-color: rgba(221, 34, 181, 0.473);
-  transform: translateY(2px);
-}
-
-.btnPageSE {
-  width: 2em;
-  height: 2em;
-  border-top-left-radius: 3px;
-  border-bottom-left-radius: 3px;
-  border-top-right-radius: 3px;
-  border-bottom-right-radius: 3px;
-
-  background-color: rgba(255, 0, 140, 0.884);
-  color: white;
-  border: none;
-  margin: 0 5px;
-  transition: background-color 0.1s ease;
-}
-
-.btnPageSE:hover {
-  background-color: rgb(240, 10, 117);
-}
-
-.btnPageSE:active {
-  background-color: rgba(221, 34, 181, 0.473);
-  transform: translateY(2px);
 }

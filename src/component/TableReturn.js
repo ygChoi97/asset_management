@@ -3,6 +3,7 @@ import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from 
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
 import { Search, SearchPws, SearchReturn } from "./Search";
 import "../css/tableReturn.css";
+import "../css/pagination.css";
 
 function TableReturn({ columns, data, dataWasFiltered }) {
     

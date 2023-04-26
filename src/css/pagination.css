@@ -6,7 +6,7 @@
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
   
-    background-color:lightblue;
+    background-color:lightgray;
     color: black;
     border: none;
     margin: 0 2px;
@@ -14,11 +14,11 @@
   }
   
   .btnPagePws:hover {
-    background-color: lightskyblue;
+    background-color: lightsteelblue;
   }
   
   .btnPagePws:active {
-    background-color: lightcyan;
+    background-color: lightslategray;
     transform: translateY(2px);
   }
   
@@ -30,7 +30,7 @@
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   
-    background-color: lightblue;
+    background-color: lightgray;
     color: black;
     border: none;
     margin: 0 5px;
@@ -38,11 +38,11 @@
   }
   
   .btnPagePwsSE:hover {
-    background-color: lightskyblue;
+    background-color: lightsteelblue;
   }
   
   .btnPagePwsSE:active {
-    background-color: lightcyan;
+    background-color: lightslategray;
     transform: translateY(2px);
   }
   
