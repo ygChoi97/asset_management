@@ -14,7 +14,7 @@ import PrivateRoute2 from "./PrivateRoute2";
 const AppRouter = () => {
     
     return (
-        <>
+        <div style={{height: '100vh'}}>
             <Menu />
             <Routes>
                 <Route path="/login" element={<Login />} />
@@ -29,7 +29,7 @@ const AppRouter = () => {
             </Routes>
 
 
-        </>
+        </div>
 
     );
 };

@@ -28,7 +28,7 @@ function TableProvision({ columns, data, dataWasFiltered }) {
         preGlobalFilteredRows,
         // setFilter is the key!!!
         setFilter,
-    } = useTable({ columns, data, initialState: { pageIndex: 0, pageSize: 15 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
+    } = useTable({ columns, data, initialState: { pageIndex: 0, pageSize: 30 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
 
     const { pageIndex, pageSize } = state;
 
@@ -44,7 +44,8 @@ function TableProvision({ columns, data, dataWasFiltered }) {
         <>
             <SearchProvision column1={'assetno'} column2={'department'} column3={'headquarters'} column4={'idasset'} column5={'sn'} column6={'areainstall'} column7={'model'} column8={'provisiondate'} onSubmit={setFilter}/>
             {/* {searchs} */}
-            <div style={{width:'100%', height: '58vh', overflow: 'auto'}}>
+            <div style={{ width: '100%', height : `calc(100vh - 275px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div style={{width:'100%', overflow: 'auto'}}>
             <table className="provision-table" {...getTableProps()}>
                 <thead>
                     {/* <tr>            
@@ -137,13 +138,14 @@ function TableProvision({ columns, data, dataWasFiltered }) {
                     value={pageSize}
                     onChange={(e) => setPageSize(Number(e.target.value))}
                 >
-                    {[10, 15, 30, 50, 100].map((pageSize) => (
+                    {[10, 20, 30, 50, 100, 200].map((pageSize) => (
                         <option key={pageSize} value={pageSize}>
                             페이지당 {pageSize}
                         </option>
                     ))}
                 </select>
                 <span style={{marginLeft: '1rem'}}>{rows.length} rows</span>
+            </div>
             </div>
         </>
     );

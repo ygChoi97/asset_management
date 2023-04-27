@@ -9,19 +9,19 @@ label {
   width: 6rem;
   text-align: right;
   font-weight: 600;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 }
 
 .underline {
     width: 200px;
-    height: 2em;
+    height: 1.3rem;
     border: 1px solid;
     border-left-width:0;
     border-right-width:0;
     border-top-width:0;
     border-bottom-width:1;
     margin:0.5rem 15px;
-    font-size: 0.7rem;
+    font-size: 0.8rem;
     outline: none;
 }
 
@@ -55,7 +55,7 @@ label {
     color: white;
     border: none;
     padding: 5px 10px;
-    margin: 0.2rem 0.2rem;
+    margin: 1rem;
     transition: background-color 0.1s ease;
 }
 

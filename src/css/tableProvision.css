@@ -39,7 +39,7 @@ body {
 
 /* 번호 */
 .provision-table td:nth-child(1) {
-  width: 30px;
+  width: 50px;
 }
 /* 부서명 */
 .provision-table td:nth-child(2) {

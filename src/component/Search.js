@@ -143,7 +143,7 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
             <div className="filterItem"><label htmlFor='snHandler'>S/N</label><input className='underline' id='snHandler' name={column8} placeholder='' onChange={snHandler} value={sn} /></div>
           </div>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'center', margin: '1em' }}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
           <button className="btnSearch">조회</button>
         </div>
       </div>
@@ -259,7 +259,7 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
               <div className="filterItem"><label htmlFor='provisiondate'>지급일</label><input className='underline' id='provisiondate' name={column8} placeholder='' type='date' onChange={provisiondateHandler} value={provisiondate} /></div> 
             </div>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'center', margin: '1em' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <button className="btnSearch">조회</button>
           </div>
         </div>
@@ -352,7 +352,7 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
               <div className="filterItem"><label htmlFor='returndate'>반납일자</label><input className='underline' id='returndate' name={column8} placeholder='' type='date' onChange={returndateHandler} value={returndate} /></div> 
             </div>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'center', margin: '1em' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <button className="btnSearch">조회</button>
           </div>
         </div>
@@ -488,7 +488,7 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
               <div className="filterItem"><label htmlFor='snHandler'>S/N</label><input className='underline' id='snHandler' name={column8} placeholder='' onChange={snHandler} value={sn} /></div>
             </div>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'center', margin: '1em' }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <button className="btnSearch">조회</button>
           </div>
         </div>

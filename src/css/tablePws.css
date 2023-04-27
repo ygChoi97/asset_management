@@ -23,7 +23,7 @@ body {
   border: 1px solid #dddddd;
   padding: 8px;
   text-align: center;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   /* min-width: 20%;
   max-width: 20%; */
   position: sticky;
@@ -34,12 +34,12 @@ body {
 .pws-table td {
     padding: 4px 10px;
     border: 1px solid #dddddd;
-    font-size: 0.6rem;
+    font-size: 0.7rem;
 }
 
 /* 사용구분 */
 .pws-table td:nth-child(1) {
-  width: 55px;
+  width: 60px;
 }
 /* 회사 */
 .pws-table td:nth-child(2) {

@@ -395,7 +395,7 @@ function Provision() {
                 <li>
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                     <img src={DBToExcel} alt="DBToExcel" width='20%' />
-                    <button className="btnImport" onClick={exportHandler}>Export excel from DB</button>
+                    <button className="btnImport" onClick={exportHandler}>Export data from DB</button>
                   </div>
                 </li>
               </ul>
