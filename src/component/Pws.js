@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../css/btnImportExport.css";
 import "../css/dropdownmenu.css"
 import TablePws from "./TablePws";
@@ -8,6 +8,7 @@ import ExcelToDB from "../exceltodb2.png";
 import DBToExcel from "../dbtoexcel2.png";
 import { useDetectOutsideClick } from "./useDetectOutsideClick";
 import jwt_decode from "jwt-decode";
+import { DateRangeColumnFilter, dateBetweenFilterFn } from "./Filter";
 
 const BASE_URL = 'http://localhost:8181/api/pws';
 
@@ -110,6 +111,10 @@ function Pws() {
             copyColumn.accessor = json[i].column_name;
             if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area')
               copyColumn.filter = 'equals';
+            if (copyColumn.accessor === 'introductiondate') {
+              copyColumn.Filter = DateRangeColumnFilter;
+              copyColumn.filter = dateBetweenFilterFn;  // Custom Filter Type 
+            }
             copyColumn.Header = json[i].column_comment;
             copyColumns.push(copyColumn);
           }
