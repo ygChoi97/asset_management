@@ -43,7 +43,7 @@ function TablePws({ columns, data, dataWasFiltered }) {
     return (
         <>
             {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchPws column1={'department'} column2={'model'} column3={'uptake'} column4={'userid'} column5={'idasset'} column6={'area'} column7={'username'} column8={'sn'} onSubmit={setFilter} />
+            <SearchPws column1={'department'} column2={'model'} column3={'uptake'} column4={'userid'} column5={'idasset'} column6={'area'} column7={'username'} column8={'sn'} column9={'headquarters'} column10={'introductiondate'} onSubmit={setFilter} />
             {/* {searchs} */}
 
             <div style={{ width: '100%', height: `calc(100vh - 275px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>

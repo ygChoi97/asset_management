@@ -15,7 +15,7 @@ export function Search({ onSubmit }) {
   );
 }
 
-export function SearchPws({ column1, column2, column3, column4, column5, column6, column7, column8, onSubmit }) {
+export function SearchPws({ column1, column2, column3, column4, column5, column6, column7, column8, column9, column10, onSubmit }) {
   const [department, setDepartment] = useState('');
   const [model, setModel] = useState('');
   const [uptake, setUptake] = useState('');
@@ -26,55 +26,50 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
 
   const [username, setUsername] = useState('');
   const [sn, setSn] = useState('');
-
+  const [headquarters, setHeadquarters] = useState('');
+  const [introductiondate, setIntroductiondate] = useState('');
+  
   const departmentHandler = (e) => {
     const inputText = e.target.value;
     setDepartment(inputText);
   }
 
   const modelHandler = (e) => {
-    const inputText = e.target.value;
-    setModel(inputText);
-  }
-
-  const uptakeHandler = (e) => {
-    const inputText = e.target.value;
-    setUptake(inputText);
+    setModel(e.target.value);
   }
 
   const useridHandler = (e) => {
-    const inputText = e.target.value;
-    setUserid(inputText);
+    setUserid(e.target.value);
   }
 
   const idassetHandler = (e) => {
-    const inputText = e.target.value;
-    setIdasset(inputText);
-  }
-
-  const areaHandler = (e) => {
-    const inputText = e.target.value;
-    setArea(inputText);
+    setIdasset(e.target.value);
   }
 
   const usernameHandler = (e) => {
-    const inputText = e.target.value;
-    setUsername(inputText);
+    setUsername(e.target.value);
   }
 
   const snHandler = (e) => {
-    const inputText = e.target.value;
-    setSn(inputText);
+    setSn(e.target.value);
   }
 
-  const handleAreaSelect = (e) => {
+  function areaSelectHandler(e) {
     setArea(e.target.value);
-  };
+  }
 
-  const handleUptakeSelect = (e) => {
+  const uptakeSelectHandler = (e) => {
     setUptake(e.target.value);
   };
 
+  const headquartersHandler = (e) => {
+    setHeadquarters(e.target.value);
+  };
+
+  const introductiondateHandler = (e) => {
+    setIntroductiondate(e.target.value);
+  };
+  
   const hSubmit = (event) => {
     event.preventDefault();
 
@@ -92,6 +87,8 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
         onSubmit(column6, undefined);
       onSubmit(column7, event.target.elements[6].value);
       onSubmit(column8, event.target.elements[7].value);
+      onSubmit(column9, event.target.elements[8].value);
+      onSubmit(column10, event.target.elements[9].value);
   };
 
   return (
@@ -100,10 +97,13 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-            <div className="filterItem"><label htmlFor='department'>팀명 </label><input className='underline' id='department' name={column1} placeholder='' onChange={departmentHandler} value={department} /></div>
-            <div className="filterItem"><label htmlFor='model'>모델명</label><input className='underline' id='model' name={column2} placeholder='' onChange={modelHandler} value={model} /></div>
-            <div className="filterItem"><label htmlFor='uptake'>상태</label>
-              <select className="selectItem" id='uptake' name={column3} onChange={handleUptakeSelect} value={uptake}>
+          <div className="filterItem"><label htmlFor='headquarters'>본부</label><input className='underline' id='headquarters' name={column9} placeholder='' onChange={headquartersHandler} value={headquarters} /></div>
+            <div className="filterItem"><label htmlFor='department'>관리부서 </label><input className='underline' id='department' name={column1} placeholder='' onChange={departmentHandler} value={department} /></div>
+            <div className="filterItem"><label htmlFor='username'>사용자</label><input className='underline' id='username' name={column7} placeholder='' onChange={usernameHandler} value={username} /></div>
+            
+            
+            <div className="filterItem"><label htmlFor='uptake'>사용구분</label>
+              <select className="selectItem" id='uptake' name={column3} onChange={uptakeSelectHandler} value={uptake}>
                 <option value="">― 선택안함 ―</option>
                 <option value="사용">사용</option>
                 <option value="미사용">미사용</option>
@@ -113,10 +113,11 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-            <div className="filterItem"><label htmlFor='userid'>사번</label><input className='underline' id='userid' name={column4} placeholder='' onChange={useridHandler} value={userid} /></div>
+          <div className="filterItem"><label htmlFor='model'>모델명</label><input className='underline' id='model' name={column2} placeholder='' onChange={modelHandler} value={model} /></div>
             <div className="filterItem"><label htmlFor='idasset'>자산관리번호</label><input className='underline' id='idasset' name={column5} placeholder='' onChange={idassetHandler} value={idasset} /></div>
-            <div className="filterItem"><label htmlFor='area'>설치지역</label>
-              <select className="selectItem" id='area' name={column6} onChange={handleAreaSelect} value={area}>
+            <div className="filterItem"><label htmlFor='userid'>사용자ID</label><input className='underline' id='userid' name={column4} placeholder='' onChange={useridHandler} value={userid} /></div>
+            <div className="filterItem"><label htmlFor='area'>지역</label>
+              <select className="selectItem" id='area' name={column6} onChange={areaSelectHandler} value={area}>
                 <option value="">― 선택안함 ―</option>
                 <option value="남양">남양</option>
                 <option value="마북">마북</option>
@@ -139,8 +140,9 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
             </div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-            <div className="filterItem"><label htmlFor='username'>성명</label><input className='underline' id='username' name={column7} placeholder='' onChange={usernameHandler} value={username} /></div>
-            <div className="filterItem"><label htmlFor='snHandler'>S/N</label><input className='underline' id='snHandler' name={column8} placeholder='' onChange={snHandler} value={sn} /></div>
+            
+            <div className="filterItem"><label htmlFor='sn'>S/N</label><input className='underline' id='sn' name={column8} placeholder='' onChange={snHandler} value={sn} /></div>
+            <div className="filterItem"><label htmlFor='introductiondate'>도입년월</label><input className='selectDate' id='introductiondate' name={column10} placeholder='' type='date' onChange={introductiondateHandler} value={introductiondate} /></div> 
           </div>
         </div>
         <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -162,43 +164,35 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
     const [provisiondate, setProvisiondate] = useState('');
     
     const assetnoHandler = (e) => {
-      const inputText = e.target.value;
-      setAssetno(inputText);
+      setAssetno(e.target.value);
     }
 
     const departmentHandler = (e) => {
-      const inputText = e.target.value;
-      setDepartment(inputText);
+      setDepartment(e.target.value);
     }
     
     const headquartersHandler = (e) => {
-      const inputText = e.target.value;
-      setHeadquarters(inputText);
+      setHeadquarters(e.target.value);
     }
 
     const idassetHandler = (e) => {
-      const inputText = e.target.value;
-      setIdasset(inputText);
+      setIdasset(e.target.value);
     }
 
     const snHandler = (e) => {
-      const inputText = e.target.value;
-      setSn(inputText);
+      setSn(e.target.value);
     }
 
     const areainstallHandler = (e) => {
-      const inputText = e.target.value;
-      setAreainstall(inputText);
+      setAreainstall(e.target.value);
     }
 
     const modelHandler = (e) => {
-      const inputText = e.target.value;
-      setModel(inputText);
+      setModel(e.target.value);
     }
   
     const provisiondateHandler = (e) => {
-      const inputText = e.target.value;
-      setProvisiondate(inputText);
+      setProvisiondate(e.target.value);
     }
   
     const hSubmit = (event) => {
@@ -278,43 +272,35 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
     const [returndate, setReturndate] = useState('');
     
     const assetnoHandler = (e) => {
-      const inputText = e.target.value;
-      setAssetno(inputText);
+      setAssetno(e.target.value);
     }
 
     const hoteamHandler = (e) => {
-      const inputText = e.target.value;
-      setHoteam(inputText);
+      setHoteam(e.target.value);
     }
     
     const housernameHandler = (e) => {
-      const inputText = e.target.value;
-      setHousername(inputText);
+      setHousername(e.target.value);
     }
 
     const idassetHandler = (e) => {
-      const inputText = e.target.value;
-      setIdasset(inputText);
+      setIdasset(e.target.value);
     }
 
     const snHandler = (e) => {
-      const inputText = e.target.value;
-      setSn(inputText);
+      setSn(e.target.value);
     }
 
     const modelHandler = (e) => {
-      const inputText = e.target.value;
-      setModel(inputText);
+      setModel(e.target.value);
     }
 
     const resigndateHandler = (e) => {
-      const inputText = e.target.value;
-      setResigndate(inputText);
+      setResigndate(e.target.value);
     }
 
     const returndateHandler = (e) => {
-      const inputText = e.target.value;
-      setReturndate(inputText);
+      setReturndate(e.target.value);
     }
   
     const hSubmit = (event) => {
@@ -360,7 +346,7 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
     );
   }
 
-  export function SearchPwsDisposal({ column1, column2, column3, column4, column5, column6, column7, column8, onSubmit }) {
+  export function SearchPwsDisposal({ column1, column2, column3, column4, column5, column6, column7, column8, column9, onSubmit }) {
     const [department, setDepartment] = useState('');
     const [model, setModel] = useState('');
     const [uptake, setUptake] = useState('');
@@ -371,53 +357,43 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
   
     const [username, setUsername] = useState('');
     const [sn, setSn] = useState('');
-  
+    const [headquarters, setHeadquarters] = useState('');
+
     const departmentHandler = (e) => {
       const inputText = e.target.value;
       setDepartment(inputText);
     }
   
     const modelHandler = (e) => {
-      const inputText = e.target.value;
-      setModel(inputText);
-    }
-  
-    const uptakeHandler = (e) => {
-      const inputText = e.target.value;
-      setUptake(inputText);
+      setModel(e.target.value);
     }
   
     const useridHandler = (e) => {
-      const inputText = e.target.value;
-      setUserid(inputText);
+      setUserid(e.target.value);
     }
   
     const idassetHandler = (e) => {
-      const inputText = e.target.value;
-      setIdasset(inputText);
-    }
-  
-    const areaHandler = (e) => {
-      const inputText = e.target.value;
-      setArea(inputText);
+      setIdasset(e.target.value);
     }
   
     const usernameHandler = (e) => {
-      const inputText = e.target.value;
-      setUsername(inputText);
+      setUsername(e.target.value);
     }
   
     const snHandler = (e) => {
-      const inputText = e.target.value;
-      setSn(inputText);
+      setSn(e.target.value);
     }
   
-    const handleAreaSelect = (e) => {
+    const areaSelectHandler = (e) => {
       setArea(e.target.value);
     };
   
-    const handleUptakeSelect = (e) => {
+    const uptakeSelectHandler = (e) => {
       setUptake(e.target.value);
+    };
+
+    const headquartersHandler = (e) => {
+      setHeadquarters(e.target.value);
     };
   
     const hSubmit = (event) => {
@@ -437,7 +413,7 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
         onSubmit(column6, undefined);
       onSubmit(column7, event.target.elements[6].value);
       onSubmit(column8, event.target.elements[7].value);
-
+      onSubmit(column9, event.target.elements[8].value);
       console.log(event.target.elements[2]);
     };
   
@@ -447,10 +423,10 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-              <div className="filterItem"><label htmlFor='department'>팀명 </label><input className='underline' id='department' name={column1} placeholder='' onChange={departmentHandler} value={department} /></div>
+              <div className="filterItem"><label htmlFor='department'>관리부서 </label><input className='underline' id='department' name={column1} placeholder='' onChange={departmentHandler} value={department} /></div>
               <div className="filterItem"><label htmlFor='model'>모델명</label><input className='underline' id='model' name={column2} placeholder='' onChange={modelHandler} value={model} /></div>
-              <div className="filterItem"><label htmlFor='uptake'>상태</label>
-                <select className="selectItem" id='uptake' name={column3} onChange={handleUptakeSelect} value={uptake}>
+              <div className="filterItem"><label htmlFor='uptake'>사용구분</label>
+                <select className="selectItem" id='uptake' name={column3} onChange={uptakeSelectHandler} value={uptake}>
                   <option value="">― 선택안함 ―</option>
                   <option value="매각대기">매각대기</option>
                   <option value="매각">매각</option>
@@ -458,10 +434,10 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-              <div className="filterItem"><label htmlFor='userid'>사번</label><input className='underline' id='userid' name={column4} placeholder='' onChange={useridHandler} value={userid} /></div>
+              <div className="filterItem"><label htmlFor='userid'>사용자ID</label><input className='underline' id='userid' name={column4} placeholder='' onChange={useridHandler} value={userid} /></div>
               <div className="filterItem"><label htmlFor='idasset'>자산관리번호</label><input className='underline' id='idasset' name={column5} placeholder='' onChange={idassetHandler} value={idasset} /></div>
-              <div className="filterItem"><label htmlFor='area'>설치지역</label>
-                <select className="selectItem" id='area' name={column6} onChange={handleAreaSelect} value={area}>
+              <div className="filterItem"><label htmlFor='area'>지역</label>
+                <select className="selectItem" id='area' name={column6} onChange={areaSelectHandler} value={area}>
                   <option value="">― 선택안함 ―</option>
                   <option value="남양">남양</option>
                   <option value="마북">마북</option>
@@ -484,8 +460,9 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
               </div>
             </div>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-              <div className="filterItem"><label htmlFor='username'>성명</label><input className='underline' id='username' name={column7} placeholder='' onChange={usernameHandler} value={username} /></div>
-              <div className="filterItem"><label htmlFor='snHandler'>S/N</label><input className='underline' id='snHandler' name={column8} placeholder='' onChange={snHandler} value={sn} /></div>
+              <div className="filterItem"><label htmlFor='username'>사용자</label><input className='underline' id='username' name={column7} placeholder='' onChange={usernameHandler} value={username} /></div>
+              <div className="filterItem"><label htmlFor='sn'>S/N</label><input className='underline' id='sn' name={column8} placeholder='' onChange={snHandler} value={sn} /></div>
+              <div className="filterItem"><label htmlFor='headquarters'>본부</label><input className='underline' id='headquarters' name={column9} placeholder='' onChange={headquartersHandler} value={headquarters} /></div>
             </div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>

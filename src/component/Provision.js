@@ -241,11 +241,17 @@ function Provision() {
         $fileInput.current.click();
         setIsActive(false);
     };
-
+    
     const exportHandler = e => {
+        
+        const currentDate = new Date();
+        
+        //오늘날짜를 YYYY-MM-DD 로 선언하여 파일이름에 붙이기 위해서.
+        const currentDayFormat = `_${currentDate.getFullYear()}년${currentDate.getMonth()+1}월${currentDate.getDate()}일${currentDate.getHours()}시${currentDate.getMinutes()}분${currentDate.getSeconds()}초`;
+        
         const datas = filteredData.map(item => item.values);
         console.log(datas);
-
+        
         const Excel = require("exceljs");
         try {
             // 엑셀 생성
@@ -276,6 +282,20 @@ function Provision() {
                 obj.key = item.accessor;
                 obj.width = 20;
                 // 스타일 설정
+                /* if(obj.key == 'period')
+                obj.style = {
+                    // Font 설정
+                    font: { name: 'Arial Black', size: 10 },
+                    // 정렬 설정
+                    alignment: {
+                        vertical: 'middle',
+                        horizontal: 'center',
+                        wrapText: true
+                    },
+                    numFmt : 'yyyy-mm-dd'
+                
+                }
+                else */
                 obj.style = {
                     // Font 설정
                     font: { name: 'Arial Black', size: 10 },
@@ -315,6 +335,10 @@ function Provision() {
                 // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
                 for (let loop = 1; loop <= columns.length; loop++) {
                     const col = sheetOne.getRow(index + 1).getCell(loop);
+                    /* if(col.text == '대여기간') {   
+                        col.numFmt = 'dd/mm/yyyy';
+                        console.log(col);
+                    } */
                     col.border = borderStyle;
                     col.font = { name: 'Arial Black', size: 9 };
                 }
@@ -328,7 +352,7 @@ function Provision() {
 
             workbook.xlsx.writeBuffer().then((data) => {
                 const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-                saveFile(blob, 'PWS지급리스트');
+                saveFile(blob, `PWS지급리스트${currentDayFormat}`);
             })
             setIsActive(false);
         } catch (error) {
@@ -343,7 +367,7 @@ function Provision() {
                 description: 'Excel file',
                 accept: { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ['.xlsx'] },
             }],
-            suggestedName: 'PWS지급리스트',
+            suggestedName: filename,
         };
         let handle = await window.showSaveFilePicker(opts);
         let writable = await handle.createWritable();

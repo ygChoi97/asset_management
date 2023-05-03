@@ -25,6 +25,19 @@ label {
     outline: none;
 }
 
+.selectDate {
+  width: 100px;
+    height: 1.3rem;
+    border: 1px solid;
+    border-left-width:0;
+    border-right-width:0;
+    border-top-width:0;
+    border-bottom-width:1;
+    margin:0.5rem 15px;
+    font-size: 0.8rem;
+    outline: none;
+}
+
 .selectItem {
   width : 205px; /* 원하는 너비설정 */
   padding: 0.2rem 0.5rem; /* 여백으로 높이 설정 */
