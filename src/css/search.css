@@ -13,7 +13,7 @@ label {
 }
 
 .underline {
-    width: 200px;
+    width: 230px;
     height: 1.3rem;
     border: 1px solid;
     border-left-width:0;
@@ -26,7 +26,7 @@ label {
 }
 
 .selectDate {
-  width: 95px;
+    width: 96px;
     height: 1.3rem;
     border: 1px solid;
     border-left-width:0;
@@ -39,10 +39,11 @@ label {
 }
 
 .selectItem {
-  width : 205px; /* 원하는 너비설정 */
+  width : 230px; /* 원하는 너비설정 */
   padding: 0.2rem 0.5rem; /* 여백으로 높이 설정 */
   font-family: inherit;  /* 폰트 상속 */
   font-size: 0.7rem;
+  font-style: oblique;
   background: url(../dropdown.jfif) no-repeat 95% 50%; /* 네이티브 화살표 대체 */  
   border-left-width:0;
   border-right-width:0;

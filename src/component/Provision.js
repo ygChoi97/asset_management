@@ -7,6 +7,7 @@ import ExcelToDB from "../exceltodb2.png";
 import DBToExcel from "../dbtoexcel2.png";
 import { useDetectOutsideClick } from "./useDetectOutsideClick";
 import jwt_decode from "jwt-decode";
+import { DateRangeColumnFilter, dateBetweenFilterFn } from "./Filter";
 
 const BASE_URL = 'http://localhost:8181/api/provision';
 
@@ -114,10 +115,14 @@ function Provision() {
                 if (json != null) {
                 let copyColumns = [];
                 for (let i = 0; i < json.length; i++) {
-                    let copyColumn = { accessor: '', Header: '', filter: '' };
+                    let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
                     copyColumn.accessor = json[i].column_name;
                     if (copyColumn.accessor === 'areainstall')
                         copyColumn.filter = 'equals';
+                    if (copyColumn.accessor === 'period' || copyColumn.accessor === 'joiningdate' || copyColumn.accessor === 'applicationdate' || copyColumn.accessor === 'provisiondate') {
+                        copyColumn.Filter = DateRangeColumnFilter;
+                        copyColumn.filter = dateBetweenFilterFn;
+                    }
                     copyColumn.Header = json[i].column_comment;
                     copyColumns.push(copyColumn);
                 }
@@ -244,8 +249,7 @@ function Provision() {
     
     const exportHandler = e => {
         
-        const currentDate = new Date();
-        
+        const currentDate = new Date(); 
         //오늘날짜를 YYYY-MM-DD 로 선언하여 파일이름에 붙이기 위해서.
         const currentDayFormat = `_${currentDate.getFullYear()}년${currentDate.getMonth()+1}월${currentDate.getDate()}일${currentDate.getHours()}시${currentDate.getMinutes()}분${currentDate.getSeconds()}초`;
         
@@ -427,7 +431,10 @@ function Provision() {
           </div>
         </div>
       </div>
-            <input type="file" accept=".xls,.xlsx" onChange={readExcel} ref={$fileInput} hidden></input>
+            <input type="file" accept=".xls,.xlsx" onChange={readExcel} 
+                onClick={(event)=> { 
+                    event.target.value = null
+                }} ref={$fileInput} hidden></input>
             <TableProvision columns={columns} data={data} dataWasFiltered={dataWasFiltered} />
         </>
 

@@ -106,14 +106,14 @@ function Pws() {
           let copyColumns = [];
           for (let i = 0; i < json.length; i++) {
             if (json[i].column_name === 'id') continue;
-            let copyColumn = { accessor: '', Header: '', filter: '' };
+            let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
             copyColumn.accessor = json[i].column_name;
             copyColumn.accessor = json[i].column_name;
             if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area')
               copyColumn.filter = 'equals';
             if (copyColumn.accessor === 'introductiondate') {
               copyColumn.Filter = DateRangeColumnFilter;
-              copyColumn.filter = dateBetweenFilterFn;  // Custom Filter Type 
+              copyColumn.filter = dateBetweenFilterFn;
             }
             copyColumn.Header = json[i].column_comment;
             copyColumns.push(copyColumn);
@@ -147,14 +147,12 @@ function Pws() {
   };
 
   const readExcel = async (e) => {
-    let input = e.target;
     const file1 = e.target.files[0];
     console.log(file1);
     const ExcelJS = require("exceljs");
     const wb = new ExcelJS.Workbook();
     const reader = new FileReader();
     reader.readAsArrayBuffer(file1);
-
     reader.onload = () => {
       const buffer = reader.result;
       wb.xlsx.load(buffer).then(workbook => {
@@ -223,6 +221,11 @@ function Pws() {
   };
 
   const exportHandler = e => {
+
+    const currentDate = new Date(); 
+    //오늘날짜를 YYYY-MM-DD 로 선언하여 파일이름에 붙이기 위해서.
+    const currentDayFormat = `_${currentDate.getFullYear()}년${currentDate.getMonth()+1}월${currentDate.getDate()}일${currentDate.getHours()}시${currentDate.getMinutes()}분${currentDate.getSeconds()}초`;
+
     const datas = filteredData.map(item => item.values);
     console.log(datas);
 
@@ -308,7 +311,7 @@ function Pws() {
 
       workbook.xlsx.writeBuffer().then((data) => {
         const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-        saveFile(blob, 'PWS현황리스트');
+        saveFile(blob, `PWS현황리스트${currentDayFormat}`);
       })
       setIsActive(false);
     } catch (error) {
@@ -323,7 +326,7 @@ function Pws() {
         description: 'Excel file',
         accept: { "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ['.xlsx'] },
       }],
-      suggestedName: 'PWS현황리스트',
+      suggestedName: filename,
     };
     let handle = await window.showSaveFilePicker(opts);
     let writable = await handle.createWritable();
@@ -383,7 +386,10 @@ function Pws() {
           </div>
         </div>
       </div>
-      <input type="file" accept=".xls,.xlsx" onChange={readExcel} ref={$fileInput} hidden></input>
+      <input type="file" accept=".xls,.xlsx" onChange={readExcel} 
+          onClick={(event)=> { 
+               event.target.value = null
+          }} ref={$fileInput} hidden></input>
       <TablePws columns={columns} data={data} dataWasFiltered={dataWasFiltered} />
 
     </>

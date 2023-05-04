@@ -38,11 +38,11 @@ function TableDisposal({ columns, data, dataWasFiltered }) {
     useEffect(() => { dataWasFiltered(rows); }, [rows, dataWasFiltered]);
 
 
-    console.log('Pws Table 랜더링');
+    console.log('Pws Disposal Table 랜더링');
     return (
         <>
             {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchPwsDisposal column9={'headquarters'} column1={'department'} column2={'model'} column3={'uptake'} column4={'userid'} column5={'idasset'} column8={'sn'} column6={'area'} column7={'username'} onSubmit={setFilter} />
+            <SearchPwsDisposal column1={'headquarters'} column2={'department'} column3={'model'} column4={'uptake'} column5={'userid'} column6={'idasset'} column7={'sn'} column8={'area'} column9={'username'} column10={'introductiondate'} onSubmit={setFilter} />
             {/* {searchs} */}
             <div style={{ width: '100%', height: `calc(100vh - 275px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div style={{ width: '100%', overflow: 'auto' }}>
