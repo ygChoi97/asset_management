@@ -43,7 +43,7 @@ function TableReturn({ columns, data, dataWasFiltered }) {
     return (
         <>
             {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchReturn column1={'assetno'} column2={'hoteam'} column3={'housername'} column4={'idasset'} column5={'sn'} column6={'model'} column7={'resigndate'} column8={'returndate'} onSubmit={setFilter} />
+            <SearchReturn column1={'headquarters'} column2={'assetno'} column3={'hoteam'} column4={'housername'} column5={'idasset'} column6={'sn'} column7={'model'} column8={'area'}  column9={'resigndate'} column10={'returndate'} onSubmit={setFilter} />
             {/* {searchs} */}
             <div style={{ width: '100%', height: `calc(100vh - 275px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div style={{ width: '100%', overflow: 'auto' }}>

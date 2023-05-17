@@ -279,7 +279,9 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
     );
   }
 
-  export function SearchReturn({ column1, column2, column3, column4, column5, column6, column7, column8, onSubmit }) {
+  export function SearchReturn({ column1, column2, column3, column4, column5, column6, column7, column8, column9, column10, onSubmit }) {
+    const [headquarters, setHeadquarters] = useState('');
+    const [area, setArea] = useState('');
     const [assetno, setAssetno] = useState('');
     const [hoteam, setHoteam] = useState('');
     const [housername, setHousername] = useState('');
@@ -290,6 +292,10 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
     const [resigndateED, setResigndateED] = useState('');
     const [returndateSD, setReturndateSD] = useState('');
     const [returndateED, setReturndateED] = useState('');
+
+    const headquartersHandler = (e) => {
+      setHeadquarters(e.target.value);
+    }
 
     const assetnoHandler = (e) => {
       setAssetno(e.target.value);
@@ -313,6 +319,10 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
 
     const modelHandler = (e) => {
       setModel(e.target.value);
+    }
+
+    const areaSelectHandler = (e) => {
+      setArea(e.target.value);
     }
 
     const resigndateSDHandler = (e) => {
@@ -340,10 +350,12 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
       onSubmit(column4, event.target.elements[3].value);
       onSubmit(column5, event.target.elements[4].value);
       onSubmit(column6, event.target.elements[5].value);
-      onSubmit(column7, (old = []) => [event.target.elements[7].value ? event.target.elements[7].value : undefined, old[1]]);
-      onSubmit(column7, (old = []) => [event.target.elements[6].value ? event.target.elements[6].value : undefined, old[0]]);
-      onSubmit(column8, (old = []) => [event.target.elements[9].value ? event.target.elements[9].value : undefined, old[1]]);
-      onSubmit(column8, (old = []) => [event.target.elements[8].value ? event.target.elements[8].value : undefined, old[0]]);
+      onSubmit(column7, event.target.elements[6].value);
+      onSubmit(column8, event.target.elements[7].value);
+      onSubmit(column9, (old = []) => [event.target.elements[9].value ? event.target.elements[9].value : undefined, old[1]]);
+      onSubmit(column9, (old = []) => [event.target.elements[8].value ? event.target.elements[8].value : undefined, old[0]]);
+      onSubmit(column10, (old = []) => [event.target.elements[11].value ? event.target.elements[11].value : undefined, old[1]]);
+      onSubmit(column10, (old = []) => [event.target.elements[10].value ? event.target.elements[10].value : undefined, old[0]]);
     };
   
     return (
@@ -352,15 +364,38 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           <div>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-              <div className="filterItem"><label htmlFor='assetno'>자산번호</label> <input className='underline' id='assetno' name={column1} placeholder='' onChange={assetnoHandler} value={assetno} /></div>
-              <div className="filterItem"><label htmlFor='hoteam'>인계팀</label><input className='underline'id='hoteam' name={column2} placeholder='' onChange={hoteamHandler} value={hoteam} /></div>
-              <div className="filterItem"><label htmlFor='housername'>인계자</label><input className='underline' id='housername' name={column3} placeholder='' onChange={housernameHandler} value={housername} /></div>          
+              <div className="filterItem"><label htmlFor='headquarters'>본부</label> <input className='underline' id='headquarters' name={column1} placeholder='' onChange={headquartersHandler} value={headquarters} /></div>
+              <div className="filterItem"><label htmlFor='assetno'>자산번호</label> <input className='underline' id='assetno' name={column2} placeholder='' onChange={assetnoHandler} value={assetno} /></div>
+              <div className="filterItem"><label htmlFor='hoteam'>인계팀</label><input className='underline'id='hoteam' name={column3} placeholder='' onChange={hoteamHandler} value={hoteam} /></div>
+              <div className="filterItem"><label htmlFor='housername'>인계자</label><input className='underline' id='housername' name={column4} placeholder='' onChange={housernameHandler} value={housername} /></div>          
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-              <div className="filterItem"><label htmlFor='idasset'>자산관리번호</label><input className='underline' id='idasset' name={column4} placeholder='' onChange={idassetHandler} value={idasset} /></div>
-              <div className="filterItem"><label htmlFor='sn'>S/N</label><input className='underline' id='sn' name={column5} placeholder='' onChange={snHandler} value={sn} /></div>
-              <div className="filterItem"><label htmlFor='model'>모델</label><input className='underline' id='model' name={column6} placeholder='' onChange={modelHandler} value={model} /></div>
+              <div className="filterItem"><label htmlFor='idasset'>자산관리번호</label><input className='underline' id='idasset' name={column5} placeholder='' onChange={idassetHandler} value={idasset} /></div>
+              <div className="filterItem"><label htmlFor='sn'>S/N</label><input className='underline' id='sn' name={column6} placeholder='' onChange={snHandler} value={sn} /></div>
+              <div className="filterItem"><label htmlFor='model'>모델</label><input className='underline' id='model' name={column7} placeholder='' onChange={modelHandler} value={model} /></div>
+              <div className="filterItem"><label htmlFor='area'>지역</label>
+                <select className="selectItem" id='area' name={column8} onChange={areaSelectHandler} value={area}>
+                  <option value="">― 선택안함 ―</option>
+                  <option value="남양">남양</option>
+                  <option value="마북">마북</option>
+                  <option value="의왕">의왕</option>
+                  <option value="광명">광명</option>
+                  <option value="화성">화성</option>
+                  <option value="광주">광주</option>
+                  <option value="전주">전주</option>
+                  <option value="울산">울산</option>
+                  <option value="아산">아산</option>
+                  <option value="본사">본사</option>
+                  <option value="대치">대치</option>
+                  <option value="삼성">삼성</option>
+                  <option value="판교">판교</option>
+                  <option value="원효로">원효로</option>
+                  <option value="대방">대방</option>
+                  <option value="기타">기타</option>
+                  
+                </select>
+              </div>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>

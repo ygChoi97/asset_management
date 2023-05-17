@@ -153,6 +153,7 @@ function Pws() {
     const wb = new ExcelJS.Workbook();
     const reader = new FileReader();
     reader.readAsArrayBuffer(file1);
+
     reader.onload = () => {
       const buffer = reader.result;
       wb.xlsx.load(buffer).then(workbook => {
@@ -167,31 +168,40 @@ function Pws() {
 
           let tempDbData = [];
           for (let r = 2; r <= sheet.rowCount; r++) {
+            let isEmpty = {idasset: false, sn: false};
             let obj = {};
             for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
-              if (columns[c - 1].accessor === 'introductiondate')
-                if (sheet.getRow(r).getCell(c).toString() !== '') {
+              
+              let str = sheet.getRow(r).getCell(c).toString();
+              str = str.replace(/\n/g, ""); // 개행문자 제거
+              str = str.trim();             // 양쪽 공백 제거
+
+              if(columns[c - 1].accessor === 'idasset' && str == '') isEmpty.idasset = true;
+              if(columns[c - 1].accessor === 'sn' && str == '') isEmpty.sn = true;
+              if(isEmpty.idasset & isEmpty.sn) {
+                getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 자산관리번호와 S/N가 둘다 빈칸입니다.\n import를 취소합니다.`);
+                return;
+              }
+
+              if (columns[c - 1].accessor === 'introductiondate') {
+                if (str !== '') {
                   obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
                 }
                 else
                   obj[columns[c - 1].accessor] = null;
-
-              else if (sheet.getRow(r).getCell(c).toString() == '_x000d_' || sheet.getRow(r).getCell(c).toString() == '')
+              }
+              else if (str == '_x000d_' || str == '')
                 obj[columns[c - 1].accessor] = null;
               else
-                obj[columns[c - 1].accessor] = sheet.getRow(r).getCell(c).toString();
+                obj[columns[c - 1].accessor] = str;
             }
             tempDbData.push(obj);
           }
           console.log(tempDbData);
-          //setDbData(tempDbData);
 
           fetch(BASE_URL + `/import`, {
             method: 'POST',
-            headers: {
-              'Content-type': 'application/json',
-              'Authorization': 'Bearer ' + ACCESS_TOKEN
-            },
+            headers: { 'Content-type': 'application/json' },
             body: JSON.stringify(tempDbData)
           })
             .then(res => {
@@ -209,6 +219,7 @@ function Pws() {
             })
             .catch(error => {
               console.log(error);
+              getConfirmationOK(`DB 업데이트 실패 \n ${error}`);
             });
         })
       })
@@ -332,7 +343,6 @@ function Pws() {
     let writable = await handle.createWritable();
     await writable.write(blob);
     writable.close();
-
   }
 
   const dataWasFiltered = x => {

@@ -103,8 +103,8 @@ function Provision() {
             .then(res => {
                 if (res.status === 403) {
                     throw new Error('로그인 토큰이 만료되었습니다.\n로그인 페이지로 이동합니다.');
-                  }
-                   else if (!res.ok) {
+                }
+                else if (!res.ok) {
                     throw new Error(res.status);
                 }
                 else {
@@ -113,36 +113,36 @@ function Provision() {
             })
             .then(json => {
                 if (json != null) {
-                let copyColumns = [];
-                for (let i = 0; i < json.length; i++) {
-                    let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
-                    copyColumn.accessor = json[i].column_name;
-                    if (copyColumn.accessor === 'areainstall')
-                        copyColumn.filter = 'equals';
-                    if (copyColumn.accessor === 'period' || copyColumn.accessor === 'joiningdate' || copyColumn.accessor === 'applicationdate' || copyColumn.accessor === 'provisiondate') {
-                        copyColumn.Filter = DateRangeColumnFilter;
-                        copyColumn.filter = dateBetweenFilterFn;
+                    let copyColumns = [];
+                    for (let i = 0; i < json.length; i++) {
+                        let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
+                        copyColumn.accessor = json[i].column_name;
+                        if (copyColumn.accessor === 'areainstall')
+                            copyColumn.filter = 'equals';
+                        if (copyColumn.accessor === 'period' || copyColumn.accessor === 'joiningdate' || copyColumn.accessor === 'applicationdate' || copyColumn.accessor === 'provisiondate') {
+                            copyColumn.Filter = DateRangeColumnFilter;
+                            copyColumn.filter = dateBetweenFilterFn;
+                        }
+                        copyColumn.Header = json[i].column_comment;
+                        copyColumns.push(copyColumn);
                     }
-                    copyColumn.Header = json[i].column_comment;
-                    copyColumns.push(copyColumn);
+                    setColumns(copyColumns);
+                    console.log('useEffect() fetch - /menu', copyColumns);
                 }
-                setColumns(copyColumns);
-                console.log('useEffect() fetch - /menu', copyColumns);
-            }
             })
             .catch(err => {
-              const token = localStorage.getItem('ACCESS_TOKEN');
-              if (token) {
-                const isExpired = isTokenExpired(token);
-                if (isExpired) {
-                  console.log('Expired');
-                  alert(err.message);
-                  window.location.href = '/login';
-                } else {
-                  console.log('no Expired');
-                  alert(`Error message : ${err.message}\n\n서버 점검이 필요합니다.`);
+                const token = localStorage.getItem('ACCESS_TOKEN');
+                if (token) {
+                    const isExpired = isTokenExpired(token);
+                    if (isExpired) {
+                        console.log('Expired');
+                        alert(err.message);
+                        window.location.href = '/login';
+                    } else {
+                        console.log('no Expired');
+                        alert(`Error message : ${err.message}\n\n서버 점검이 필요합니다.`);
+                    }
                 }
-              }
             });
 
         getAllDataFromDB();
@@ -153,7 +153,7 @@ function Provision() {
         const decodedToken = jwt_decode(token);
         const currentTime = Date.now() / 1000;
         return decodedToken.exp < currentTime;
-      };
+    };
 
     const readExcel = async (e) => {
         let input = e.target;
@@ -178,36 +178,49 @@ function Provision() {
 
                     let tempDbData = [];
                     for (let r = 2; r <= sheet.rowCount; r++) {
+                        let isEmpty = { idasset: false, sn: false };
                         let obj = {};
                         for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
+
+                            let str = sheet.getRow(r).getCell(c).toString();
+                            str = str.replace(/\n/g, ""); // 개행문자 제거
+                            str = str.trim();             // 양쪽 공백 제거
+
+                            if (columns[c - 1].accessor === 'idasset' && str == '') isEmpty.idasset = true;
+                            if (columns[c - 1].accessor === 'sn' && str == '') isEmpty.sn = true;
+                            if (isEmpty.idasset & isEmpty.sn) {
+                                getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 자산관리번호와 S/N가 둘다 빈칸입니다.\n import를 취소합니다.`);
+                                return;
+                            }
+
                             if (columns[c - 1].accessor === 'period')
-                                if (sheet.getRow(r).getCell(c).toString() !== '')
+                                if (str !== '')
                                     obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
                                 else
                                     obj[columns[c - 1].accessor] = null;
 
                             else if (columns[c - 1].accessor === 'joiningdate')
-                                if (sheet.getRow(r).getCell(c).toString() !== '')
+                                if (str !== '')
                                     obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
                                 else
                                     obj[columns[c - 1].accessor] = null;
 
                             else if (columns[c - 1].accessor === 'applicationdate')
-                                if (sheet.getRow(r).getCell(c).toString() !== '')
+                                if (str !== '')
                                     obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
                                 else
                                     obj[columns[c - 1].accessor] = null;
                             else if (columns[c - 1].accessor === 'provisiondate')
-                                if (sheet.getRow(r).getCell(c).toString() !== '')
+                                if (str !== '')
                                     obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
                                 else
                                     obj[columns[c - 1].accessor] = null;
 
-                            else if (sheet.getRow(r).getCell(c).toString() == '_x000d_' || sheet.getRow(r).getCell(c).toString() == '')
+                            else if (str == '_x000d_' || str == '')
                                 obj[columns[c - 1].accessor] = null;
 
                             else
-                                obj[columns[c - 1].accessor] = sheet.getRow(r).getCell(c).toString();
+                                obj[columns[c - 1].accessor] = str;
                         }
                         tempDbData.push(obj);
                     }
@@ -236,6 +249,7 @@ function Provision() {
                         })
                         .catch(error => {
                             console.log(error);
+                            getConfirmationOK(`DB 업데이트 실패 \n ${error}`);
                         });
                 })
             })
@@ -246,16 +260,16 @@ function Provision() {
         $fileInput.current.click();
         setIsActive(false);
     };
-    
+
     const exportHandler = e => {
-        
-        const currentDate = new Date(); 
+
+        const currentDate = new Date();
         //오늘날짜를 YYYY-MM-DD 로 선언하여 파일이름에 붙이기 위해서.
-        const currentDayFormat = `_${currentDate.getFullYear()}년${currentDate.getMonth()+1}월${currentDate.getDate()}일${currentDate.getHours()}시${currentDate.getMinutes()}분${currentDate.getSeconds()}초`;
-        
+        const currentDayFormat = `_${currentDate.getFullYear()}년${currentDate.getMonth() + 1}월${currentDate.getDate()}일${currentDate.getHours()}시${currentDate.getMinutes()}분${currentDate.getSeconds()}초`;
+
         const datas = filteredData.map(item => item.values);
         console.log(datas);
-        
+
         const Excel = require("exceljs");
         try {
             // 엑셀 생성
@@ -401,38 +415,38 @@ function Provision() {
     return (
         <>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-        <ConfirmationOK />
-        <div className="container">
-          <div ref={dropdownRef} className="menu-container">
-            <button onClick={() => { setIsActive(!isActive) }} className="menu-trigger">
-              <span>Excel 연동</span>
-              <img
-                src={ExcelDB}
-                alt="ExcelDB"
-                width='50px'
-              />
-            </button>
-            <nav className={`menu ${isActive ? "active" : "inactive"}`}>
-              <ul>
-                <li>
-                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                    <img src={ExcelToDB} alt="ExcelToDB" width='20%'/>
-                    <button className="btnImport" onClick={importHandler}> Import data to DB</button>
-                  </div>
-                </li>
-                <li>
-                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                    <img src={DBToExcel} alt="DBToExcel" width='20%' />
-                    <button className="btnImport" onClick={exportHandler}>Export data from DB</button>
-                  </div>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-      </div>
-            <input type="file" accept=".xls,.xlsx" onChange={readExcel} 
-                onClick={(event)=> { 
+                <ConfirmationOK />
+                <div className="container">
+                    <div ref={dropdownRef} className="menu-container">
+                        <button onClick={() => { setIsActive(!isActive) }} className="menu-trigger">
+                            <span>Excel 연동</span>
+                            <img
+                                src={ExcelDB}
+                                alt="ExcelDB"
+                                width='50px'
+                            />
+                        </button>
+                        <nav className={`menu ${isActive ? "active" : "inactive"}`}>
+                            <ul>
+                                <li>
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                                        <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
+                                        <button className="btnImport" onClick={importHandler}> Import data to DB</button>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                                        <img src={DBToExcel} alt="DBToExcel" width='20%' />
+                                        <button className="btnImport" onClick={exportHandler}>Export data from DB</button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <input type="file" accept=".xls,.xlsx" onChange={readExcel}
+                onClick={(event) => {
                     event.target.value = null
                 }} ref={$fileInput} hidden></input>
             <TableProvision columns={columns} data={data} dataWasFiltered={dataWasFiltered} />
