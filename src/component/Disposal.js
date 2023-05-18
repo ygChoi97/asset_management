@@ -306,20 +306,6 @@ function Disposal() {
             horizontal: 'center',
             wrapText: true
           },
-
-          // Borders 설정
-          // border: {
-          //   top: {style:'thin'},
-          //   left: {style:'thin'},
-          //   bottom: {style:'thin'},
-          //   right: {style:'thin'},
-          // },
-          // Fills 설정
-          // fill: {
-          //   type: 'pattern',
-          //   fgColor: {argb: 'FFFFFF00'},
-          //   bgColor: {argb: 'FF0000FF'}
-          // }
         }
         return obj;
       });
@@ -331,20 +317,26 @@ function Disposal() {
         right: { style: 'thin' }
       };
 
+      const fillStyle = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'E4DCD3' },
+        bgColor: { argb: 'E4DCD3' }
+      };
+
       datas.map((item, index) => {
         sheetOne.addRow(item);
         // 추가된 행의 컬럼 설정(헤더와 style이 다를 경우)
         for (let loop = 1; loop <= columns.length; loop++) {
           const col = sheetOne.getRow(index + 1).getCell(loop);
           col.border = borderStyle;
-          col.font = { name: '맑은 고딕', size: 9 };
+          if(index === 0) col.fill = fillStyle;
         }
       });
 
       for (let loop = 1; loop <= columns.length; loop++) {
         const col = sheetOne.getRow(sheetOne.rowCount).getCell(loop);
         col.border = borderStyle;
-        col.font = { name: '맑은 고딕', size: 9 };
       }
 
       workbook.xlsx.writeBuffer().then((data) => {
