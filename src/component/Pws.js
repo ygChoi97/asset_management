@@ -105,17 +105,16 @@ function Pws() {
         if (json != null) {
           let copyColumns = [];
           for (let i = 0; i < json.length; i++) {
-            if (json[i].column_name === 'id') continue;
+            if (json[i].column_name === 'id') continue; // 메뉴에서 인덱스 제외
             let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
             copyColumn.accessor = json[i].column_name;
-            copyColumn.accessor = json[i].column_name;
             if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area')
-              copyColumn.filter = 'equals';
+              copyColumn.filter = 'equals';   // select 타입은 equals 필터 적용
             if (copyColumn.accessor === 'introductiondate') {
-              copyColumn.Filter = DateRangeColumnFilter;
+              copyColumn.Filter = DateRangeColumnFilter;  // 날짜 구간 필터 적용
               copyColumn.filter = dateBetweenFilterFn;
             }
-            copyColumn.Header = json[i].column_comment;
+            copyColumn.Header = json[i].column_comment; // 메뉴명
             copyColumns.push(copyColumn);
           }
           setColumns(copyColumns);
@@ -201,7 +200,10 @@ function Pws() {
 
           fetch(BASE_URL + `/import`, {
             method: 'POST',
-            headers: { 'Content-type': 'application/json' },
+            headers: {
+              'Content-type': 'application/json',
+              'Authorization': 'Bearer ' + ACCESS_TOKEN
+            },
             body: JSON.stringify(tempDbData)
           })
             .then(res => {
@@ -272,7 +274,7 @@ function Pws() {
         // 스타일 설정
         obj.style = {
           // Font 설정
-          font: { name: 'Arial Black', size: 10 },
+          font: { name: '맑은 고딕', size: 9 },
           // 정렬 설정
           alignment: {
             vertical: 'middle',
@@ -310,14 +312,14 @@ function Pws() {
         for (let loop = 1; loop <= columns.length; loop++) {
           const col = sheetOne.getRow(index + 1).getCell(loop);
           col.border = borderStyle;
-          col.font = { name: 'Arial Black', size: 9 };
+          col.font = { name: '맑은 고딕', size: 9 };
         }
       });
 
       for (let loop = 1; loop <= columns.length; loop++) {
         const col = sheetOne.getRow(sheetOne.rowCount).getCell(loop);
         col.border = borderStyle;
-        col.font = { name: 'Arial Black', size: 9 };
+        col.font = { name: '맑은 고딕', size: 9 };
       }
 
       workbook.xlsx.writeBuffer().then((data) => {

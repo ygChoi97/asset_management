@@ -185,7 +185,12 @@ function Provision() {
                             let str = sheet.getRow(r).getCell(c).toString();
                             str = str.replace(/\n/g, ""); // 개행문자 제거
                             str = str.trim();             // 양쪽 공백 제거
-
+                            
+                            if(columns[c - 1].accessor === 'id' && str === '') {
+                                getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 번호가 빈칸입니다.\n import를 취소합니다.`);
+                                return;
+                            }
+                            
                             if (columns[c - 1].accessor === 'idasset' && str == '') isEmpty.idasset = true;
                             if (columns[c - 1].accessor === 'sn' && str == '') isEmpty.sn = true;
                             if (isEmpty.idasset & isEmpty.sn) {
@@ -303,7 +308,7 @@ function Provision() {
                 /* if(obj.key == 'period')
                 obj.style = {
                     // Font 설정
-                    font: { name: 'Arial Black', size: 10 },
+                    font: { name: '맑은 고딕', size: 10 },
                     // 정렬 설정
                     alignment: {
                         vertical: 'middle',
@@ -316,7 +321,7 @@ function Provision() {
                 else */
                 obj.style = {
                     // Font 설정
-                    font: { name: 'Arial Black', size: 10 },
+                    font: { name: '맑은 고딕', size: 9 },
                     // 정렬 설정
                     alignment: {
                         vertical: 'middle',
@@ -358,14 +363,14 @@ function Provision() {
                         console.log(col);
                     } */
                     col.border = borderStyle;
-                    col.font = { name: 'Arial Black', size: 9 };
+                    col.font = { name: '맑은 고딕', size: 9 };
                 }
             });
 
             for (let loop = 1; loop <= columns.length; loop++) {
                 const col = sheetOne.getRow(sheetOne.rowCount).getCell(loop);
                 col.border = borderStyle;
-                col.font = { name: 'Arial Black', size: 9 };
+                col.font = { name: '맑은 고딕', size: 9 };
             }
 
             workbook.xlsx.writeBuffer().then((data) => {

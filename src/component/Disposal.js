@@ -60,7 +60,7 @@ function Disposal() {
         }
       })
       .then(json => {
-        let copyDatas = [...data];
+        let copyDatas = [];
         for (let i = 0; i < json.count; i++) {
           let copyData = {};
           copyData = json.pwsDtos[i];
@@ -199,7 +199,7 @@ function Disposal() {
               let str = sheet.getRow(r).getCell(c).toString();
               str = str.replace(/\n/g, ""); // 개행문자 제거
               str = str.trim();             // 양쪽 공백 제거
-
+              
               if(columns[c - 1].accessor === 'idasset' && str == '') isEmpty.idasset = true;
               if(columns[c - 1].accessor === 'sn' && str == '') isEmpty.sn = true;
               if(isEmpty.idasset & isEmpty.sn) {
@@ -225,7 +225,10 @@ function Disposal() {
 
           fetch(BASE_URL + `/import`, {
             method: 'POST',
-            headers: { 'Content-type': 'application/json' },
+            headers: {
+              'Content-type': 'application/json',
+              'Authorization': 'Bearer ' + ACCESS_TOKEN
+            },
             body: JSON.stringify(tempDbData)
           })
             .then(res => {
@@ -296,7 +299,7 @@ function Disposal() {
         // 스타일 설정
         obj.style = {
           // Font 설정
-          font: { name: 'Arial Black', size: 10 },
+          font: { name: '맑은 고딕', size: 9 },
           // 정렬 설정
           alignment: {
             vertical: 'middle',
@@ -334,14 +337,14 @@ function Disposal() {
         for (let loop = 1; loop <= columns.length; loop++) {
           const col = sheetOne.getRow(index + 1).getCell(loop);
           col.border = borderStyle;
-          col.font = { name: 'Arial Black', size: 9 };
+          col.font = { name: '맑은 고딕', size: 9 };
         }
       });
 
       for (let loop = 1; loop <= columns.length; loop++) {
         const col = sheetOne.getRow(sheetOne.rowCount).getCell(loop);
         col.border = borderStyle;
-        col.font = { name: 'Arial Black', size: 9 };
+        col.font = { name: '맑은 고딕', size: 9 };
       }
 
       workbook.xlsx.writeBuffer().then((data) => {
