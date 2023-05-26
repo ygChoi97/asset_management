@@ -10,6 +10,10 @@ export default function Menu() {
         // 로컬스토리지 데이터 제거
         localStorage.removeItem('ACCESS_TOKEN');
         localStorage.removeItem('LOGIN_USERNAME');
+        localStorage.removeItem('SEARCHTERM_PWS');
+        localStorage.removeItem('SEARCHTERM_PROVISION');
+        localStorage.removeItem('SEARCHTERM_RETURN');
+        localStorage.removeItem('SEARCHTERM_DISPOSAL');
         window.location.href = '/login';
     };
     const button = USERNAME

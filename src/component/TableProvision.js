@@ -5,7 +5,7 @@ import { Search, SearchProvision, SearchPws } from "./Search";
 import "../css/tableProvision.css";
 import "../css/pagination.css";
 
-function TableProvision({ columns, data, dataWasFiltered }) {
+function TableProvision({ columns, data, dataWasFiltered, setFilterHeadquarters }) {
     
     const {
         getTableProps,
@@ -28,7 +28,7 @@ function TableProvision({ columns, data, dataWasFiltered }) {
         preGlobalFilteredRows,
         // setFilter is the key!!!
         setFilter,
-    } = useTable({ columns, data, initialState: { pageIndex: 0, pageSize: 30 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
+    } = useTable({ columns, data, initialState: { pageIndex: 0, pageSize: 100 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
 
     const { pageIndex, pageSize } = state;
 
@@ -42,7 +42,7 @@ function TableProvision({ columns, data, dataWasFiltered }) {
     console.log('Provision Table 랜더링');
     return (
         <>
-            <SearchProvision column1={'assetno'} column2={'department'} column3={'headquarters'} column4={'idasset'} column5={'sn'} column6={'areainstall'} column7={'model'} column8={'provisiondate'} onSubmit={setFilter}/>
+            <SearchProvision column1={'assetno'} column2={'department'} column3={'headquarters'} column4={'idasset'} column5={'sn'} column6={'areainstall'} column7={'model'} column8={'provisiondate'} onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
             {/* {searchs} */}
             <div style={{ width: '100%', height : `calc(100vh - 275px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
             <div style={{width:'100%', overflow: 'auto'}}>
@@ -138,7 +138,7 @@ function TableProvision({ columns, data, dataWasFiltered }) {
                     value={pageSize}
                     onChange={(e) => setPageSize(Number(e.target.value))}
                 >
-                    {[10, 20, 30, 50, 100, 200].map((pageSize) => (
+                    {[10, 20, 30, 50, 100, data.length].map((pageSize) => (
                         <option key={pageSize} value={pageSize}>
                             페이지당 {pageSize}
                         </option>

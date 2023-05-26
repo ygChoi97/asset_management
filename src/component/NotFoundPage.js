@@ -1,6 +1,7 @@
 import React from 'react';
 
 const NotFoundPage = () => {
+  const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
   return (
     <div style={{border: '1px solid', width: '100%', height: '90vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
       

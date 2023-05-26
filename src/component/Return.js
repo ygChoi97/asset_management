@@ -7,7 +7,7 @@ import ExcelToDB from "../exceltodb2.png";
 import DBToExcel from "../dbtoexcel2.png";
 import { useDetectOutsideClick } from "./useDetectOutsideClick";
 import jwt_decode from "jwt-decode";
-import { DateRangeColumnFilter, dateBetweenFilterFn } from "./Filter";
+import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from "./Filter";
 
 const BASE_URL = 'http://localhost:8181/api/return';
 
@@ -107,6 +107,8 @@ function Return() {
                     for (let i = 0; i < json.length; i++) {
                         let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
                         copyColumn.accessor = json[i].column_name;
+                        if (copyColumn.accessor === 'headquarters')
+                            copyColumn.filter = exclusionFilterFn;   // 본부는 exclusion 필터 적용
                         if (copyColumn.accessor === 'resigndate' || copyColumn.accessor === 'returndate') {
                             copyColumn.Filter = DateRangeColumnFilter;
                             copyColumn.filter = dateBetweenFilterFn;
@@ -135,6 +137,22 @@ function Return() {
 
         getAllDataFromDB();
     }, []);
+
+    const setFilterHeadquarters = (headquartersOption) => {
+        let copyColumns = [...columns];
+        console.log(headquartersOption);
+        copyColumns.forEach(el => {
+            if (el.accessor === 'headquarters') {
+                if (headquartersOption == 1)
+                    el.filter = exclusionFilterFn
+                else
+                    el.filter = ''
+                console.log(el)
+                setColumns(copyColumns);
+                return false;
+            }
+        })
+    }
 
     const isTokenExpired = (token) => {
         const decodedToken = jwt_decode(token);
@@ -367,6 +385,7 @@ function Return() {
         // 로컬 스토리지에서 데이터 삭제
         localStorage.removeItem('ACCESS_TOKEN');
         localStorage.removeItem('LOGIN_USERNAME');
+        localStorage.removeItem('SEARCHTERM_RETURN');
     };
 
     return (
@@ -406,7 +425,7 @@ function Return() {
                 onClick={(event) => {
                     event.target.value = null
                 }} ref={$fileInput} hidden></input>
-            <TableReturn columns={columns} data={data} dataWasFiltered={dataWasFiltered} />
+            <TableReturn columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} />
         </>
     );
 }

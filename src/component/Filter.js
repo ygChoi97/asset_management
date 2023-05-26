@@ -90,7 +90,6 @@ export function SelectColumnFilter({
 export function dateBetweenFilterFn(rows, id, filterValues) {
   const sd = filterValues[0] ? new Date(filterValues[0]) : undefined
   const ed = filterValues[1] ? new Date(filterValues[1]) : undefined
-
   if (ed || sd) {
     return rows.filter(r => {
       const cellDate = new Date(r.values[id])
@@ -106,6 +105,15 @@ export function dateBetweenFilterFn(rows, id, filterValues) {
   } else {
     return rows
   }
+}
+
+export function exclusionFilterFn(rows, id, filterValues) {
+  const searchTerm = filterValues.trim();
+  if (searchTerm) {
+    return rows.filter(r => r.values[id] === null || !r.values[id].includes(searchTerm))
+  }
+  else
+    return rows
 }
 
 export function DateRangeColumnFilter({

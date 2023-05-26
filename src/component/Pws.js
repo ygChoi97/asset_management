@@ -8,7 +8,7 @@ import ExcelToDB from "../exceltodb2.png";
 import DBToExcel from "../dbtoexcel2.png";
 import { useDetectOutsideClick } from "./useDetectOutsideClick";
 import jwt_decode from "jwt-decode";
-import { DateRangeColumnFilter, dateBetweenFilterFn } from "./Filter";
+import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from "./Filter";
 
 const BASE_URL = 'http://localhost:8181/api/pws';
 
@@ -18,11 +18,8 @@ function Pws() {
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
 
-  const [dbData, setDbData] = useState([]);
-
   const $fileInput = useRef();
 
-  const [filtered, setFiltered] = useState(null);
   const [, , getConfirmationOK, ConfirmationOK] = UseConfirm();
   let filteredData = null;
 
@@ -63,7 +60,6 @@ function Pws() {
       .then(json => {
         let copyDatas = [];
         for (let i = 0; i < json.count; i++) {
-          //console.log(json.pwsDtos[i]);
           let copyData = {};
           copyData = json.pwsDtos[i];
           if (json.pwsDtos[i].introductiondate != null || json.pwsDtos[i].introductiondate != undefined) {
@@ -89,8 +85,6 @@ function Pws() {
       }
     })
       .then(res => {
-        console.log(res);
-
         if (res.status === 403) {
           throw new Error('로그인 토큰이 만료되었습니다.\n로그인 페이지로 이동합니다.');
         }
@@ -108,11 +102,13 @@ function Pws() {
             if (json[i].column_name === 'id') continue; // 메뉴에서 인덱스 제외
             let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
             copyColumn.accessor = json[i].column_name;
-            if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area')
+            if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area' || copyColumn.accessor === 'company')
               copyColumn.filter = 'equals';   // select 타입은 equals 필터 적용
+            if (copyColumn.accessor === 'headquarters')
+              copyColumn.filter = exclusionFilterFn;   // 본부는 exclusion 필터 적용
             if (copyColumn.accessor === 'introductiondate') {
-              copyColumn.Filter = DateRangeColumnFilter;  // 날짜 구간 필터 적용
-              copyColumn.filter = dateBetweenFilterFn;
+              // copyColumn.Filter = DateRangeColumnFilter;  
+              copyColumn.filter = dateBetweenFilterFn;  // 날짜 구간 필터 적용
             }
             copyColumn.Header = json[i].column_comment; // 메뉴명
             copyColumns.push(copyColumn);
@@ -135,9 +131,24 @@ function Pws() {
           }
         }
       });
-
     getAllDataFromDB();
   }, []);
+
+  const setFilterHeadquarters = (headquartersOption) => {
+    let copyColumns = [...columns];
+    console.log(headquartersOption);
+    copyColumns.forEach(el => {
+      if(el.accessor === 'headquarters') {
+        if(headquartersOption == 1)
+          el.filter = exclusionFilterFn
+        else
+          el.filter = ''
+        console.log(el)
+        setColumns(copyColumns);
+        return false;
+      }
+    })
+  }
 
   const isTokenExpired = (token) => {
     const decodedToken = jwt_decode(token);
@@ -322,7 +333,6 @@ function Pws() {
     } catch (error) {
       console.error(error);
     }
-
   };
 
   async function saveFile(blob, filename) {
@@ -349,12 +359,14 @@ function Pws() {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
+    
   }, []);
-
+  
   const handleBeforeUnload = () => {
     // 로컬 스토리지에서 데이터 삭제
     localStorage.removeItem('ACCESS_TOKEN');
     localStorage.removeItem('LOGIN_USERNAME');
+    localStorage.removeItem('SEARCHTERM_PWS');
   };
 
   return (
@@ -394,11 +406,8 @@ function Pws() {
           onClick={(event)=> { 
                event.target.value = null
           }} ref={$fileInput} hidden></input>
-      <TablePws columns={columns} data={data} dataWasFiltered={dataWasFiltered} />
-
+      <TablePws columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} />
     </>
-
-
   );
 }
 

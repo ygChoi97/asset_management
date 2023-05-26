@@ -7,7 +7,7 @@ import ExcelToDB from "../exceltodb2.png";
 import DBToExcel from "../dbtoexcel2.png";
 import { useDetectOutsideClick } from "./useDetectOutsideClick";
 import jwt_decode from "jwt-decode";
-import { DateRangeColumnFilter, dateBetweenFilterFn } from "./Filter";
+import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from "./Filter";
 
 const BASE_URL = 'http://localhost:8181/api/pws';
 
@@ -17,11 +17,8 @@ function Disposal() {
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
 
-  const [dbData, setDbData] = useState([]);
-
   const $fileInput = useRef();
 
-  const [filtered, setFiltered] = useState(null);
   const [, , getConfirmationOK, ConfirmationOK] = UseConfirm();
   let filteredData = null;
 
@@ -78,36 +75,7 @@ function Disposal() {
         console.log(error);
       });
   }
-  function SelectColumnFilter({
-    column: { filterValue, setFilter, preFilteredRows, id },
-  }) {
-    // Calculate the options for filtering
-    // using the preFilteredRows
-    const options = React.useMemo(() => {
-      const options = new Set()
-      preFilteredRows.forEach(row => {
-        options.add(row.values[id])
-      })
-      return [...options.values()]
-    }, [id, preFilteredRows])
 
-    // Render a multi-select box
-    return (
-      <select
-        value={filterValue}
-        onChange={e => {
-          setFilter(e.target.value || undefined)
-        }}
-      >
-        <option value="">All</option>
-        {options.map((option, i) => (
-          <option key={i} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-    )
-  }
 
   useEffect(() => {
     fetch(BASE_URL + `/menu`, {
@@ -131,16 +99,18 @@ function Disposal() {
         if (json != null) {
         let copyColumns = [];
         for (let i = 0; i < json.length; i++) {
-          if (json[i].column_name === 'id') continue;
+          if (json[i].column_name === 'id') continue; // 메뉴에서 인덱스 제외
           let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
           copyColumn.accessor = json[i].column_name;
           if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area')
-            copyColumn.filter = 'equals';
+            copyColumn.filter = 'equals';  // select 타입은 equals 필터 적용
+          if (copyColumn.accessor === 'headquarters')
+            copyColumn.filter = exclusionFilterFn;   // 본부는 exclusion 필터 적용
           if (copyColumn.accessor === 'introductiondate') {
-            copyColumn.Filter = DateRangeColumnFilter;
-            copyColumn.filter = dateBetweenFilterFn;
+            // copyColumn.Filter = DateRangeColumnFilter;
+            copyColumn.filter = dateBetweenFilterFn;  // 날짜 구간 필터 적용
           }
-            copyColumn.Header = json[i].column_comment;
+            copyColumn.Header = json[i].column_comment; // 메뉴명
           copyColumns.push(copyColumn);
         }
         setColumns(copyColumns);
@@ -163,6 +133,22 @@ function Disposal() {
       });
     getAllDataFromDB();
   }, []);
+
+  const setFilterHeadquarters = (headquartersOption) => {
+    let copyColumns = [...columns];
+    console.log(headquartersOption);
+    copyColumns.forEach(el => {
+      if(el.accessor === 'headquarters') {
+        if(headquartersOption == 1)
+          el.filter = exclusionFilterFn
+        else
+          el.filter = ''
+        console.log(el)
+        setColumns(copyColumns);
+        return false;
+      }
+    })
+  }
 
   const isTokenExpired = (token) => {
     const decodedToken = jwt_decode(token);
@@ -342,13 +328,11 @@ function Disposal() {
       workbook.xlsx.writeBuffer().then((data) => {
         const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
         saveFile(blob, `PWS매각리스트${currentDayFormat}`);
-
       })
       setIsActive(false);
     } catch (error) {
       console.error(error);
     }
-
   };
 
   async function saveFile(blob, filename) {
@@ -382,6 +366,7 @@ function Disposal() {
     // 로컬 스토리지에서 데이터 삭제
     localStorage.removeItem('ACCESS_TOKEN');
     localStorage.removeItem('LOGIN_USERNAME');
+    localStorage.removeItem('SEARCHTERM_DISPOSAL');
   };
 
   return (
@@ -421,7 +406,7 @@ function Disposal() {
         onClick={(event) => {
           event.target.value = null
         }} ref={$fileInput} hidden></input>
-      <TableDisposal columns={columns} data={data} dataWasFiltered={dataWasFiltered} />
+      <TableDisposal columns={columns} data={data} dataWasFiltered={dataWasFiltered}  setFilterHeadquarters={setFilterHeadquarters} />
     </>
   );
 }

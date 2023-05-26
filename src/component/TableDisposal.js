@@ -4,7 +4,7 @@ import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
 import { Search, SearchPwsDisposal } from "./Search";
 import "../css/tablePws.css";
 
-function TableDisposal({ columns, data, dataWasFiltered }) {
+function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters }) {
 
     const {
         getTableProps,
@@ -27,7 +27,7 @@ function TableDisposal({ columns, data, dataWasFiltered }) {
         preGlobalFilteredRows,
         // setFilter is the key!!!
         setFilter,
-    } = useTable({ columns, data, initialState: { pageIndex: 0, pageSize: 30 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
+    } = useTable({ columns, data, initialState: { pageIndex: 0, pageSize: 100 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
 
     const { pageIndex, pageSize } = state;
 
@@ -42,7 +42,7 @@ function TableDisposal({ columns, data, dataWasFiltered }) {
     return (
         <>
             {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchPwsDisposal column1={'headquarters'} column2={'department'} column3={'model'} column4={'uptake'} column5={'userid'} column6={'idasset'} column7={'sn'} column8={'area'} column9={'username'} column10={'introductiondate'} onSubmit={setFilter} />
+            <SearchPwsDisposal column1={'headquarters'} column2={'department'} column3={'model'} column4={'uptake'} column5={'userid'} column6={'idasset'} column7={'sn'} column8={'area'} column9={'username'} column10={'introductiondate'} column11={'company'} onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
             {/* {searchs} */}
             <div style={{ width: '100%', height: `calc(100vh - 275px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div style={{ width: '100%', overflow: 'auto' }}>
@@ -138,7 +138,7 @@ function TableDisposal({ columns, data, dataWasFiltered }) {
                         value={pageSize}
                         onChange={(e) => setPageSize(Number(e.target.value))}
                     >
-                        {[10, 20, 30, 50, 100, 200].map((pageSize) => (
+                        {[10, 20, 30, 50, 100, data.length].map((pageSize) => (
                             <option key={pageSize} value={pageSize}>
                                 페이지당 {pageSize}
                             </option>

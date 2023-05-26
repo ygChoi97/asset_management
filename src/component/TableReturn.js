@@ -5,7 +5,7 @@ import { Search, SearchPws, SearchReturn } from "./Search";
 import "../css/tableReturn.css";
 import "../css/pagination.css";
 
-function TableReturn({ columns, data, dataWasFiltered }) {
+function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters }) {
 
     const {
         getTableProps,
@@ -28,7 +28,7 @@ function TableReturn({ columns, data, dataWasFiltered }) {
         preGlobalFilteredRows,
         // setFilter is the key!!!
         setFilter,
-    } = useTable({ columns, data, initialState: { pageIndex: 0, pageSize: 30 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
+    } = useTable({ columns, data, initialState: { pageIndex: 0, pageSize: 100 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
 
     const { pageIndex, pageSize } = state;
 
@@ -43,7 +43,7 @@ function TableReturn({ columns, data, dataWasFiltered }) {
     return (
         <>
             {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchReturn column1={'headquarters'} column2={'assetno'} column3={'hoteam'} column4={'housername'} column5={'idasset'} column6={'sn'} column7={'model'} column8={'area'}  column9={'resigndate'} column10={'returndate'} onSubmit={setFilter} />
+            <SearchReturn column1={'headquarters'} column2={'assetno'} column3={'hoteam'} column4={'housername'} column5={'idasset'} column6={'sn'} column7={'model'} column8={'area'}  column9={'resigndate'} column10={'returndate'}  onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
             {/* {searchs} */}
             <div style={{ width: '100%', height: `calc(100vh - 275px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div style={{ width: '100%', overflow: 'auto' }}>
@@ -139,7 +139,7 @@ function TableReturn({ columns, data, dataWasFiltered }) {
                         value={pageSize}
                         onChange={(e) => setPageSize(Number(e.target.value))}
                     >
-                        {[10, 20, 30, 50, 100, 200].map((pageSize) => (
+                        {[10, 20, 30, 50, 100, data.length].map((pageSize) => (
                             <option key={pageSize} value={pageSize}>
                                 페이지당 {pageSize}
                             </option>

@@ -39,51 +39,51 @@ body {
 
 /* 번호 */
 .return-table td:nth-child(1) {
-  width: 60px;
+  width: 40px;
 }
 /* 본부 */
 .return-table td:nth-child(2) {
-  width: 90px;
-}
-/* 지역 */
-.return-table td:nth-child(3) {
-  width: 65px;
+  width: 100px;
 }
 /* 인계팀 */
-.return-table td:nth-child(4) {
-  width: 90px;
+.return-table td:nth-child(3) {
+  width: 100px;
 }
 /* 인계자 */
-.return-table td:nth-child(5) {
+.return-table td:nth-child(4) {
   width: 50px;
 }
 /* 인계자 사번 */
-.return-table td:nth-child(6) {
-  width: 60px;
+.return-table td:nth-child(5) {
+  width: 40px;
 }
 /* 인수팀 */
-.return-table td:nth-child(7) {
-  width: 90px;
+.return-table td:nth-child(6) {
+  width: 100px;
 }
 /* 담당자 */
-.return-table td:nth-child(8) {
+.return-table td:nth-child(7) {
   width: 50px;
 }
 /* 자산번호 */
-.return-table td:nth-child(9) {
-  width: 50px;
+.return-table td:nth-child(8) {
+  width: 30px;
 }
 /* 자산관리번호 */
-.return-table td:nth-child(10) {
-  width: 80px;
+.return-table td:nth-child(9) {
+  width: 30px;
 }
 /* S/N */
-.return-table td:nth-child(11) {
-  width: 90px;
+.return-table td:nth-child(10) {
+  width: 40px;
 }
 /* 모델명 */
+.return-table td:nth-child(11) {
+  width: 40px;
+}
+/* 지역 */
 .return-table td:nth-child(12) {
-  width: 50px;
+  width: 40px;
 }
 /* 현재위치 */
 .return-table td:nth-child(13) { 
@@ -91,11 +91,11 @@ body {
 }
 /* 반납사유 */
 .return-table td:nth-child(14) {
-  width: 75px;
+  width: 55px;
 }
 /* 비고 */
 .return-table td:nth-child(15) {
-  width: 110px;
+  width: 140px;
 }
 /* 퇴직일 */
 .return-table td:nth-child(16) {
