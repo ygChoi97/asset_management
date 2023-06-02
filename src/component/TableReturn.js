@@ -1,11 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
 import { Search, SearchPws, SearchReturn } from "./Search";
 import "../css/tableReturn.css";
 import "../css/pagination.css";
+import ContentListCommon from "./ContentListCommon";
 
-function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters }) {
+function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh }) {
+
+    const [id, setId] = useState('');
 
     const {
         getTableProps,
@@ -38,10 +41,24 @@ function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters }) 
 
     useEffect(() => { dataWasFiltered(rows); }, [rows, dataWasFiltered]);
 
+    const handleRowClick = (event, values) => {
+        console.log('event : ', values);
+        if(values.id !== null && values.id !== '') {
+            setId(values.id);
+        } 
+        else {
+            alert('해당 PWS반납정보가 조회되지 않았습니다. \n예상치 못한 오류입니다.');
+        }    
+    };
+
+    const doClose = () => {
+        setId('');
+    }
 
     console.log('Return Table 랜더링');
     return (
         <>
+            <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/return'/>
             {/* <Search onSubmit={setGlobalFilter} /> */}
             <SearchReturn column1={'headquarters'} column2={'assetno'} column3={'hoteam'} column4={'housername'} column5={'idasset'} column6={'sn'} column7={'model'} column8={'area'}  column9={'resigndate'} column10={'returndate'}  onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
             {/* {searchs} */}
@@ -90,7 +107,7 @@ function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters }) 
                             {page.map((row) => {
                                 prepareRow(row);
                                 return (
-                                    <tr {...row.getRowProps()}>
+                                    <tr onClick={(event) => handleRowClick(event, row.values)} {...row.getRowProps()}>
                                         {row.cells.map((cell) => (
                                             <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                                         ))}

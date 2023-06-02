@@ -15,6 +15,8 @@ const BASE_URL = 'http://localhost:8181/api/pws';
 function Pws() {
   const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
 
+  const [refresh, setRefresh] = useState(false);
+
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
 
@@ -62,7 +64,7 @@ function Pws() {
         for (let i = 0; i < json.count; i++) {
           let copyData = {};
           copyData = json.pwsDtos[i];
-          if (json.pwsDtos[i].introductiondate != null || json.pwsDtos[i].introductiondate != undefined) {
+          if (json.pwsDtos[i].introductiondate != null) {
             let day = new Date(json.pwsDtos[i].introductiondate);
             copyData['introductiondate'] = dateFormat(day);
           }
@@ -99,7 +101,6 @@ function Pws() {
         if (json != null) {
           let copyColumns = [];
           for (let i = 0; i < json.length; i++) {
-            if (json[i].column_name === 'id') continue; // 메뉴에서 인덱스 제외
             let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
             copyColumn.accessor = json[i].column_name;
             if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area' || copyColumn.accessor === 'company')
@@ -132,14 +133,18 @@ function Pws() {
         }
       });
     getAllDataFromDB();
-  }, []);
+  }, [refresh]);
+
+  const doRefresh = () => {
+    setRefresh(!refresh);
+  }
 
   const setFilterHeadquarters = (headquartersOption) => {
     let copyColumns = [...columns];
     console.log(headquartersOption);
     copyColumns.forEach(el => {
-      if(el.accessor === 'headquarters') {
-        if(headquartersOption == 1)
+      if (el.accessor === 'headquarters') {
+        if (headquartersOption == 1)
           el.filter = exclusionFilterFn
         else
           el.filter = ''
@@ -178,17 +183,17 @@ function Pws() {
 
           let tempDbData = [];
           for (let r = 2; r <= sheet.rowCount; r++) {
-            let isEmpty = {idasset: false, sn: false};
+            let isEmpty = { idasset: false, sn: false };
             let obj = {};
             for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
-              
+
               let str = sheet.getRow(r).getCell(c).toString();
               str = str.replace(/\n/g, ""); // 개행문자 제거
               str = str.trim();             // 양쪽 공백 제거
 
-              if(columns[c - 1].accessor === 'idasset' && str == '') isEmpty.idasset = true;
-              if(columns[c - 1].accessor === 'sn' && str == '') isEmpty.sn = true;
-              if(isEmpty.idasset & isEmpty.sn) {
+              if (columns[c - 1].accessor === 'idasset' && str == '') isEmpty.idasset = true;
+              if (columns[c - 1].accessor === 'sn' && str == '') isEmpty.sn = true;
+              if (isEmpty.idasset & isEmpty.sn) {
                 getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 자산관리번호와 S/N가 둘다 빈칸입니다.\n import를 취소합니다.`);
                 return;
               }
@@ -246,9 +251,9 @@ function Pws() {
 
   const exportHandler = e => {
 
-    const currentDate = new Date(); 
+    const currentDate = new Date();
     //오늘날짜를 YYYY-MM-DD 로 선언하여 파일이름에 붙이기 위해서.
-    const currentDayFormat = `_${currentDate.getFullYear()}년${currentDate.getMonth()+1}월${currentDate.getDate()}일${currentDate.getHours()}시${currentDate.getMinutes()}분${currentDate.getSeconds()}초`;
+    const currentDayFormat = `_${currentDate.getFullYear()}년${currentDate.getMonth() + 1}월${currentDate.getDate()}일${currentDate.getHours()}시${currentDate.getMinutes()}분${currentDate.getSeconds()}초`;
 
     const datas = filteredData.map(item => item.values);
     console.log(datas);
@@ -316,7 +321,7 @@ function Pws() {
         for (let loop = 1; loop <= columns.length; loop++) {
           const col = sheetOne.getRow(index + 1).getCell(loop);
           col.border = borderStyle;
-          if(index === 0) col.fill = fillStyle;
+          if (index === 0) col.fill = fillStyle;
         }
       });
 
@@ -359,9 +364,9 @@ function Pws() {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-    
+
   }, []);
-  
+
   const handleBeforeUnload = () => {
     // 로컬 스토리지에서 데이터 삭제
     localStorage.removeItem('ACCESS_TOKEN');
@@ -402,11 +407,11 @@ function Pws() {
           </div>
         </div>
       </div>
-      <input type="file" accept=".xls,.xlsx" onChange={readExcel} 
-          onClick={(event)=> { 
-               event.target.value = null
-          }} ref={$fileInput} hidden></input>
-      <TablePws columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} />
+      <input type="file" accept=".xls,.xlsx" onChange={readExcel}
+        onClick={(event) => {
+          event.target.value = null
+        }} ref={$fileInput} hidden></input>
+      <TablePws columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} />
     </>
   );
 }

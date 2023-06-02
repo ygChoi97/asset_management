@@ -46,7 +46,6 @@ const Login = () => {
                 localStorage.setItem('ACCESS_TOKEN', loginUserData.token);
                 localStorage.setItem('LOGIN_USERNAME', loginUserData.username);
 
-                // 할일 목록 보여주기
                 window.location.href = '/';
             }
         })

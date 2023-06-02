@@ -115,6 +115,11 @@ body {
   background-color: #f3f3f3;
 }
 
+.return-table tbody tr:hover {
+  cursor: pointer;
+  background-color: lightgoldenrodyellow;
+}
+
 .return-table tbody tr:last-of-type {
   border-bottom: 2px solid #34343b;
 }

@@ -14,6 +14,8 @@ const BASE_URL = 'http://localhost:8181/api/pws';
 function Disposal() {
   const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
 
+  const [refresh, setRefresh] = useState(false);
+
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
 
@@ -98,8 +100,7 @@ function Disposal() {
       .then(json => {
         if (json != null) {
         let copyColumns = [];
-        for (let i = 0; i < json.length; i++) {
-          if (json[i].column_name === 'id') continue; // 메뉴에서 인덱스 제외
+        for (let i = 0; i < json.length; i++) {    
           let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
           copyColumn.accessor = json[i].column_name;
           if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area')
@@ -132,7 +133,11 @@ function Disposal() {
         }
       });
     getAllDataFromDB();
-  }, []);
+  }, [refresh]);
+
+  const doRefresh = () => {
+    setRefresh(!refresh);
+  }
 
   const setFilterHeadquarters = (headquartersOption) => {
     let copyColumns = [...columns];
@@ -406,7 +411,7 @@ function Disposal() {
         onClick={(event) => {
           event.target.value = null
         }} ref={$fileInput} hidden></input>
-      <TableDisposal columns={columns} data={data} dataWasFiltered={dataWasFiltered}  setFilterHeadquarters={setFilterHeadquarters} />
+      <TableDisposal columns={columns} data={data} dataWasFiltered={dataWasFiltered}  setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} />
     </>
   );
 }

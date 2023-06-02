@@ -26,7 +26,9 @@ export default function Menu() {
     
     return (
         <div style={{ display: 'flex', backgroundColor: 'lightslategrey', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderBottom: '2px solid' }}>
+            <div style={{width: '220px', fontSize : '0.8rem', fontWeight:'900', color: 'whitesmoke', fontStyle: 'normal', textShadow: '2px 2px 3px black', marginLeft: '0.4rem'}}>컴앤프로정보기술</div>
             <div style={{width: '290px', fontSize : '1.2rem', fontWeight:'900', color: 'whitesmoke', fontStyle: 'oblique', textShadow: '2px 2px 3px black', marginLeft: '0.4rem'}}>PWS Asset Manager</div>
+            
             <nav className="menu">
 
                 <ul className="menu-list">

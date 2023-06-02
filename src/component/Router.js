@@ -8,12 +8,15 @@ import Provision from "./Provision";
 import Pws from "./Pws";
 import Return from "./Return";
 
-const HeaderLayout = () => (
-    <>
-        <Menu />
-        <Outlet />
-    </>
-);
+const HeaderLayout = () => {
+    return (
+        <>
+            <Menu />
+            <Outlet />
+        </>
+    );
+}
+
 export const RouterInfo = createBrowserRouter([
 
     {

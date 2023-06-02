@@ -1,12 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
 import { Search, SearchProvision, SearchPws } from "./Search";
 import "../css/tableProvision.css";
 import "../css/pagination.css";
+import ContentListCommon, { MemoizedChildComponent } from "./ContentListCommon";
 
-function TableProvision({ columns, data, dataWasFiltered, setFilterHeadquarters }) {
+function TableProvision({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh }) {
     
+    const [id, setId] = useState('');
+
     const {
         getTableProps,
         getTableBodyProps,
@@ -38,10 +41,24 @@ function TableProvision({ columns, data, dataWasFiltered, setFilterHeadquarters 
     
     useEffect(() => { dataWasFiltered(rows);}, [rows, dataWasFiltered]);
 
-   
+    const handleRowClick = (event, values) => {
+        console.log('event : ', values);
+        if(values.id !== null && values.id !== '') {
+            setId(values.id);
+        } 
+        else {
+            alert('해당 PWS지급정보가 조회되지 않았습니다. \n예상치 못한 오류입니다.');
+        }    
+    };
+
+    const doClose = () => {
+        setId('');
+    }
+    
     console.log('Provision Table 랜더링');
     return (
         <>
+            <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/provision'/>
             <SearchProvision column1={'assetno'} column2={'department'} column3={'headquarters'} column4={'idasset'} column5={'sn'} column6={'areainstall'} column7={'model'} column8={'provisiondate'} onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
             {/* {searchs} */}
             <div style={{ width: '100%', height : `calc(100vh - 275px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
@@ -89,7 +106,7 @@ function TableProvision({ columns, data, dataWasFiltered, setFilterHeadquarters 
                     {page.map((row) => {
                         prepareRow(row);
                         return (
-                            <tr {...row.getRowProps()}>
+                            <tr onClick={(event) => handleRowClick(event, row.values)} {...row.getRowProps()}>
                                 {row.cells.map((cell) => (
                                     <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                                 ))}

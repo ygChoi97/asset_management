@@ -14,6 +14,8 @@ const BASE_URL = 'http://localhost:8181/api/provision';
 function Provision() {
     const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
 
+    const [refresh, setRefresh] = useState(false);
+
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
 
@@ -149,7 +151,11 @@ function Provision() {
 
         getAllDataFromDB();
 
-    }, []);
+    }, [refresh]);
+
+    const doRefresh = () => {
+        setRefresh(!refresh);
+    }
 
     const setFilterHeadquarters = (headquartersOption) => {
         let copyColumns = [...columns];
@@ -447,7 +453,7 @@ function Provision() {
                 onClick={(event) => {
                     event.target.value = null
                 }} ref={$fileInput} hidden></input>
-            <TableProvision columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} />
+            <TableProvision columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} />
         </>
 
     );
