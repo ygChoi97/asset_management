@@ -12,7 +12,8 @@ import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from ".
 
 const BASE_URL = 'http://localhost:8181/api/pws';
 
-function Pws() {
+function Pws({ account }) {
+  
   const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
 
   const [refresh, setRefresh] = useState(false);
@@ -31,15 +32,15 @@ function Pws() {
   function dateFormat(date) {
     let month = date.getMonth() + 1;
     let day = date.getDate();
-    let hour = date.getHours();
-    let minute = date.getMinutes();
-    let second = date.getSeconds();
+    // let hour = date.getHours();
+    // let minute = date.getMinutes();
+    // let second = date.getSeconds();
 
     month = month >= 10 ? month : '0' + month;
     day = day >= 10 ? day : '0' + day;
-    hour = hour >= 10 ? hour : '0' + hour;
-    minute = minute >= 10 ? minute : '0' + minute;
-    second = second >= 10 ? second : '0' + second;
+    // hour = hour >= 10 ? hour : '0' + hour;
+    // minute = minute >= 10 ? minute : '0' + minute;
+    // second = second >= 10 ? second : '0' + second;
 
     return date.getFullYear() + '-' + month + '-' + day;
   }
@@ -53,6 +54,11 @@ function Pws() {
     })
       .then(res => {
         if (!res.ok) {
+          console.log(res);
+          if(res.status == 404) 
+            getConfirmationOK(`${res.status}Error - DB 테이블의 데이터가 존재하지 않습니다.`)
+          else    
+            getConfirmationOK(`${res.status}Error - DB 테이블의 데이터를 가져올 수 없습니다.`)
           throw new Error(res.status);
         }
         else {
@@ -64,7 +70,7 @@ function Pws() {
         for (let i = 0; i < json.count; i++) {
           let copyData = {};
           copyData = json.pwsDtos[i];
-          if (json.pwsDtos[i].introductiondate != null) {
+          if (json.pwsDtos[i].introductiondate !== null) {
             let day = new Date(json.pwsDtos[i].introductiondate);
             copyData['introductiondate'] = dateFormat(day);
           }
@@ -144,7 +150,7 @@ function Pws() {
     console.log(headquartersOption);
     copyColumns.forEach(el => {
       if (el.accessor === 'headquarters') {
-        if (headquartersOption == 1)
+        if (headquartersOption === 1)
           el.filter = exclusionFilterFn
         else
           el.filter = ''
@@ -191,8 +197,8 @@ function Pws() {
               str = str.replace(/\n/g, ""); // 개행문자 제거
               str = str.trim();             // 양쪽 공백 제거
 
-              if (columns[c - 1].accessor === 'idasset' && str == '') isEmpty.idasset = true;
-              if (columns[c - 1].accessor === 'sn' && str == '') isEmpty.sn = true;
+              if (columns[c - 1].accessor === 'idasset' && str === '') isEmpty.idasset = true;
+              if (columns[c - 1].accessor === 'sn' && str === '') isEmpty.sn = true;
               if (isEmpty.idasset & isEmpty.sn) {
                 getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 자산관리번호와 S/N가 둘다 빈칸입니다.\n import를 취소합니다.`);
                 return;
@@ -205,7 +211,7 @@ function Pws() {
                 else
                   obj[columns[c - 1].accessor] = null;
               }
-              else if (str == '_x000d_' || str == '')
+              else if (str === '_x000d_' || str === '')
                 obj[columns[c - 1].accessor] = null;
               else
                 obj[columns[c - 1].accessor] = str;
@@ -390,12 +396,19 @@ function Pws() {
             </button>
             <nav className={`menu ${isActive ? "active" : "inactive"}`}>
               <ul>
-                <li>
+              {account.role === 'admin' ?
+                <li>                  
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                     <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
                     <button className="btnImport" onClick={importHandler}> Import data to DB</button>
                   </div>
-                </li>
+                </li> : 
+                    <li>                  
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                      <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
+                      <button className="btnImportDisabled" onClick={importHandler} disabled={true}> Import data to DB</button>
+                    </div>
+                  </li> }
                 <li>
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                     <img src={DBToExcel} alt="DBToExcel" width='20%' />
@@ -411,7 +424,7 @@ function Pws() {
         onClick={(event) => {
           event.target.value = null
         }} ref={$fileInput} hidden></input>
-      <TablePws columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} />
+      <TablePws columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} account={account}/>
     </>
   );
 }

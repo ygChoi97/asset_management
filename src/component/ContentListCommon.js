@@ -5,7 +5,7 @@ import '../css/contentlist.css';
 import UseConfirm from "./UseConfirm";
 import ContentCommon from "./ContentCommon";
 
-function ContentListCommon({id, doRefresh, doClose, url}) {
+function ContentListCommon({id, doRefresh, doClose, url, account}) {
 
     const BASE_URL = `http://localhost:8181${url}`;
 
@@ -175,10 +175,10 @@ function ContentListCommon({id, doRefresh, doClose, url}) {
         console.log('pwsInfo : ', pwsInfo);
 
         if((pwsInfo.idasset === null || pwsInfo.idasset === '') && (pwsInfo.sn === null || pwsInfo.sn === '')) {        
-            getConfirmationOK('해당 정보의 자산관리번호와 S/N 중 최소 하나는 입력되어야 수정이 가능합니다.');
+            getConfirmationOK('해당 정보의 자산관리번호와 S/N 중에서 최소 하나는 입력되어야 수정이 가능합니다.');
             return;
         }
-        
+        let msg = '';
         fetch(BASE_URL, {
             method: 'PUT',
             headers: { 'Content-type': 'application/json',
@@ -188,7 +188,9 @@ function ContentListCommon({id, doRefresh, doClose, url}) {
             .then(res => {
                 if (!res.ok) {
                     console.log(JSON.stringify(pwsInfo));
-                    console.log(res); throw new Error(res.status);
+                    console.log(res);
+                    msg = `status(${res.status}) `
+                    return res.json();
                 }
                 else {
                     setBtnMode(true);
@@ -197,20 +199,25 @@ function ContentListCommon({id, doRefresh, doClose, url}) {
             })
             .then(json => {
                 console.log(json);
-                if(pwsInfo.idasset !== null && pwsInfo.idasset !== '')
-                    getConfirmationOK(`${pwsInfo.idasset} DB 저장 완료!`);
-                else
-                    getConfirmationOK(`${pwsInfo.sn} DB 저장 완료!`);
+                if (json.count) {   // SQL이 정상동작했다면 PwsDto을 response
+                    if (pwsInfo.idasset !== null && pwsInfo.idasset !== '')
+                        getConfirmationOK(`${pwsInfo.idasset} DB 저장 완료!`)
+                        .then(res=>{doRefresh();});
+                    else
+                        getConfirmationOK(`${pwsInfo.sn} DB 저장 완료!`)
+                        .then(res=>{doRefresh();});
 
-                doRefresh();
-                
+                    // doRefresh();
+                }
+                else
+                    throw new Error(msg.concat(json.cause.message));
             })
             .catch(error => {
                 console.log(error);
                 if(pwsInfo.idasset !== null && pwsInfo.idasset !== '')
-                    getConfirmationOK(`${pwsInfo.idasset} DB 저장 실패(${error})`);
+                    getConfirmationOK(`${pwsInfo.idasset} DB 저장 실패 (${error})`);
                 else
-                    getConfirmationOK(`${pwsInfo.sn} DB 저장 실패(${error})`);
+                    getConfirmationOK(`${pwsInfo.sn} DB 저장 실패 (${error})`);
                 
             });
     };
@@ -227,15 +234,17 @@ function ContentListCommon({id, doRefresh, doClose, url}) {
             <ConfirmationOK />
             <Paper sx={{
                 width: 400,
-                borderRadius: 3, borderColor: "#000",
+                borderRadius: 1, borderColor: "#000",
                 backgroundColor: (theme) =>
-                    theme.palette.mode === 'dark' ? '#1A2027' : '#FFFFFF',
+                    theme.palette.mode === 'dark' ? '#1A2027' : '#FFFFFC',
             }} elevation={8}>
                 <List>
                     {items}
                 </List>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button variant="contained" color="success" sx={{ width: 80, height: 19, padding: 1, mb: 1, mr: 1 }} disabled={Boolean(bModifyDisabled | btnMode)} onClick={onClickModifyHandler}>modify</Button>
+                    {account.role === 'admin' ? 
+                    <Button variant="contained" color="success" sx={{ width: 80, height: 19, padding: 1, mb: 1, mr: 1 }} disabled={Boolean(bModifyDisabled | btnMode)} onClick={onClickModifyHandler}>modify</Button> 
+                    : <></> }
                     <Button variant="contained" sx={{ width: 80, height: 19, padding: 1, mb: 1, mr: 1 }} onClick={onClickCloseHanler}>close</Button>
                 </div>
             </Paper>

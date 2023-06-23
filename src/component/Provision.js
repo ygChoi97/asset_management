@@ -11,7 +11,7 @@ import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from ".
 
 const BASE_URL = 'http://localhost:8181/api/provision';
 
-function Provision() {
+function Provision({ account }) {
     const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
 
     const [refresh, setRefresh] = useState(false);
@@ -19,11 +19,8 @@ function Provision() {
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
 
-    const [dbData, setDbData] = useState([]);
-
     const $fileInput = useRef();
 
-    const [filtered, setFiltered] = useState(null);
     const [, , getConfirmationOK, ConfirmationOK] = UseConfirm();
     let filteredData = null;
 
@@ -33,15 +30,9 @@ function Provision() {
     function dateFormat(date) {
         let month = date.getMonth() + 1;
         let day = date.getDate();
-        let hour = date.getHours();
-        let minute = date.getMinutes();
-        let second = date.getSeconds();
 
         month = month >= 10 ? month : '0' + month;
         day = day >= 10 ? day : '0' + day;
-        hour = hour >= 10 ? hour : '0' + hour;
-        minute = minute >= 10 ? minute : '0' + minute;
-        second = second >= 10 ? second : '0' + second;
 
         return date.getFullYear() + '-' + month + '-' + day;
     }
@@ -55,6 +46,10 @@ function Provision() {
         })
             .then(res => {
                 if (!res.ok) {
+                    if (res.status == 404)
+                        getConfirmationOK(`${res.status}Error - DB 테이블의 데이터가 존재하지 않습니다.`)
+                    else
+                        getConfirmationOK(`${res.status}Error - DB 테이블의 데이터를 가져올 수 없습니다.`)
                     throw new Error(res.status);
                 }
                 else {
@@ -67,21 +62,21 @@ function Provision() {
                 for (let i = 0; i < json.count; i++) {
                     let copyData = {};
                     copyData = json.pwsProvisionDtos[i];
-                    if (json.pwsProvisionDtos[i].period != null || json.pwsProvisionDtos[i].period != undefined) {
+                    if (json.pwsProvisionDtos[i].period !== null || json.pwsProvisionDtos[i].period !== undefined) {
                         let day = new Date(json.pwsProvisionDtos[i].period);
                         copyData['period'] = dateFormat(day);
                     }
-                    if (json.pwsProvisionDtos[i].joiningdate != null || json.pwsProvisionDtos[i].joiningdate != undefined) {
+                    if (json.pwsProvisionDtos[i].joiningdate !== null || json.pwsProvisionDtos[i].joiningdate !== undefined) {
                         let day = new Date(json.pwsProvisionDtos[i].joiningdate);
                         copyData['joiningdate'] = dateFormat(day);
                     }
 
-                    if (json.pwsProvisionDtos[i].applicationdate != null || json.pwsProvisionDtos[i].applicationdate != undefined) {
+                    if (json.pwsProvisionDtos[i].applicationdate !== null || json.pwsProvisionDtos[i].applicationdate !== undefined) {
                         let day = new Date(json.pwsProvisionDtos[i].applicationdate);
                         copyData['applicationdate'] = dateFormat(day);
                     }
 
-                    if (json.pwsProvisionDtos[i].provisiondate != null || json.pwsProvisionDtos[i].provisiondate != undefined) {
+                    if (json.pwsProvisionDtos[i].provisiondate !== null || json.pwsProvisionDtos[i].provisiondate !== undefined) {
                         let day = new Date(json.pwsProvisionDtos[i].provisiondate);
                         copyData['provisiondate'] = dateFormat(day);
                     }
@@ -162,7 +157,7 @@ function Provision() {
         console.log(headquartersOption);
         copyColumns.forEach(el => {
             if (el.accessor === 'headquarters') {
-                if (headquartersOption == 1)
+                if (headquartersOption === 1)
                     el.filter = exclusionFilterFn
                 else
                     el.filter = ''
@@ -180,7 +175,6 @@ function Provision() {
     };
 
     const readExcel = async (e) => {
-        let input = e.target;
         const file1 = e.target.files[0];
         console.log(file1);
         const ExcelJS = require("exceljs");
@@ -215,8 +209,8 @@ function Provision() {
                                 return;
                             }
 
-                            if (columns[c - 1].accessor === 'idasset' && str == '') isEmpty.idasset = true;
-                            if (columns[c - 1].accessor === 'sn' && str == '') isEmpty.sn = true;
+                            if (columns[c - 1].accessor === 'idasset' && str === '') isEmpty.idasset = true;
+                            if (columns[c - 1].accessor === 'sn' && str === '') isEmpty.sn = true;
                             if (isEmpty.idasset & isEmpty.sn) {
                                 getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 자산관리번호와 S/N가 둘다 빈칸입니다.\n import를 취소합니다.`);
                                 return;
@@ -245,7 +239,7 @@ function Provision() {
                                 else
                                     obj[columns[c - 1].accessor] = null;
 
-                            else if (str == '_x000d_' || str == '')
+                            else if (str === '_x000d_' || str === '')
                                 obj[columns[c - 1].accessor] = null;
 
                             else
@@ -415,7 +409,7 @@ function Provision() {
         localStorage.removeItem('LOGIN_USERNAME');
         localStorage.removeItem('SEARCHTERM_PROVISION');
     };
-
+    console.log(account);
     return (
         <>
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
@@ -432,12 +426,19 @@ function Provision() {
                         </button>
                         <nav className={`menu ${isActive ? "active" : "inactive"}`}>
                             <ul>
-                                <li>
-                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                                        <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
-                                        <button className="btnImport" onClick={importHandler}> Import data to DB</button>
-                                    </div>
-                                </li>
+                                {account.role === 'admin' ?
+                                    <li>
+                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                                            <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
+                                            <button className="btnImport" onClick={importHandler}> Import data to DB</button>
+                                        </div>
+                                    </li> :
+                                    <li>
+                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                                            <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
+                                            <button className="btnImportDisabled" onClick={importHandler} disabled={true}> Import data to DB</button>
+                                        </div>
+                                    </li>}
                                 <li>
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                                         <img src={DBToExcel} alt="DBToExcel" width='20%' />
@@ -453,7 +454,7 @@ function Provision() {
                 onClick={(event) => {
                     event.target.value = null
                 }} ref={$fileInput} hidden></input>
-            <TableProvision columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} />
+            <TableProvision columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} account={account} />
         </>
 
     );

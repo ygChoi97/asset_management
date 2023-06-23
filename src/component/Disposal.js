@@ -11,7 +11,7 @@ import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from ".
 
 const BASE_URL = 'http://localhost:8181/api/pws';
 
-function Disposal() {
+function Disposal({ account }) {
   const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
 
   const [refresh, setRefresh] = useState(false);
@@ -30,15 +30,9 @@ function Disposal() {
   function dateFormat(date) {
     let month = date.getMonth() + 1;
     let day = date.getDate();
-    let hour = date.getHours();
-    let minute = date.getMinutes();
-    let second = date.getSeconds();
 
     month = month >= 10 ? month : '0' + month;
     day = day >= 10 ? day : '0' + day;
-    hour = hour >= 10 ? hour : '0' + hour;
-    minute = minute >= 10 ? minute : '0' + minute;
-    second = second >= 10 ? second : '0' + second;
 
     return date.getFullYear() + '-' + month + '-' + day;
   }
@@ -52,6 +46,10 @@ function Disposal() {
     })
       .then(res => {
         if (!res.ok) {
+          if (res.status == 404)
+            getConfirmationOK(`${res.status}Error - DB 테이블의 데이터가 존재하지 않습니다.`)
+          else
+            getConfirmationOK(`${res.status}Error - DB 테이블의 데이터를 가져올 수 없습니다.`)
           throw new Error(res.status);
         }
         else {
@@ -63,7 +61,7 @@ function Disposal() {
         for (let i = 0; i < json.count; i++) {
           let copyData = {};
           copyData = json.pwsDtos[i];
-          if (json.pwsDtos[i].introductiondate != null || json.pwsDtos[i].introductiondate != undefined) {
+          if (json.pwsDtos[i].introductiondate !== null || json.pwsDtos[i].introductiondate !== undefined) {
             let day = new Date(json.pwsDtos[i].introductiondate);
             copyData['introductiondate'] = dateFormat(day);
           }
@@ -89,7 +87,7 @@ function Disposal() {
       .then(res => {
         if (res.status === 403) {
           throw new Error('로그인 토큰이 만료되었습니다.\n로그인 페이지로 이동합니다.');
-        } 
+        }
         else if (!res.ok) {
           throw new Error(res.status);
         }
@@ -99,24 +97,24 @@ function Disposal() {
       })
       .then(json => {
         if (json != null) {
-        let copyColumns = [];
-        for (let i = 0; i < json.length; i++) {    
-          let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
-          copyColumn.accessor = json[i].column_name;
-          if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area')
-            copyColumn.filter = 'equals';  // select 타입은 equals 필터 적용
-          if (copyColumn.accessor === 'headquarters')
-            copyColumn.filter = exclusionFilterFn;   // 본부는 exclusion 필터 적용
-          if (copyColumn.accessor === 'introductiondate') {
-            // copyColumn.Filter = DateRangeColumnFilter;
-            copyColumn.filter = dateBetweenFilterFn;  // 날짜 구간 필터 적용
-          }
+          let copyColumns = [];
+          for (let i = 0; i < json.length; i++) {
+            let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
+            copyColumn.accessor = json[i].column_name;
+            if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area')
+              copyColumn.filter = 'equals';  // select 타입은 equals 필터 적용
+            if (copyColumn.accessor === 'headquarters')
+              copyColumn.filter = exclusionFilterFn;   // 본부는 exclusion 필터 적용
+            if (copyColumn.accessor === 'introductiondate') {
+              // copyColumn.Filter = DateRangeColumnFilter;
+              copyColumn.filter = dateBetweenFilterFn;  // 날짜 구간 필터 적용
+            }
             copyColumn.Header = json[i].column_comment; // 메뉴명
-          copyColumns.push(copyColumn);
+            copyColumns.push(copyColumn);
+          }
+          setColumns(copyColumns);
+          console.log('useEffect() fetch - /menu', copyColumns);
         }
-        setColumns(copyColumns);
-        console.log('useEffect() fetch - /menu', copyColumns);
-      }
       })
       .catch(err => {
         const token = localStorage.getItem('ACCESS_TOKEN');
@@ -143,8 +141,8 @@ function Disposal() {
     let copyColumns = [...columns];
     console.log(headquartersOption);
     copyColumns.forEach(el => {
-      if(el.accessor === 'headquarters') {
-        if(headquartersOption == 1)
+      if (el.accessor === 'headquarters') {
+        if (headquartersOption === 1)
           el.filter = exclusionFilterFn
         else
           el.filter = ''
@@ -183,17 +181,17 @@ function Disposal() {
 
           let tempDbData = [];
           for (let r = 2; r <= sheet.rowCount; r++) {
-            let isEmpty = {idasset: false, sn: false};
+            let isEmpty = { idasset: false, sn: false };
             let obj = {};
             for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
-              
+
               let str = sheet.getRow(r).getCell(c).toString();
               str = str.replace(/\n/g, ""); // 개행문자 제거
               str = str.trim();             // 양쪽 공백 제거
-              
-              if(columns[c - 1].accessor === 'idasset' && str == '') isEmpty.idasset = true;
-              if(columns[c - 1].accessor === 'sn' && str == '') isEmpty.sn = true;
-              if(isEmpty.idasset & isEmpty.sn) {
+
+              if (columns[c - 1].accessor === 'idasset' && str === '') isEmpty.idasset = true;
+              if (columns[c - 1].accessor === 'sn' && str === '') isEmpty.sn = true;
+              if (isEmpty.idasset & isEmpty.sn) {
                 getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 자산관리번호와 S/N가 둘다 빈칸입니다.\n import를 취소합니다.`);
                 return;
               }
@@ -205,7 +203,7 @@ function Disposal() {
                 else
                   obj[columns[c - 1].accessor] = null;
               }
-              else if (str == '_x000d_' || str == '')
+              else if (str === '_x000d_' || str === '')
                 obj[columns[c - 1].accessor] = null;
               else
                 obj[columns[c - 1].accessor] = str;
@@ -251,10 +249,10 @@ function Disposal() {
 
   const exportHandler = e => {
 
-    const currentDate = new Date(); 
+    const currentDate = new Date();
     //오늘날짜를 YYYY-MM-DD 로 선언하여 파일이름에 붙이기 위해서.
-    const currentDayFormat = `_${currentDate.getFullYear()}년${currentDate.getMonth()+1}월${currentDate.getDate()}일${currentDate.getHours()}시${currentDate.getMinutes()}분${currentDate.getSeconds()}초`;
-        
+    const currentDayFormat = `_${currentDate.getFullYear()}년${currentDate.getMonth() + 1}월${currentDate.getDate()}일${currentDate.getHours()}시${currentDate.getMinutes()}분${currentDate.getSeconds()}초`;
+
     const datas = filteredData.map(item => item.values);
     console.log(datas);
 
@@ -321,7 +319,7 @@ function Disposal() {
         for (let loop = 1; loop <= columns.length; loop++) {
           const col = sheetOne.getRow(index + 1).getCell(loop);
           col.border = borderStyle;
-          if(index === 0) col.fill = fillStyle;
+          if (index === 0) col.fill = fillStyle;
         }
       });
 
@@ -392,8 +390,8 @@ function Disposal() {
               <ul>
                 <li>
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                    <img src={ExcelToDB} alt="ExcelToDB" width='20%'/>
-                    <button className="btnImport" onClick={importHandler}> Import data to DB</button>
+                    <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
+                    <button className="btnImportDisabled" onClick={importHandler} disabled={true}> Import data to DB</button>
                   </div>
                 </li>
                 <li>
@@ -407,11 +405,11 @@ function Disposal() {
           </div>
         </div>
       </div>
-      <input type="file" accept=".xls,.xlsx" onChange={readExcel} 
+      <input type="file" accept=".xls,.xlsx" onChange={readExcel}
         onClick={(event) => {
           event.target.value = null
         }} ref={$fileInput} hidden></input>
-      <TableDisposal columns={columns} data={data} dataWasFiltered={dataWasFiltered}  setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} />
+      <TableDisposal columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} account={account} />
     </>
   );
 }

@@ -1,5 +1,5 @@
-import { React, useEffect, useState } from "react";
-import { Routes, Route, useNavigate, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { React, useState } from "react";
+import { Routes, Route } from "react-router-dom";
 import Menu from "./Menu";
 import Provision from "./Provision";
 import Pws from "./Pws";
@@ -9,26 +9,36 @@ import NotFoundPage from "./NotFoundPage";
 import Login from "./Login";
 import PrivateRoute2 from "./PrivateRoute2";
 
-
-
 const AppRouter = () => {
-    
-    return (
-        <div style={{ height: '100vh' }}>
-            <Menu />
-            <Routes>
-                <Route path="/login" element={<Login />} />
-                <Route element={<PrivateRoute2 authentication={true} />}>
-                    <Route exact path="/" element={<Pws />} />
-                    <Route path="/provision" element={<Provision />} />
-                    <Route path="/return" element={<Return />} />
-                    <Route path="/disposal" element={<Disposal />} />
-                </Route>
-                <Route path="/*" element={<NotFoundPage />} />
-            </Routes>
-        </div>
 
-    );
+  const [account, setAccount] = useState('');
+  const handleLogin = (accountData) => {
+    setAccount(accountData);
+  }
+  // 배포 환경에서 console.log, console.warn 지우기
+  if (process.env.NODE_ENV) {
+    console.log = function no_console() { };
+    console.warn = function no_console() { };
+  }
+
+  return (
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+      <Menu />
+
+      <Routes>
+        <Route path="/login" element={<Login onLogin={handleLogin} />} />
+        <Route element={<PrivateRoute2 authentication={true} />}>
+          <Route exact path="/" element={<Pws account={account} />} />
+          <Route path="/provision" element={<Provision account={account} />} />
+          <Route path="/return" element={<Return account={account} />} />
+          <Route path="/disposal" element={<Disposal account={account} />} />
+        </Route>
+        <Route path="/*" element={<NotFoundPage />} />
+      </Routes>
+
+      
+    </div>
+  );
 };
 
 export default AppRouter;

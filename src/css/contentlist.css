@@ -4,7 +4,7 @@
     align-items :flex-start;
     position: absolute;
     top: 28%;
-    right: calc(5px);
+    right: calc(18px);
     margin: 0.5rem 0;
     z-index: 3;
     opacity: 0.25;
@@ -17,7 +17,7 @@
     align-items :flex-start;
     position: absolute;
     top: 28%;
-    right: calc(5px);
+    right: calc(18px);
     margin: 0.5rem 0;
     z-index: 3;
     opacity: 1;
@@ -30,7 +30,7 @@
     align-items :flex-end;
     position: absolute;
     top: -100%;
-    right: calc(5px);
+    right: calc(18px);
     margin: 0.5rem 0;
     z-index: 3;
     opacity: 0;

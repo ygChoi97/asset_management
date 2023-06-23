@@ -1,12 +1,12 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
-import { Search, SearchPws } from "./Search";
+import { SearchPws } from "./Search";
 import "../css/tablePws.css";
-import "../css/pagination.css";
+import "../css/foot.css";
 import ContentListCommon from "./ContentListCommon";
 
-function TablePws({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh }) {
+function TablePws({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh, account }) {
 
     const [id, setId] = useState('');
 
@@ -39,16 +39,25 @@ function TablePws({ columns, data, dataWasFiltered, setFilterHeadquarters, doRef
         return col.Header + "";
     });
 
-    useEffect(() => { dataWasFiltered(rows); }, [rows, dataWasFiltered]);
+    useEffect(() => {
+        dataWasFiltered(rows);
+        console.log("렌더링 완료?")
+    }, [rows, dataWasFiltered]);
+
+    useEffect(() => {
+        // 데이터 업데이트 및 렌더링 완료 시점을 처리하는 작업
+        console.log('테이블 데이터 렌더링 완료');
+
+        // document.getElementById('submitPwsBtn').click();
+    }, []);
 
     const handleRowClick = (event, values) => {
-        console.log('event : ', values);
-        if(values.id !== null && values.id !== '') {
+        if (values.id !== null && values.id !== '') {
             setId(values.id);
-        } 
+        }
         else {
             alert('해당 PWS정보가 조회되지 않았습니다. \n예상치 못한 오류입니다.');
-        }    
+        }
     };
 
     const doClose = () => {
@@ -58,13 +67,14 @@ function TablePws({ columns, data, dataWasFiltered, setFilterHeadquarters, doRef
     console.log('Pws Table 랜더링');
     return (
         <>
-            <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/pws'/>
+
+            <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/pws' account={account} />
             {/* <Search onSubmit={setGlobalFilter} /> */}
             <SearchPws column1={'headquarters'} column2={'department'} column3={'model'} column4={'uptake'} column5={'userid'} column6={'idasset'} column7={'sn'} column8={'area'} column9={'username'} column10={'introductiondate'} column11={'company'} onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
             {/* {searchs} */}
-            <div style={{ width: '100%', height: `calc(100vh - 275px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div style={{ width: '100%', height: `calc(100vh - 250px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div style={{ width: '100%', overflow: 'auto' }}>
-                    <table className="pws-table" {...getTableProps()}>
+                    <table className="pws-table" {...getTableProps()} >
                         <thead>
                             {/* <tr>            
                         <th
@@ -94,7 +104,7 @@ function TablePws({ columns, data, dataWasFiltered, setFilterHeadquarters, doRef
                                                     : '⇳'}
                                             </span>
                                             {/* Rendering Default Column Filter */}
-                                           {/*  <div>
+                                            {/*  <div>
                                         {column.canFilter ? column.render("Filter")
                                             : null}
                                     </div> */}
@@ -106,8 +116,8 @@ function TablePws({ columns, data, dataWasFiltered, setFilterHeadquarters, doRef
                         <tbody {...getTableBodyProps()}>
                             {page.map((row) => {
                                 prepareRow(row);
-                                if(page.length === row.index+1) {
-                                    console.log("렌더링 완료 ", page.length)
+                                if (page.length === row.index + 1) {
+                                    // console.log("렌더링 완료 ", page.length)
                                 }
                                 // 해당 페이지 렌더링 완료하면
                                 /* if(page.length === row.index+1 && submit === null) {
@@ -127,7 +137,7 @@ function TablePws({ columns, data, dataWasFiltered, setFilterHeadquarters, doRef
                         </tbody>
                     </table>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '0.5rem' }}>
                     <button className="btnPagePwsSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
                         {"<<"}
                     </button>

@@ -1,10 +1,10 @@
 import { Grid, ListItem, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { DatePicker, DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 function ContentCommon({ item, update }) {
 
@@ -80,9 +80,8 @@ function ContentCommon({ item, update }) {
                                     style: { height: '1rem', fontSize: '0.9rem', fontWeight: 600 }
                                 }}
 
-                                defaultValue={''}
                                 variant="standard"
-                                value={item.data}
+                                value={item.data||''}
                                 size="small"
                                 color="secondary"
                                 onChange={handleChangeInput}
@@ -128,8 +127,7 @@ function ContentCommon({ item, update }) {
                                     <>
 
                                         <Select
-                                            defaultValue=''
-                                            value={item.data || ''}
+                                            value={item.data||''}
                                             onChange={handleChangeInput}
                                             sx={{ width: 1, height: '1.6rem', fontSize: '0.7rem', textAlign: 'left' }}
                                         >
@@ -158,8 +156,7 @@ function ContentCommon({ item, update }) {
                                         <>
 
                                             <Select
-                                                defaultValue=''
-                                                value={item.data || ''}
+                                                value={item.data||''}
                                                 onChange={handleChangeInput}
                                                 sx={{ width: 1, height: '1.6rem', fontSize: '0.7rem', textAlign: 'left' }}
                                             >
@@ -179,8 +176,7 @@ function ContentCommon({ item, update }) {
                                             id="standard-basic"
                                             inputProps={{ style: { height: 9, fontSize: '0.7rem', fontWeight: 400 } }}
                                             //label={item.columnName}
-                                            defaultValue=''
-                                            value={item.data}
+                                            value={item.data||''}
                                             onChange={handleChangeInput}
                                             sx={{
                                                 width: 1,

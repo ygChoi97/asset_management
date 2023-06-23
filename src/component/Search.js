@@ -185,10 +185,9 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
       if (state.company) setCompany(state.company);
 
       if (btnRef.current) {
-        console.log("rerendering 2sec")
         const timeoutId = setTimeout(() => {
           btnRef.current.click();
-        }, 2000); // 2초 후에 클릭 이벤트 발생
+        }, 3000); // 3초 후에 클릭 이벤트 발생
         return () => clearTimeout(timeoutId);
       }
     }
@@ -197,7 +196,7 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
   return (
     <form onSubmit={hSubmit} id="frmPws">
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div className="searchFrm">
         <div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
 
@@ -408,7 +407,7 @@ export function SearchProvision({ column1, column2, column3, column4, column5, c
       if (btnRef.current) {
         const timeoutId = setTimeout(() => {
           btnRef.current.click();
-        }, 2000); // 2초 후에 클릭 이벤트 발생
+        }, 3000); // 3초 후에 클릭 이벤트 발생
         return () => clearTimeout(timeoutId);
       }
     }   
@@ -417,7 +416,7 @@ export function SearchProvision({ column1, column2, column3, column4, column5, c
   return (
     <form onSubmit={hSubmit}>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div className="searchFrm">
         <div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <div className="filterItem"><label htmlFor='assetno'>자산번호</label> <input className='underline' id='assetno' name={column1} placeholder='' onChange={assetnoHandler} value={assetno} /></div>
@@ -637,7 +636,7 @@ export function SearchReturn({ column1, column2, column3, column4, column5, colu
       if (btnRef.current) {
         const timeoutId = setTimeout(() => {
           btnRef.current.click();
-        }, 2000); // 2초 후에 클릭 이벤트 발생
+        }, 3000); // 3초 후에 클릭 이벤트 발생
         return () => clearTimeout(timeoutId);
       }
     }   
@@ -646,7 +645,7 @@ export function SearchReturn({ column1, column2, column3, column4, column5, colu
   return (
     <form onSubmit={hSubmit}>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div className="searchFrm">
         <div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '355px' }}>
@@ -887,7 +886,7 @@ export function SearchPwsDisposal({ column1, column2, column3, column4, column5,
         console.log("rerendering 2sec")
         const timeoutId = setTimeout(() => {
           btnRef.current.click();
-        }, 2000); // 2초 후에 클릭 이벤트 발생
+        }, 3000); // 3초 후에 클릭 이벤트 발생
         return () => clearTimeout(timeoutId);
       }
     }
@@ -896,7 +895,7 @@ export function SearchPwsDisposal({ column1, column2, column3, column4, column5,
   return (
     <form onSubmit={hSubmit} id="frmPws">
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div className="searchFrm">
         <div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
 

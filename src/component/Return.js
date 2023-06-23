@@ -11,7 +11,7 @@ import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from ".
 
 const BASE_URL = 'http://localhost:8181/api/return';
 
-function Return() {
+function Return({ account }) {
     const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
 
     const [refresh, setRefresh] = useState(false);
@@ -19,11 +19,8 @@ function Return() {
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
 
-    const [dbData, setDbData] = useState([]);
-
     const $fileInput = useRef();
 
-    const [filtered, setFiltered] = useState(null);
     const [, , getConfirmationOK, ConfirmationOK] = UseConfirm();
     let filteredData = null;
 
@@ -33,15 +30,9 @@ function Return() {
     function dateFormat(date) {
         let month = date.getMonth() + 1;
         let day = date.getDate();
-        let hour = date.getHours();
-        let minute = date.getMinutes();
-        let second = date.getSeconds();
 
         month = month >= 10 ? month : '0' + month;
         day = day >= 10 ? day : '0' + day;
-        hour = hour >= 10 ? hour : '0' + hour;
-        minute = minute >= 10 ? minute : '0' + minute;
-        second = second >= 10 ? second : '0' + second;
 
         return date.getFullYear() + '-' + month + '-' + day;
     }
@@ -55,6 +46,10 @@ function Return() {
         })
             .then(res => {
                 if (!res.ok) {
+                    if (res.status == 404)
+                        getConfirmationOK(`${res.status}Error - DB 테이블의 데이터가 존재하지 않습니다.`)
+                    else
+                        getConfirmationOK(`${res.status}Error - DB 테이블의 데이터를 가져올 수 없습니다.`)
                     throw new Error(res.status);
                 }
                 else {
@@ -67,11 +62,11 @@ function Return() {
                 for (let i = 0; i < json.count; i++) {
                     let copyData = {};
                     copyData = json.pwsReturnDtos[i];
-                    if (json.pwsReturnDtos[i].resigndate != null || json.pwsReturnDtos[i].resigndate != undefined) {
+                    if (json.pwsReturnDtos[i].resigndate !== null || json.pwsReturnDtos[i].resigndate !== undefined) {
                         let day = new Date(json.pwsReturnDtos[i].resigndate);
                         copyData['resigndate'] = dateFormat(day);
                     }
-                    if (json.pwsReturnDtos[i].returndate != null || json.pwsReturnDtos[i].returndate != undefined) {
+                    if (json.pwsReturnDtos[i].returndate !== null || json.pwsReturnDtos[i].returndate !== undefined) {
                         let day = new Date(json.pwsReturnDtos[i].returndate);
                         copyData['returndate'] = dateFormat(day);
                     }
@@ -149,7 +144,7 @@ function Return() {
         console.log(headquartersOption);
         copyColumns.forEach(el => {
             if (el.accessor === 'headquarters') {
-                if (headquartersOption == 1)
+                if (headquartersOption === 1)
                     el.filter = exclusionFilterFn
                 else
                     el.filter = ''
@@ -167,7 +162,6 @@ function Return() {
     };
 
     const readExcel = async (e) => {
-        let input = e.target;
         const file1 = e.target.files[0];
         console.log(file1);
         const ExcelJS = require("exceljs");
@@ -204,8 +198,8 @@ function Return() {
                                 return;
                             }
 
-                            if (columns[c - 1].accessor === 'idasset' && str == '') isEmpty.idasset = true;
-                            if (columns[c - 1].accessor === 'sn' && str == '') isEmpty.sn = true;
+                            if (columns[c - 1].accessor === 'idasset' && str === '') isEmpty.idasset = true;
+                            if (columns[c - 1].accessor === 'sn' && str === '') isEmpty.sn = true;
                             if (isEmpty.idasset & isEmpty.sn) {
                                 getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 자산관리번호와 S/N가 둘다 빈칸입니다.\n import를 취소합니다.`);
                                 return;
@@ -223,7 +217,7 @@ function Return() {
                                 else
                                     obj[columns[c - 1].accessor] = null;
 
-                            else if (str == '_x000d_' || str == '')
+                            else if (str === '_x000d_' || str === '')
                                 obj[columns[c - 1].accessor] = null;
                             else
                                 obj[columns[c - 1].accessor] = str;
@@ -410,12 +404,19 @@ function Return() {
                         </button>
                         <nav className={`menu ${isActive ? "active" : "inactive"}`}>
                             <ul>
-                                <li>
-                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                                        <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
-                                        <button className="btnImport" onClick={importHandler}> Import data to DB</button>
-                                    </div>
-                                </li>
+                                {account.role === 'admin' ?
+                                    <li>
+                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                                            <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
+                                            <button className="btnImport" onClick={importHandler}> Import data to DB</button>
+                                        </div>
+                                    </li> :
+                                    <li>
+                                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                                            <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
+                                            <button className="btnImportDisabled" onClick={importHandler} disabled={true}> Import data to DB</button>
+                                        </div>
+                                    </li>}
                                 <li>
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                                         <img src={DBToExcel} alt="DBToExcel" width='20%' />
@@ -431,7 +432,7 @@ function Return() {
                 onClick={(event) => {
                     event.target.value = null
                 }} ref={$fileInput} hidden></input>
-            <TableReturn columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters}  doRefresh={doRefresh} />
+            <TableReturn columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} account={account} />
         </>
     );
 }

@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
-import { Search, SearchPws, SearchReturn } from "./Search";
+import { SearchReturn } from "./Search";
 import "../css/tableReturn.css";
-import "../css/pagination.css";
+import "../css/foot.css";
 import ContentListCommon from "./ContentListCommon";
 
-function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh }) {
+function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh, account }) {
 
     const [id, setId] = useState('');
 
@@ -42,13 +42,12 @@ function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters, do
     useEffect(() => { dataWasFiltered(rows); }, [rows, dataWasFiltered]);
 
     const handleRowClick = (event, values) => {
-        console.log('event : ', values);
-        if(values.id !== null && values.id !== '') {
+        if (values.id !== null && values.id !== '') {
             setId(values.id);
-        } 
+        }
         else {
             alert('해당 PWS반납정보가 조회되지 않았습니다. \n예상치 못한 오류입니다.');
-        }    
+        }
     };
 
     const doClose = () => {
@@ -58,11 +57,11 @@ function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters, do
     console.log('Return Table 랜더링');
     return (
         <>
-            <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/return'/>
+            <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/return' account={account} />
             {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchReturn column1={'headquarters'} column2={'assetno'} column3={'hoteam'} column4={'housername'} column5={'idasset'} column6={'sn'} column7={'model'} column8={'area'}  column9={'resigndate'} column10={'returndate'}  onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
+            <SearchReturn column1={'headquarters'} column2={'assetno'} column3={'hoteam'} column4={'housername'} column5={'idasset'} column6={'sn'} column7={'model'} column8={'area'} column9={'resigndate'} column10={'returndate'} onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
             {/* {searchs} */}
-            <div style={{ width: '100%', height: `calc(100vh - 275px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div style={{ width: '100%', height: `calc(100vh - 250px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div style={{ width: '100%', overflow: 'auto' }}>
                     <table className="return-table" {...getTableProps()}>
                         <thead>
@@ -117,7 +116,7 @@ function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters, do
                         </tbody>
                     </table>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '0.5rem' }}>
                     <button className="btnPagePwsSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
                         {"<<"}
                     </button>

@@ -5,6 +5,14 @@
   align-items: center;
 }
 
+.searchFrm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.5rem;
+
+}
+
 label {
   width: 6rem;
   text-align: right;

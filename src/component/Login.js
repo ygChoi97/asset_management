@@ -1,10 +1,12 @@
-import {React, useEffect} from "react";
+import { React } from "react";
 import {Grid, Button, Container, Typography, TextField} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = 'http://localhost:8181';
 
-const Login = () => {
+const Login = ({onLogin}) => {
 
+    const navigate = useNavigate();
     // 로그인 서브밋 이벤트 핸들러
     const submitHandler = e => {
 
@@ -45,8 +47,9 @@ const Login = () => {
                 // 로그인 성공시 받은 토큰을 로컬 스토리지에 저장
                 localStorage.setItem('ACCESS_TOKEN', loginUserData.token);
                 localStorage.setItem('LOGIN_USERNAME', loginUserData.username);
-
-                window.location.href = '/';
+                onLogin(loginUserData);
+                // window.location.href = '/';
+                navigate(-1);
             }
         })
         // 서버가 200번이아닌 오류코드를 보낼경우 실행할 코드
@@ -56,7 +59,7 @@ const Login = () => {
 
         })
     };
-    
+
     return (
         <Container component="main" maxWidth="xs" style={{ marginTop: "200px" }}>
             <Grid container spacing={2}>

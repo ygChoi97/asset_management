@@ -1,11 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
-import { Search, SearchPwsDisposal } from "./Search";
+import { SearchPwsDisposal } from "./Search";
 import "../css/tablePws.css";
+import "../css/foot.css";
 import ContentListCommon from "./ContentListCommon";
 
-function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh }) {
+function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh, account }) {
 
     const [id, setId] = useState('');
 
@@ -42,12 +43,12 @@ function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, 
 
     const handleRowClick = (event, values) => {
         console.log('event : ', values);
-        if(values.id !== null && values.id !== '') {
+        if (values.id !== null && values.id !== '') {
             setId(values.id);
-        } 
+        }
         else {
             alert('해당 PWS정보가 조회되지 않았습니다. \n예상치 못한 오류입니다.');
-        }    
+        }
     };
 
     const doClose = () => {
@@ -57,11 +58,11 @@ function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, 
     console.log('Pws Disposal Table 랜더링');
     return (
         <>
-            <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/pws'/>
+            <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/pws' account={account} />
             {/* <Search onSubmit={setGlobalFilter} /> */}
             <SearchPwsDisposal column1={'headquarters'} column2={'department'} column3={'model'} column4={'uptake'} column5={'userid'} column6={'idasset'} column7={'sn'} column8={'area'} column9={'username'} column10={'introductiondate'} column11={'company'} onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
             {/* {searchs} */}
-            <div style={{ width: '100%', height: `calc(100vh - 275px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+            <div style={{ width: '100%', height: `calc(100vh - 250px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div style={{ width: '100%', overflow: 'auto' }}>
                     <table className="pws-table" {...getTableProps()}>
                         <thead>
@@ -116,7 +117,7 @@ function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, 
                         </tbody>
                     </table>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '0.5rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '0.5rem' }}>
                     <button className="btnPagePwsSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
                         {"<<"}
                     </button>
