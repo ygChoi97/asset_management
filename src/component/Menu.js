@@ -73,7 +73,7 @@ export default function Menu() {
             </div>
             <div className="foot-container" >
                 <div className="company-foot"><img src={COMNPRO} alt="컴앤프로정보기술" width='47rem' />
-                    <div style={{ fontSize: '0.7rem', margin: '0 0.8rem'}}>
+                    <div style={{ fontSize: '0.7rem', margin: '0 0.8rem' }}>
                         <div>Com & Pro</div>
                         <div>Information Technology</div>
                         <div>컴앤프로 정보기술(주)</div>

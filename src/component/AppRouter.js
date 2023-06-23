@@ -22,7 +22,7 @@ const AppRouter = () => {
   }
 
   return (
-    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', userSelect: 'none' }}>
       <Menu />
 
       <Routes>

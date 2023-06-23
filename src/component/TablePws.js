@@ -67,12 +67,11 @@ function TablePws({ columns, data, dataWasFiltered, setFilterHeadquarters, doRef
     console.log('Pws Table 랜더링');
     return (
         <>
-
             <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/pws' account={account} />
             {/* <Search onSubmit={setGlobalFilter} /> */}
             <SearchPws column1={'headquarters'} column2={'department'} column3={'model'} column4={'uptake'} column5={'userid'} column6={'idasset'} column7={'sn'} column8={'area'} column9={'username'} column10={'introductiondate'} column11={'company'} onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
             {/* {searchs} */}
-            <div style={{ width: '100vw', height: `calc(100vh - 250px)`, overflow: 'auto' }}>
+            <div style={{ width: '100%', height: `calc(100vh - 250px)`, overflow: 'auto' }}>
                 <table className="pws-table" {...getTableProps()} >
                     <thead>
                         {/* <tr>            
