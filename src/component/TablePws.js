@@ -72,11 +72,10 @@ function TablePws({ columns, data, dataWasFiltered, setFilterHeadquarters, doRef
             {/* <Search onSubmit={setGlobalFilter} /> */}
             <SearchPws column1={'headquarters'} column2={'department'} column3={'model'} column4={'uptake'} column5={'userid'} column6={'idasset'} column7={'sn'} column8={'area'} column9={'username'} column10={'introductiondate'} column11={'company'} onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
             {/* {searchs} */}
-            <div style={{ width: '100%', height: `calc(100vh - 250px)`, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div style={{ width: '100%', overflow: 'auto' }}>
-                    <table className="pws-table" {...getTableProps()} >
-                        <thead>
-                            {/* <tr>            
+            <div style={{ width: '100vw', height: `calc(100vh - 250px)`, overflow: 'auto' }}>
+                <table className="pws-table" {...getTableProps()} >
+                    <thead>
+                        {/* <tr>            
                         <th
                             colSpan={visibleColumns.length}
                             style={{
@@ -91,99 +90,98 @@ function TablePws({ columns, data, dataWasFiltered, setFilterHeadquarters, doRef
                             />
                         </th>
                     </tr> */}
-                            {headerGroups.map((headerGroup) => (
-                                <tr {...headerGroup.getHeaderGroupProps()}>
-                                    {headerGroup.headers.map((column) => (
-                                        <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                            {column.render("Header")}
-                                            <span>
-                                                {column.isSorted
-                                                    ? column.isSortedDesc
-                                                        ? '⬇'
-                                                        : '⬆'
-                                                    : '⇳'}
-                                            </span>
-                                            {/* Rendering Default Column Filter */}
-                                            {/*  <div>
+                        {headerGroups.map((headerGroup) => (
+                            <tr {...headerGroup.getHeaderGroupProps()}>
+                                {headerGroup.headers.map((column) => (
+                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                        {column.render("Header")}
+                                        <span>
+                                            {column.isSorted
+                                                ? column.isSortedDesc
+                                                    ? '⬇'
+                                                    : '⬆'
+                                                : '⇳'}
+                                        </span>
+                                        {/* Rendering Default Column Filter */}
+                                        {/*  <div>
                                         {column.canFilter ? column.render("Filter")
                                             : null}
                                     </div> */}
-                                        </th>
+                                    </th>
+                                ))}
+                            </tr>
+                        ))}
+                    </thead>
+                    <tbody {...getTableBodyProps()}>
+                        {page.map((row) => {
+                            prepareRow(row);
+                            if (page.length === row.index + 1) {
+                                // console.log("렌더링 완료 ", page.length)
+                            }
+                            // 해당 페이지 렌더링 완료하면
+                            /* if(page.length === row.index+1 && submit === null) {
+                                console.log(row.index)
+                                // isSubmit = true;
+                                setSubmit(true);
+                                // document.getElementById('submitPwsBtn').click();                                   
+                            } */
+                            return (
+                                <tr onClick={(event) => handleRowClick(event, row.values)} {...row.getRowProps()}>
+                                    {row.cells.map((cell) => (
+                                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                                     ))}
                                 </tr>
-                            ))}
-                        </thead>
-                        <tbody {...getTableBodyProps()}>
-                            {page.map((row) => {
-                                prepareRow(row);
-                                if (page.length === row.index + 1) {
-                                    // console.log("렌더링 완료 ", page.length)
-                                }
-                                // 해당 페이지 렌더링 완료하면
-                                /* if(page.length === row.index+1 && submit === null) {
-                                    console.log(row.index)
-                                    // isSubmit = true;
-                                    setSubmit(true);
-                                    // document.getElementById('submitPwsBtn').click();                                   
-                                } */
-                                return (
-                                    <tr onClick={(event) => handleRowClick(event, row.values)} {...row.getRowProps()}>
-                                        {row.cells.map((cell) => (
-                                            <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                                        ))}
-                                    </tr>
-                                );
-                            })}
-                        </tbody>
-                    </table>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '0.5rem' }}>
-                    <button className="btnPagePwsSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-                        {"<<"}
-                    </button>
-                    <button className="btnPagePws" onClick={() => previousPage()} disabled={!canPreviousPage}>
-                        Previous
-                    </button>
-                    <button className="btnPagePws" onClick={() => nextPage()} disabled={!canNextPage}>
-                        Next
-                    </button>
-                    <button className="btnPagePwsSE" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-                        {">>"}
-                    </button>
-                    <span style={{ margin: '0 1rem' }}>
-                        Page{" "}
-                        <strong>
-                            {pageIndex + 1} of {pageOptions.length}
-                        </strong>
-                    </span>
-                    <span style={{ marginLeft: '5px' }}>
-                        Go to page:{" "}
-                        <input
-                            type="number"
-                            min='1'
-                            max={pageCount}
-                            defaultValue={pageIndex + 1}
-                            onChange={(e) => {
-                                const pageNumber = e.target.value
-                                    ? Number(e.target.value) - 1
-                                    : 0;
-                                gotoPage(pageNumber);
-                            }}
-                            style={{ width: "50px", height: '1.5rem', marginRight: '5px' }}
-                        />
-                    </span>{" "}
-                    <select className="selectPageItem"
-                        value={pageSize}
-                        onChange={(e) => setPageSize(Number(e.target.value))}
-                    >
-                        {[10, 20, 30, 50, 100, data.length].map((pageSize) => (
-                            <option key={pageSize} value={pageSize}>
-                                페이지당 {pageSize}
-                            </option>
-                        ))}
-                    </select>
-                    <span style={{ marginLeft: '1rem' }}>{rows.length} rows</span>
-                </div>
+                            );
+                        })}
+                    </tbody>
+                </table>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
+                <button className="btnPagePwsSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+                    {"<<"}
+                </button>
+                <button className="btnPagePws" onClick={() => previousPage()} disabled={!canPreviousPage}>
+                    Previous
+                </button>
+                <button className="btnPagePws" onClick={() => nextPage()} disabled={!canNextPage}>
+                    Next
+                </button>
+                <button className="btnPagePwsSE" onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+                    {">>"}
+                </button>
+                <span style={{ margin: '0 1rem' }}>
+                    Page{" "}
+                    <strong>
+                        {pageIndex + 1} of {pageOptions.length}
+                    </strong>
+                </span>
+                <span style={{ marginLeft: '5px' }}>
+                    Go to page:{" "}
+                    <input
+                        type="number"
+                        min='1'
+                        max={pageCount}
+                        defaultValue={pageIndex + 1}
+                        onChange={(e) => {
+                            const pageNumber = e.target.value
+                                ? Number(e.target.value) - 1
+                                : 0;
+                            gotoPage(pageNumber);
+                        }}
+                        style={{ width: "50px", height: '1.5rem', marginRight: '5px' }}
+                    />
+                </span>{" "}
+                <select className="selectPageItem"
+                    value={pageSize}
+                    onChange={(e) => setPageSize(Number(e.target.value))}
+                >
+                    {[10, 20, 30, 50, 100, data.length].map((pageSize) => (
+                        <option key={pageSize} value={pageSize}>
+                            페이지당 {pageSize}
+                        </option>
+                    ))}
+                </select>
+                <span style={{ marginLeft: '1rem' }}>{rows.length} rows</span>
             </div>
         </>
     );
