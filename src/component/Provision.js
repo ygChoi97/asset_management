@@ -8,12 +8,14 @@ import DBToExcel from "../dbtoexcel2.png";
 import { useDetectOutsideClick } from "./useDetectOutsideClick";
 import jwt_decode from "jwt-decode";
 import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from "./Filter";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const BASE_URL = 'http://localhost:8181/api/provision';
 
 function Provision({ account }) {
     const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
-
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
     const [refresh, setRefresh] = useState(false);
 
     const [columns, setColumns] = useState([]);
@@ -62,21 +64,21 @@ function Provision({ account }) {
                 for (let i = 0; i < json.count; i++) {
                     let copyData = {};
                     copyData = json.pwsProvisionDtos[i];
-                    if (json.pwsProvisionDtos[i].period !== null || json.pwsProvisionDtos[i].period !== undefined) {
+                    if (json.pwsProvisionDtos[i].period !== null) {
                         let day = new Date(json.pwsProvisionDtos[i].period);
                         copyData['period'] = dateFormat(day);
                     }
-                    if (json.pwsProvisionDtos[i].joiningdate !== null || json.pwsProvisionDtos[i].joiningdate !== undefined) {
+                    if (json.pwsProvisionDtos[i].joiningdate !== null) {
                         let day = new Date(json.pwsProvisionDtos[i].joiningdate);
                         copyData['joiningdate'] = dateFormat(day);
                     }
 
-                    if (json.pwsProvisionDtos[i].applicationdate !== null || json.pwsProvisionDtos[i].applicationdate !== undefined) {
+                    if (json.pwsProvisionDtos[i].applicationdate !== null) {
                         let day = new Date(json.pwsProvisionDtos[i].applicationdate);
                         copyData['applicationdate'] = dateFormat(day);
                     }
 
-                    if (json.pwsProvisionDtos[i].provisiondate !== null || json.pwsProvisionDtos[i].provisiondate !== undefined) {
+                    if (json.pwsProvisionDtos[i].provisiondate !== null) {
                         let day = new Date(json.pwsProvisionDtos[i].provisiondate);
                         copyData['provisiondate'] = dateFormat(day);
                     }
@@ -136,10 +138,12 @@ function Provision({ account }) {
                     if (isExpired) {
                         console.log('Expired');
                         alert(err.message);
-                        window.location.href = '/login';
+                        localStorage.removeItem('ACCESS_TOKEN');
+                        localStorage.removeItem('LOGIN_USERNAME');
+                        navigate('/login', { state: { previousPath: pathname } });
                     } else {
                         console.log('no Expired');
-                        alert(`Error message : ${err.message}\n\n서버 점검이 필요합니다.`);
+                        getConfirmationOK(`Error message : ${err.message}\n\n서버 점검이 필요합니다.`);
                     }
                 }
             });

@@ -8,11 +8,14 @@ import DBToExcel from "../dbtoexcel2.png";
 import { useDetectOutsideClick } from "./useDetectOutsideClick";
 import jwt_decode from "jwt-decode";
 import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from "./Filter";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const BASE_URL = 'http://localhost:8181/api/pws';
 
 function Disposal({ account }) {
   const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const [refresh, setRefresh] = useState(false);
 
@@ -61,7 +64,7 @@ function Disposal({ account }) {
         for (let i = 0; i < json.count; i++) {
           let copyData = {};
           copyData = json.pwsDtos[i];
-          if (json.pwsDtos[i].introductiondate !== null || json.pwsDtos[i].introductiondate !== undefined) {
+          if (json.pwsDtos[i].introductiondate !== null) {
             let day = new Date(json.pwsDtos[i].introductiondate);
             copyData['introductiondate'] = dateFormat(day);
           }
@@ -123,10 +126,12 @@ function Disposal({ account }) {
           if (isExpired) {
             console.log('Expired');
             alert(err.message);
-            window.location.href = '/login';
+            localStorage.removeItem('ACCESS_TOKEN');
+            localStorage.removeItem('LOGIN_USERNAME');
+            navigate('/login', { state: { previousPath: pathname } });
           } else {
             console.log('no Expired');
-            alert(`Error message : ${err.message}\n\n서버 점검이 필요합니다.`);
+            getConfirmationOK(`Error message : ${err.message}\n\n서버 점검이 필요합니다.`);
           }
         }
       });

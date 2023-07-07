@@ -23,40 +23,50 @@ label {
 .underline {
   width: 230px;
   height: 1.3rem;
-  border: 1px solid;
   border-left-width: 0;
   border-right-width: 0;
   border-top-width: 0;
-  border-bottom-width: 1;
+  border-bottom-width: 2px;
+  outline: none;
+  -webkit-appearance: none;
+  /* 네이티브 외형 감추기 */
+  -moz-appearance: none;
+  appearance: none;
   margin: 0.5rem 15px;
   font-size: 0.8rem;
-  outline: none;
 }
 
 .underline2 {
   width: 165px;
   height: 1.3rem;
-  border: 1px solid;
   border-left-width: 0;
   border-right-width: 0;
   border-top-width: 0;
-  border-bottom-width: 1;
+  border-bottom-width: 2px;
+  outline: none;
+  -webkit-appearance: none;
+  /* 네이티브 외형 감추기 */
+  -moz-appearance: none;
+  appearance: none;
   margin: 0.5rem 15px;
   font-size: 0.8rem;
-  outline: none;
+
 }
 
 .selectDate {
   width: 96px;
   height: 1.3rem;
-  border: 1px solid;
   border-left-width: 0;
   border-right-width: 0;
   border-top-width: 0;
-  border-bottom-width: 1;
+  border-bottom-width: 2px;
+  outline: none;
+  -webkit-appearance: none;
+  /* 네이티브 외형 감추기 */
+  -moz-appearance: none;
+  appearance: none;
   margin: 0.5rem 15px;
   font-size: 0.8rem;
-  outline: none;
 }
 
 .selectItem {

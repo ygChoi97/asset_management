@@ -8,11 +8,14 @@ import DBToExcel from "../dbtoexcel2.png";
 import { useDetectOutsideClick } from "./useDetectOutsideClick";
 import jwt_decode from "jwt-decode";
 import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from "./Filter";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const BASE_URL = 'http://localhost:8181/api/return';
 
 function Return({ account }) {
     const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
 
     const [refresh, setRefresh] = useState(false);
 
@@ -62,11 +65,11 @@ function Return({ account }) {
                 for (let i = 0; i < json.count; i++) {
                     let copyData = {};
                     copyData = json.pwsReturnDtos[i];
-                    if (json.pwsReturnDtos[i].resigndate !== null || json.pwsReturnDtos[i].resigndate !== undefined) {
+                    if (json.pwsReturnDtos[i].resigndate !== null) {
                         let day = new Date(json.pwsReturnDtos[i].resigndate);
                         copyData['resigndate'] = dateFormat(day);
                     }
-                    if (json.pwsReturnDtos[i].returndate !== null || json.pwsReturnDtos[i].returndate !== undefined) {
+                    if (json.pwsReturnDtos[i].returndate !== null) {
                         let day = new Date(json.pwsReturnDtos[i].returndate);
                         copyData['returndate'] = dateFormat(day);
                     }
@@ -124,10 +127,12 @@ function Return({ account }) {
                     if (isExpired) {
                         console.log('Expired');
                         alert(err.message);
-                        window.location.href = '/login';
+                        localStorage.removeItem('ACCESS_TOKEN');
+                        localStorage.removeItem('LOGIN_USERNAME');
+                        navigate('/login', { state: { previousPath: pathname } });
                     } else {
                         console.log('no Expired');
-                        alert(`Error message : ${err.message}\n\n서버 점검이 필요합니다.`);
+                        getConfirmationOK(`Error message : ${err.message}\n\n서버 점검이 필요합니다.`);
                     }
                 }
             });

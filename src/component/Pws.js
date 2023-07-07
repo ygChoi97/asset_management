@@ -9,13 +9,15 @@ import DBToExcel from "../dbtoexcel2.png";
 import { useDetectOutsideClick } from "./useDetectOutsideClick";
 import jwt_decode from "jwt-decode";
 import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from "./Filter";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const BASE_URL = 'http://localhost:8181/api/pws';
 
 function Pws({ account }) {
   
   const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
-
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [refresh, setRefresh] = useState(false);
 
   const [columns, setColumns] = useState([]);
@@ -131,10 +133,12 @@ function Pws({ account }) {
           if (isExpired) {
             console.log('Expired');
             alert(err.message);
-            window.location.href = '/login';
+            localStorage.removeItem('ACCESS_TOKEN');
+            localStorage.removeItem('LOGIN_USERNAME');
+            navigate('/login', { state: { previousPath: pathname } });
           } else {
             console.log('no Expired');
-            alert(`Error message : ${err.message}\n\n서버 점검이 필요합니다.`);
+            getConfirmationOK(`Error message : ${err.message}\n\n서버 점검이 필요합니다.`);
           }
         }
       });

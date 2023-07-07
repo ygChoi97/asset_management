@@ -2,17 +2,14 @@ body {
     padding-top: 0px;
 }
 .menu {
-    /* position: fixed; */
     top: 0;
     width: 100%;
     left: 0;
     right: 0;
+    font-family: Arial Rounded MT Bold;
     display: flex;
     justify-content: center;
-    background-color: lightslategrey; /* #8f4288; */
-    
-    /* border-bottom: 2px solid; */
-    /* border-bottom-color: #fff; */
+    background-color: lightslategray; /*#9e4a97; #8f4288*/
 }
 
 .menu-list {
@@ -20,6 +17,7 @@ body {
     list-style: none;
     margin: 0;
     padding: 0;
+    
 }
 
 .menu-item {
@@ -30,9 +28,9 @@ body {
     position: relative;
     display: inline-block;
     padding: 10px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #000;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: gainsboro;
     text-decoration: none;
 }
 
@@ -40,7 +38,7 @@ body {
     content: "";
     position: absolute;
     left: 0;
-    bottom: 3px;
+    bottom: 4px;
     
     /* 밑줄이 메뉴 아래로 위치하도록 함 */
     width: 100%;
@@ -57,14 +55,15 @@ body {
 /* 이전 메뉴와 선택한 메뉴의 밑줄 위치를 애니메이션으로 이동시킴 */
 .menu-link--active::before,
 .menu-link:hover::before {
-    transform: translateX(0%);
+    transform: translateX(0%); 
     transition: 0.3s;
 
 }
 
 /* .menu-link:hover, */
 .menu-link--active {
-    /* background-color: #0077ff; */
     color:whitesmoke;
-    /* border-bottom: 2px solid #fff; */
+    font-weight: 900;
+    text-shadow: -1px -1px 0px #000000, 1px 1px 0px #FFBB00;
+    
 }

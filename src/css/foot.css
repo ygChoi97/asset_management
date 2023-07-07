@@ -2,6 +2,7 @@
   position: absolute; 
   right: 5px;
   bottom: 0px;
+  margin-bottom: 0.5rem;
 }
 
 .company-foot {
@@ -15,7 +16,7 @@
   color: rgb(6, 6, 78);
   opacity: 44%;
   margin-top: auto;
-  margin-right: 0.5rem;
+  margin-right: 0.3rem;
   margin-left: auto;
 }
 

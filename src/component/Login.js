@@ -1,12 +1,13 @@
 import { React } from "react";
 import {Grid, Button, Container, Typography, TextField} from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const API_BASE_URL = 'http://localhost:8181';
 
 const Login = ({onLogin}) => {
 
     const navigate = useNavigate();
+    const { state } = useLocation();
     // 로그인 서브밋 이벤트 핸들러
     const submitHandler = e => {
 
@@ -39,17 +40,14 @@ const Login = ({onLogin}) => {
         .then(loginUserData => {
             console.log(loginUserData);
             if (loginUserData.message) {
-                // console.log('로그인 실패');
                 alert(loginUserData.message);
             } else {
-                // console.log('로그인 성공');
-
                 // 로그인 성공시 받은 토큰을 로컬 스토리지에 저장
                 localStorage.setItem('ACCESS_TOKEN', loginUserData.token);
                 localStorage.setItem('LOGIN_USERNAME', loginUserData.username);
                 onLogin(loginUserData);
-                // window.location.href = '/';
-                navigate(-1);
+                console.log(state)
+                navigate(state?.previousPath || "/");
             }
         })
         // 서버가 200번이아닌 오류코드를 보낼경우 실행할 코드

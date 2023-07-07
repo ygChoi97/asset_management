@@ -8,7 +8,7 @@ import ContentListCommon from "./ContentListCommon";
 
 function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh, account }) {
 
-    const [id, setId] = useState('');
+    const [idasset, setIdasset] = useState('');
 
     const {
         getTableProps,
@@ -31,7 +31,7 @@ function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, 
         preGlobalFilteredRows,
         // setFilter is the key!!!
         setFilter,
-    } = useTable({ columns, data, initialState: { hiddenColumns: ['id'], pageIndex: 0, pageSize: 100 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
+    } = useTable({ columns, data, initialState: { pageIndex: 0, pageSize: 100 }, defaultColumn: { Filter: DefaultFilterForColumn }, }, useFilters, useGlobalFilter, useSortBy, usePagination);
 
     const { pageIndex, pageSize } = state;
 
@@ -43,8 +43,8 @@ function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, 
 
     const handleRowClick = (event, values) => {
         console.log('event : ', values);
-        if (values.id !== null && values.id !== '') {
-            setId(values.id);
+        if (values.idasset !== null && values.idasset !== '') {
+            setIdasset(values.idasset);
         }
         else {
             alert('해당 PWS정보가 조회되지 않았습니다. \n예상치 못한 오류입니다.');
@@ -52,13 +52,13 @@ function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, 
     };
 
     const doClose = () => {
-        setId('');
+        setIdasset('');
     }
 
     console.log('Pws Disposal Table 랜더링');
     return (
         <>
-            <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/pws' account={account} />
+            <ContentListCommon idasset={idasset} doRefresh={doRefresh} doClose={doClose} url='/api/pws' account={account} />
             {/* <Search onSubmit={setGlobalFilter} /> */}
             <SearchPwsDisposal column1={'headquarters'} column2={'department'} column3={'model'} column4={'uptake'} column5={'userid'} column6={'idasset'} column7={'sn'} column8={'area'} column9={'username'} column10={'introductiondate'} column11={'company'} onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
             {/* {searchs} */}

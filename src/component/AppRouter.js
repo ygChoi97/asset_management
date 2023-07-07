@@ -15,12 +15,13 @@ const AppRouter = () => {
   const handleLogin = (accountData) => {
     setAccount(accountData);
   }
+  console.log(process.env.NODE_ENV)
   // 배포 환경에서 console.log, console.warn 지우기
-  if (process.env.NODE_ENV) {
+  if (process.env.NODE_ENV == 'production') {
     console.log = function no_console() { };
     console.warn = function no_console() { };
   }
-
+  
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', userSelect: 'none' }}>
       <Menu />
