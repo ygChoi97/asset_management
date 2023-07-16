@@ -32,9 +32,15 @@ body {
 }
 
 .provision-table td {
-    padding: 4px 10px;
-    border: 1px solid #dddddd;
-    font-size: 0.7rem;
+  padding: 4px 10px;
+  border: 1px solid #dddddd;
+  font-size: 0.7rem;
+
+  /* 글자 td width 넘어가면 ... 표시 */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 1px;
 }
 
 /* 번호 */

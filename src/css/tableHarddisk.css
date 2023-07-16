@@ -1,0 +1,152 @@
+body {
+  height: 100%;
+}
+
+.harddisk-table {
+  border-collapse: collapse;
+  margin: 0 0;
+  font-size: 0.9rem;
+  font-family: sans-serif;
+  width: 100%;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.harddisk-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  height: 30px;
+}
+
+.harddisk-table th {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: center;
+  font-size: 0.8rem;
+  /* min-width: 20%;
+  max-width: 20%; */
+  position: sticky;
+  top: 0px;
+  background-color: #34343b !important;
+}
+
+.harddisk-table td {
+  padding: 4px 10px;
+  border: 1px solid #dddddd;
+  font-size: 0.7rem;
+
+  /* 글자 td width 넘어가면 ... 표시 */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 1px;
+}
+
+/* 번호 */
+.harddisk-table td:nth-child(1) {
+  width: calc((100% / 17)*.5);
+}
+
+/* 회사명 */
+.harddisk-table td:nth-child(2) {
+  width: calc((100% / 17)*.6);
+}
+
+/* 본부 */
+.harddisk-table td:nth-child(3) {
+  width: calc((100% / 17)*1.6);
+}
+
+/* 자산관리번호 */
+.harddisk-table td:nth-child(4) {
+  width: calc((100% / 17)*1);
+}
+
+/* 모델명 */
+.harddisk-table td:nth-child(5) {
+  width: calc((100% / 17)*.6);
+}
+
+/* 도입년월 */
+.harddisk-table td:nth-child(6) {
+  width: calc((100% / 17)*.8);
+}
+
+/* 설치지역 */
+.harddisk-table td:nth-child(7) {
+  width: calc((100% / 17)*.7);
+}
+
+/* 팀명 */
+.harddisk-table td:nth-child(8) {
+  width: calc((100% / 17)*1.6);
+}
+
+/* 담당자 */
+.harddisk-table td:nth-child(9) {
+  width: calc((100% / 17)*.6);
+}
+
+/* 위치 */
+.harddisk-table td:nth-child(10) {
+  width: calc((100% / 17)*1);
+}
+
+/* 사용구분 */
+.harddisk-table td:nth-child(11) {
+  width: calc((100% / 17)*1.6);
+}
+
+/* 지원일자 */
+.harddisk-table td:nth-child(12) {
+  width: calc((100% / 17)*.8);
+}
+
+/* 500GB SSD */
+.harddisk-table td:nth-child(13) {
+  width: calc((100% / 17)*.5);
+}
+
+/* 1TB SATA */
+.harddisk-table td:nth-child(14) {
+  width: calc((100% / 17)*.5);
+}
+
+/* m2_512gb */
+.harddisk-table td:nth-child(15) {
+  width: calc((100% / 17)*.5);
+}
+
+/* sata_2tb */
+.harddisk-table td:nth-child(16) {
+  width: calc((100% / 17)*.5);
+}
+
+/* 비고 */
+.harddisk-table td:nth-child(17) {
+  width: calc((100% / 17)*3.8);
+}
+
+.harddisk-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+  height: 23px;
+}
+
+.harddisk-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.harddisk-table tbody tr:hover {
+  cursor: pointer;
+  background-color: lightgoldenrodyellow;
+}
+
+.harddisk-table tbody tr:last-of-type {
+  border-bottom: 2px solid #34343b;
+}
+
+.harddisk-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+}

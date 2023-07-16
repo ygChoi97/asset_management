@@ -26,7 +26,7 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
   const [username, setUsername] = useState('');
   const [sn, setSn] = useState('');
   const [headquarters, setHeadquarters] = useState('');
-  const [headquartersOption, setHeadquartersOption] = useState("1");
+  const [headquartersOption, setHeadquartersOption] = useState('1');
   const [introductiondateSD, setIntroductiondateSD] = useState('');
   const [introductiondateED, setIntroductiondateED] = useState('');
   const [company, setCompany] = useState('');
@@ -100,7 +100,7 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
     setIntroductiondateED('');
     setCompany('');
   }
-  
+
   const hSubmit = (event) => {
     event.preventDefault();
 
@@ -109,14 +109,14 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
     onSubmit(column1, event.target.elements[0].value.trim());
     onSubmit(column2, event.target.elements[2].value.trim());
     onSubmit(column3, event.target.elements[3].value.trim());
-    if (event.target.elements[4].value != '')
+    if (event.target.elements[4].value !== '')
       onSubmit(column4, event.target.elements[4].value.trim());
     else
       onSubmit(column4, undefined);
     onSubmit(column5, event.target.elements[5].value.trim());
     onSubmit(column6, event.target.elements[6].value.trim());
     onSubmit(column7, event.target.elements[7].value.trim());
-    if (event.target.elements[8].value != '')
+    if (event.target.elements[8].value !== '')
       onSubmit(column8, event.target.elements[8].value.trim());
     else
       onSubmit(column8, undefined);
@@ -125,7 +125,7 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
     onSubmit(column10, (old = []) => [event.target.elements[11].value ? event.target.elements[11].value.trim() : undefined, old[1]]);
     onSubmit(column10, (old = []) => [event.target.elements[10].value ? event.target.elements[10].value.trim() : undefined, old[0]]);
 
-    if (event.target.elements[12].value != '')
+    if (event.target.elements[12].value !== '')
       onSubmit(column11, event.target.elements[12].value.trim());
     else
       onSubmit(column11, undefined);
@@ -154,7 +154,7 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
     }
     else {
       const term = localStorage.getItem("SEARCHTERM_PWS");
-      if(term)
+      if (term)
         localStorage.removeItem("SEARCHTERM_PWS");
     }
 
@@ -276,10 +276,10 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
 };
 
 export function SearchProvision({ column1, column2, column3, column4, column5, column6, column7, column8, onSubmit, setFilterHeadquarters }) {
+  const [headquarters, setHeadquarters] = useState('');
+  const [headquartersOption, setHeadquartersOption] = useState('1');
   const [assetno, setAssetno] = useState('');
   const [department, setDepartment] = useState('');
-  const [headquarters, setHeadquarters] = useState('');
-  const [headquartersOption, setHeadquartersOption] = useState("1");
   const [idasset, setIdasset] = useState('');
   const [sn, setSn] = useState('');
   const [areainstall, setAreainstall] = useState('');
@@ -330,10 +330,10 @@ export function SearchProvision({ column1, column2, column3, column4, column5, c
   };
 
   const resetHandler = (event) => {
-    setAssetno('');
-    setDepartment('');
     setHeadquarters('');
     setHeadquartersOption('1');
+    setAssetno('');
+    setDepartment('');
     setIdasset('');
     setSn('');
     setAreainstall('');
@@ -348,11 +348,11 @@ export function SearchProvision({ column1, column2, column3, column4, column5, c
     setFilterHeadquarters(headquartersOption);
 
     onSubmit(column1, event.target.elements[0].value.trim());
-    onSubmit(column2, event.target.elements[1].value.trim());
-    onSubmit(column3, event.target.elements[2].value.trim());
+    onSubmit(column2, event.target.elements[2].value.trim());
+    onSubmit(column3, event.target.elements[3].value.trim());
     onSubmit(column4, event.target.elements[4].value.trim());
     onSubmit(column5, event.target.elements[5].value.trim());
-    if (event.target.elements[6].value != '')
+    if (event.target.elements[6].value !== '')
       onSubmit(column6, event.target.elements[6].value.trim());
     else
       onSubmit(column6, undefined);
@@ -360,13 +360,13 @@ export function SearchProvision({ column1, column2, column3, column4, column5, c
     onSubmit(column8, (old = []) => [event.target.elements[9].value ? event.target.elements[9].value.trim() : undefined, old[1]]);
     onSubmit(column8, (old = []) => [event.target.elements[8].value ? event.target.elements[8].value.trim() : undefined, old[0]]);
 
-    if (assetno !== '' || department !== '' || headquarters !== '' || idasset !== '' || sn !== '' || areainstall !== '' ||
+    if (headquarters !== '' || assetno !== '' || department !== '' || idasset !== '' || sn !== '' || areainstall !== '' ||
       model !== '' || provisiondateSD !== '' || provisiondateED !== '') {
       const state = {
-        assetno: assetno,
-        department: department,
         headquarters: headquarters,
         headquartersOption: headquartersOption,
+        assetno: assetno,
+        department: department,       
         idasset: idasset,
         sn: sn,
         areainstall: areainstall,
@@ -380,7 +380,7 @@ export function SearchProvision({ column1, column2, column3, column4, column5, c
     }
     else {
       const term = localStorage.getItem("SEARCHTERM_PROVISION");
-      if(term)
+      if (term)
         localStorage.removeItem("SEARCHTERM_PROVISION");
     }
   };
@@ -392,11 +392,10 @@ export function SearchProvision({ column1, column2, column3, column4, column5, c
     // JSON 문자열을 JavaScript 객체로 변환
     if (stateString) {
       const state = JSON.parse(stateString);
-      
-      if (state.assetno) setHeadquarters(state.assetno);
-      if (state.department) setDepartment(state.department);
       if (state.headquarters) setHeadquarters(state.headquarters);
       if (state.headquartersOption) setHeadquartersOption(state.headquartersOption);
+      if (state.assetno) setAssetno(state.assetno);
+      if (state.department) setDepartment(state.department); 
       if (state.idasset) setIdasset(state.idasset);
       if (state.sn) setSn(state.sn);
       if (state.areainstall) setAreainstall(state.areainstall);
@@ -410,7 +409,7 @@ export function SearchProvision({ column1, column2, column3, column4, column5, c
         }, 3000); // 3초 후에 클릭 이벤트 발생
         return () => clearTimeout(timeoutId);
       }
-    }   
+    }
   }, []);
 
   return (
@@ -419,19 +418,18 @@ export function SearchProvision({ column1, column2, column3, column4, column5, c
       <div className="searchFrm">
         <div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <div className="filterItem"><label htmlFor='assetno'>자산번호</label> <input className='underline' id='assetno' name={column1} placeholder='' onChange={assetnoHandler} value={assetno} /></div>
-            <div className="filterItem"><label htmlFor='department'>부서명</label><input className='underline' id='department' name={column2} placeholder='' onChange={departmentHandler} value={department} /></div>
-            
-            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '355px' }}>
+          <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '355px' }}>
               <div className="filterItem">
                 <label htmlFor='headquarters'>본부</label>
-                <input className='underline2' id='headquarters' name={column3} placeholder='' onChange={headquartersHandler} value={headquarters} />
+                <input className='underline2' id='headquarters' name={column1} placeholder='' onChange={headquartersHandler} value={headquarters} />
               </div>
               <select className="selectOption" value={headquartersOption} onChange={headquartersOptionHandler}>
                 <option value="0">포함</option>
                 <option value="1">제외</option>
               </select>
             </div>
+            <div className="filterItem"><label htmlFor='assetno'>자산번호</label> <input className='underline' id='assetno' name={column2} placeholder='' onChange={assetnoHandler} value={assetno} /></div>
+            <div className="filterItem"><label htmlFor='department'>부서명</label><input className='underline' id='department' name={column3} placeholder='' onChange={departmentHandler} value={department} /></div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -480,7 +478,7 @@ export function SearchProvision({ column1, column2, column3, column4, column5, c
 
 export function SearchReturn({ column1, column2, column3, column4, column5, column6, column7, column8, column9, column10, onSubmit, setFilterHeadquarters }) {
   const [headquarters, setHeadquarters] = useState('');
-  const [headquartersOption, setHeadquartersOption] = useState("1");
+  const [headquartersOption, setHeadquartersOption] = useState('1');
   const [assetno, setAssetno] = useState('');
   const [hoteam, setHoteam] = useState('');
   const [housername, setHousername] = useState('');
@@ -554,7 +552,7 @@ export function SearchReturn({ column1, column2, column3, column4, column5, colu
     setHoteam('');
     setHousername('');
     setIdasset('');
-    setSn(''); 
+    setSn('');
     setModel('');
     setArea('');
     setResigndateSD('');
@@ -582,7 +580,7 @@ export function SearchReturn({ column1, column2, column3, column4, column5, colu
     onSubmit(column10, (old = []) => [event.target.elements[11].value ? event.target.elements[11].value.trim() : undefined, old[0]]);
 
     if (headquarters !== '' || assetno !== '' || hoteam !== '' || housername !== '' || idasset !== '' || sn !== '' || model !== '' || area !== '' ||
-        resigndateSD !== '' || resigndateED !== '' || returndateSD !== '' || returndateED !== '') {
+      resigndateSD !== '' || resigndateED !== '' || returndateSD !== '' || returndateED !== '') {
       const state = {
         headquarters: headquarters,
         headquartersOption: headquartersOption,
@@ -604,7 +602,7 @@ export function SearchReturn({ column1, column2, column3, column4, column5, colu
     }
     else {
       const term = localStorage.getItem("SEARCHTERM_RETURN");
-      if(term)
+      if (term)
         localStorage.removeItem("SEARCHTERM_RETURN");
     }
   };
@@ -627,7 +625,7 @@ export function SearchReturn({ column1, column2, column3, column4, column5, colu
       if (state.idasset) setIdasset(state.idasset);
       if (state.sn) setSn(state.sn);
       if (state.model) setModel(state.model);
-      if (state.area) setArea(state.area);   
+      if (state.area) setArea(state.area);
       if (state.resigndateSD) setResigndateSD(state.resigndateSD);
       if (state.resigndateED) setResigndateED(state.resigndateED);
       if (state.returndateSD) setReturndateSD(state.returndateSD);
@@ -639,7 +637,7 @@ export function SearchReturn({ column1, column2, column3, column4, column5, colu
         }, 3000); // 3초 후에 클릭 이벤트 발생
         return () => clearTimeout(timeoutId);
       }
-    }   
+    }
   }, []);
 
   return (
@@ -724,7 +722,7 @@ export function SearchPwsDisposal({ column1, column2, column3, column4, column5,
   const [username, setUsername] = useState('');
   const [sn, setSn] = useState('');
   const [headquarters, setHeadquarters] = useState('');
-  const [headquartersOption, setHeadquartersOption] = useState("1");
+  const [headquartersOption, setHeadquartersOption] = useState('1');
   const [introductiondateSD, setIntroductiondateSD] = useState('');
   const [introductiondateED, setIntroductiondateED] = useState('');
   const [company, setCompany] = useState('');
@@ -798,7 +796,7 @@ export function SearchPwsDisposal({ column1, column2, column3, column4, column5,
     setIntroductiondateED('');
     setCompany('');
   }
-  
+
   const hSubmit = (event) => {
     event.preventDefault();
 
@@ -807,14 +805,14 @@ export function SearchPwsDisposal({ column1, column2, column3, column4, column5,
     onSubmit(column1, event.target.elements[0].value.trim());
     onSubmit(column2, event.target.elements[2].value.trim());
     onSubmit(column3, event.target.elements[3].value.trim());
-    if (event.target.elements[4].value != '')
+    if (event.target.elements[4].value !== '')
       onSubmit(column4, event.target.elements[4].value.trim());
     else
       onSubmit(column4, undefined);
     onSubmit(column5, event.target.elements[5].value.trim());
     onSubmit(column6, event.target.elements[6].value.trim());
     onSubmit(column7, event.target.elements[7].value.trim());
-    if (event.target.elements[8].value != '')
+    if (event.target.elements[8].value !== '')
       onSubmit(column8, event.target.elements[8].value.trim());
     else
       onSubmit(column8, undefined);
@@ -823,7 +821,7 @@ export function SearchPwsDisposal({ column1, column2, column3, column4, column5,
     onSubmit(column10, (old = []) => [event.target.elements[11].value ? event.target.elements[11].value.trim() : undefined, old[1]]);
     onSubmit(column10, (old = []) => [event.target.elements[10].value ? event.target.elements[10].value.trim() : undefined, old[0]]);
 
-    if (event.target.elements[12].value != '')
+    if (event.target.elements[12].value !== '')
       onSubmit(column11, event.target.elements[12].value.trim());
     else
       onSubmit(column11, undefined);
@@ -852,7 +850,7 @@ export function SearchPwsDisposal({ column1, column2, column3, column4, column5,
     }
     else {
       const term = localStorage.getItem("SEARCHTERM_DISPOSAL");
-      if(term)
+      if (term)
         localStorage.removeItem("SEARCHTERM_DISPOSAL");
     }
 
@@ -963,6 +961,828 @@ export function SearchPwsDisposal({ column1, column2, column3, column4, column5,
             </div>
           </div>
         </div>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <button className="btnSearch" type="submit" id="submitPwsBtn" ref={btnRef}>조회</button>
+          <button className="btnReset" type="submit" onClick={resetHandler}>리셋</button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+export function SearchMemory({ column1, column2, column3, column4, column5, column6, onSubmit, setFilterHeadquarters }) {
+
+  const [headquarters, setHeadquarters] = useState('');
+  const [headquartersOption, setHeadquartersOption] = useState('1');
+  const [idasset, setIdasset] = useState('');
+  const [area, setArea] = useState('');
+  const [team, setTeam] = useState('');
+  const [manager, setManager] = useState('');
+  const [application_dateSD, setApplication_dateSD] = useState('');
+  const [application_dateED, setApplication_dateED] = useState('');
+
+  const btnRef = useRef(null);
+
+  const headquartersHandler = (e) => {
+    setHeadquarters(e.target.value);
+  }
+
+  const headquartersOptionHandler = (e) => {
+    setHeadquartersOption(e.target.value);
+  };
+
+  const idassetHandler = (e) => {
+    setIdasset(e.target.value);
+  }
+
+  const areaHandler = (e) => {
+    setArea(e.target.value);
+  }
+
+  const teamHandler = (e) => {
+    setTeam(e.target.value);
+  }
+
+  const managerHandler = (e) => {
+    setManager(e.target.value);
+  }
+
+  const application_dateSDHandler = (e) => {
+    setApplication_dateSD(e.target.value);
+  };
+
+  const application_dateEDHandler = (e) => {
+    setApplication_dateED(e.target.value);
+  };
+
+  const resetHandler = (event) => {
+    setHeadquarters('');
+    setHeadquartersOption('1');
+    setIdasset('');
+    setArea('');
+    setTeam('');
+    setManager('');
+    setApplication_dateSD('');
+    setApplication_dateED('');
+  }
+
+  const hSubmit = (event) => {
+    event.preventDefault();
+
+    setFilterHeadquarters(headquartersOption);
+
+    onSubmit(column1, event.target.elements[0].value.trim());
+    onSubmit(column2, event.target.elements[2].value.trim());
+    if (event.target.elements[3].value !== '')
+      onSubmit(column3, event.target.elements[3].value.trim());
+    else
+      onSubmit(column3, undefined);
+    onSubmit(column4, event.target.elements[4].value.trim());
+    onSubmit(column5, event.target.elements[5].value.trim());
+
+    onSubmit(column6, (old = []) => [event.target.elements[7].value ? event.target.elements[7].value.trim() : undefined, old[1]]);
+    onSubmit(column6, (old = []) => [event.target.elements[6].value ? event.target.elements[6].value.trim() : undefined, old[0]]);
+
+    if (headquarters !== '' || idasset !== '' || area !== '' || team !== '' || manager !== '' || application_dateSD !== '' || application_dateED !== '') {
+      const state = {
+        headquarters: headquarters,
+        headquartersOption: headquartersOption,
+        idasset: idasset,
+        area: area,
+        team: team,
+        manager: manager,
+        application_dateSD: application_dateSD,
+        application_dateED: application_dateED,
+      };
+      // 상태값이 변경될 때마다 로컬 스토리지에 저장
+      const stateString = JSON.stringify(state);
+      localStorage.setItem('SEARCHTERM_MEMORY', stateString);
+    }
+    else {
+      const term = localStorage.getItem("SEARCHTERM_MEMORY");
+      if (term)
+        localStorage.removeItem("SEARCHTERM_MEMORY");
+    }
+  };
+
+  useEffect(() => {
+
+    // 로컬 스토리지에서 'SEARCHTERM_MEMORY' 가져옴
+    const stateString = localStorage.getItem('SEARCHTERM_MEMORY');
+    // JSON 문자열을 JavaScript 객체로 변환
+    if (stateString) {
+      const state = JSON.parse(stateString);
+
+      if (state.headquarters) setHeadquarters(state.headquarters);
+      if (state.headquartersOption) setHeadquartersOption(state.headquartersOption);
+      if (state.idasset) setIdasset(state.idasset);
+      if (state.area) setArea(state.area);
+      if (state.team) setTeam(state.team);
+      if (state.manager) setManager(state.manager);
+      if (state.application_dateSD) setApplication_dateSD(state.application_dateSD);
+      if (state.application_dateED) setApplication_dateED(state.application_dateED);
+
+      if (btnRef.current) {
+        const timeoutId = setTimeout(() => {
+          btnRef.current.click();
+        }, 3000); // 3초 후에 클릭 이벤트 발생
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, []);
+
+  return (
+    <form onSubmit={hSubmit}>
+
+      <div className="searchFrm">
+        <div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '355px' }}>
+              <div className="filterItem">
+                <label htmlFor='headquarters'>본부</label>
+                <input className='underline2' id='headquarters' name={column1} placeholder='' onChange={headquartersHandler} value={headquarters} />
+              </div>
+              <select className="selectOption" value={headquartersOption} onChange={headquartersOptionHandler}>
+                <option value="0">포함</option>
+                <option value="1">제외</option>
+              </select>
+            </div>
+            <div className="filterItem"><label htmlFor='idasset'>자산관리번호</label><input className='underline' id='idasset' name={column2} placeholder='' onChange={idassetHandler} value={idasset} /></div>
+            <div className="filterItem"><label htmlFor='areainstall'>설치지역</label>
+              <select className="selectItem" id='area' name={column3} onChange={areaHandler} value={area}>
+                <option value="">― 선택안함 ―</option>
+                <option value="남양">남양</option>
+                <option value="마북">마북</option>
+                <option value="의왕">의왕</option>
+                <option value="광명">광명</option>
+                <option value="화성">화성</option>
+                <option value="광주">광주</option>
+                <option value="전주">전주</option>
+                <option value="울산">울산</option>
+                <option value="아산">아산</option>
+                <option value="본사">본사</option>
+                <option value="대치">대치</option>
+                <option value="삼성">삼성</option>
+                <option value="판교">판교</option>
+                <option value="원효로">원효로</option>
+                <option value="대방">대방</option>
+                <option value="기타">기타</option>
+              </select>
+            </div>
+            <div className="filterItem"><label htmlFor='team'>팀명</label><input className='underline' id='team' name={column4} placeholder='' onChange={teamHandler} value={team} /></div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
+            <div className="filterItem"><label htmlFor='manager'>담당자</label><input className='underline' id='manager' name={column5} placeholder='' onChange={managerHandler} value={manager} /></div>
+            <div className="filterItem"><label htmlFor='introductiondate'>지원일자</label>
+              <input className='selectDate' id='application_dateSD' name={column6} placeholder='' type='date' onChange={application_dateSDHandler} value={application_dateSD} />
+              <span>~</span>
+              <input className='selectDate' id='application_dateED' name={column6} placeholder='' type='date' onChange={application_dateEDHandler} value={application_dateED} />
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <button className="btnSearch" type="submit" id="submitPwsBtn" ref={btnRef}>조회</button>
+          <button className="btnReset" type="submit" onClick={resetHandler}>리셋</button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+export function SearchVideoEquipment({ column1, column2, column3, column4, column5, column6, onSubmit, setFilterHeadquarters }) {
+
+  const [headquarters, setHeadquarters] = useState('');
+  const [headquartersOption, setHeadquartersOption] = useState('1');
+  const [idasset, setIdasset] = useState('');
+  const [area, setArea] = useState('');
+  const [requestor_id, setRequestor_id] = useState('');
+  const [user_id, setUser_id] = useState('');
+  const [provision_dateSD, setProvision_dateSD] = useState('');
+  const [provision_dateED, setProvision_dateED] = useState('');
+
+  const btnRef = useRef(null);
+
+  const headquartersHandler = (e) => {
+    setHeadquarters(e.target.value);
+  }
+
+  const headquartersOptionHandler = (e) => {
+    setHeadquartersOption(e.target.value);
+  };
+
+  const idassetHandler = (e) => {
+    setIdasset(e.target.value);
+  }
+
+  const areaHandler = (e) => {
+    setArea(e.target.value);
+  }
+
+  const requestorIdHandler = (e) => {
+    setRequestor_id(e.target.value);
+  }
+
+  const userIdHandler = (e) => {
+    setUser_id(e.target.value);
+  }
+
+  const provision_dateSDHandler = (e) => {
+    setProvision_dateSD(e.target.value);
+  };
+
+  const provision_dateEDHandler = (e) => {
+    setProvision_dateED(e.target.value);
+  };
+
+  const resetHandler = (event) => {
+    setHeadquarters('');
+    setHeadquartersOption('1');
+    setIdasset('');
+    setArea('');
+    setRequestor_id('');
+    setUser_id('');
+    setProvision_dateSD('');
+    setProvision_dateED('');
+  }
+
+  const hSubmit = (event) => {
+    event.preventDefault();
+
+    setFilterHeadquarters(headquartersOption);
+
+    onSubmit(column1, event.target.elements[0].value.trim());
+    onSubmit(column2, event.target.elements[2].value.trim());
+    if (event.target.elements[3].value !== '')
+      onSubmit(column3, event.target.elements[3].value.trim());
+    else
+      onSubmit(column3, undefined);
+    onSubmit(column4, event.target.elements[4].value.trim());
+    onSubmit(column5, event.target.elements[5].value.trim());
+
+    onSubmit(column6, (old = []) => [event.target.elements[7].value ? event.target.elements[7].value.trim() : undefined, old[1]]);
+    onSubmit(column6, (old = []) => [event.target.elements[6].value ? event.target.elements[6].value.trim() : undefined, old[0]]);
+
+    if (headquarters !== '' || idasset !== '' || area !== '' || requestor_id !== '' || user_id !== '' || provision_dateSD !== '' || provision_dateED !== '') {
+      const state = {
+        headquarters: headquarters,
+        headquartersOption: headquartersOption,
+        idasset: idasset,
+        area: area,
+        requestor_id: requestor_id,
+        user_id: user_id,
+        provision_dateSD: provision_dateSD,
+        provision_dateED: provision_dateED,
+      };
+      // 상태값이 변경될 때마다 로컬 스토리지에 저장
+      const stateString = JSON.stringify(state);
+      localStorage.setItem('SEARCHTERM_VIDEOEQUIPMENT', stateString);
+    }
+    else {
+      const term = localStorage.getItem("SEARCHTERM_VIDEOEQUIPMENT");
+      if (term)
+        localStorage.removeItem("SEARCHTERM_VIDEOEQUIPMENT");
+    }
+  };
+
+  useEffect(() => {
+
+    // 로컬 스토리지에서 'SEARCHTERM_VIDEOEQUIPMENT' 가져옴
+    const stateString = localStorage.getItem('SEARCHTERM_VIDEOEQUIPMENT');
+    // JSON 문자열을 JavaScript 객체로 변환
+    if (stateString) {
+      const state = JSON.parse(stateString);
+
+      if (state.headquarters) setHeadquarters(state.headquarters);
+      if (state.headquartersOption) setHeadquartersOption(state.headquartersOption);
+      if (state.idasset) setIdasset(state.idasset);
+      if (state.area) setArea(state.area);
+      if (state.requestor_id) setRequestor_id(state.requestor_id);
+      if (state.user_id) setUser_id(state.user_id);
+      if (state.provision_dateSD) setProvision_dateSD(state.provision_dateSD);
+      if (state.provision_dateED) setProvision_dateED(state.provision_dateED);
+
+      if (btnRef.current) {
+        const timeoutId = setTimeout(() => {
+          btnRef.current.click();
+        }, 3000); // 3초 후에 클릭 이벤트 발생
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, []);
+
+  return (
+    <form onSubmit={hSubmit}>
+
+      <div className="searchFrm">
+        <div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '355px' }}>
+              <div className="filterItem">
+                <label htmlFor='headquarters'>본부</label>
+                <input className='underline2' id='headquarters' name={column1} placeholder='' onChange={headquartersHandler} value={headquarters} />
+              </div>
+              <select className="selectOption" value={headquartersOption} onChange={headquartersOptionHandler}>
+                <option value="0">포함</option>
+                <option value="1">제외</option>
+              </select>
+            </div>
+            <div className="filterItem"><label htmlFor='idasset'>자산관리번호</label><input className='underline' id='idasset' name={column2} placeholder='' onChange={idassetHandler} value={idasset} /></div>
+            <div className="filterItem"><label htmlFor='areainstall'>설치지역</label>
+              <select className="selectItem" id='area' name={column3} onChange={areaHandler} value={area}>
+                <option value="">― 선택안함 ―</option>
+                <option value="남양">남양</option>
+                <option value="마북">마북</option>
+                <option value="의왕">의왕</option>
+                <option value="광명">광명</option>
+                <option value="화성">화성</option>
+                <option value="광주">광주</option>
+                <option value="전주">전주</option>
+                <option value="울산">울산</option>
+                <option value="아산">아산</option>
+                <option value="본사">본사</option>
+                <option value="대치">대치</option>
+                <option value="삼성">삼성</option>
+                <option value="판교">판교</option>
+                <option value="원효로">원효로</option>
+                <option value="대방">대방</option>
+                <option value="기타">기타</option>
+              </select>
+            </div>
+            <div className="filterItem"><label htmlFor='requestor_id'>요청자 사번</label><input className='underline' id='requestor_id' name={column4} placeholder='' onChange={requestorIdHandler} value={requestor_id} /></div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
+            <div className="filterItem"><label htmlFor='user_id'>실사용자 사번</label><input className='underline' id='user_id' name={column5} placeholder='' onChange={userIdHandler} value={user_id} /></div>
+            <div className="filterItem"><label htmlFor='provision_date'>지급일</label>
+              <input className='selectDate' id='provision_dateSD' name={column6} placeholder='' type='date' onChange={provision_dateSDHandler} value={provision_dateSD} />
+              <span>~</span>
+              <input className='selectDate' id='provision_dateED' name={column6} placeholder='' type='date' onChange={provision_dateEDHandler} value={provision_dateED} />
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <button className="btnSearch" type="submit" id="submitPwsBtn" ref={btnRef}>조회</button>
+          <button className="btnReset" type="submit" onClick={resetHandler}>리셋</button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+export function SearchHarddisk({ column1, column2, column3, column4, column5, column6, onSubmit, setFilterHeadquarters }) {
+
+  const [headquarters, setHeadquarters] = useState('');
+  const [headquartersOption, setHeadquartersOption] = useState('1');
+  const [idasset, setIdasset] = useState('');
+  const [area, setArea] = useState('');
+  const [team, setTeam] = useState('');
+  const [manager, setManager] = useState('');
+  const [application_dateSD, setApplication_dateSD] = useState('');
+  const [application_dateED, setApplication_dateED] = useState('');
+
+  const btnRef = useRef(null);
+
+  const headquartersHandler = (e) => {
+    setHeadquarters(e.target.value);
+  }
+
+  const headquartersOptionHandler = (e) => {
+    setHeadquartersOption(e.target.value);
+  };
+
+  const idassetHandler = (e) => {
+    setIdasset(e.target.value);
+  }
+
+  const areaHandler = (e) => {
+    setArea(e.target.value);
+  }
+
+  const teamHandler = (e) => {
+    setTeam(e.target.value);
+  }
+
+  const managerHandler = (e) => {
+    setManager(e.target.value);
+  }
+
+  const application_dateSDHandler = (e) => {
+    setApplication_dateSD(e.target.value);
+  };
+
+  const application_dateEDHandler = (e) => {
+    setApplication_dateED(e.target.value);
+  };
+
+  const resetHandler = (event) => {
+    setHeadquarters('');
+    setHeadquartersOption('1');
+    setIdasset('');
+    setArea('');
+    setTeam('');
+    setManager('');
+    setApplication_dateSD('');
+    setApplication_dateED('');
+  }
+
+  const hSubmit = (event) => {
+    event.preventDefault();
+
+    setFilterHeadquarters(headquartersOption);
+
+    onSubmit(column1, event.target.elements[0].value.trim());
+    onSubmit(column2, event.target.elements[2].value.trim());
+    if (event.target.elements[3].value !== '')
+      onSubmit(column3, event.target.elements[3].value.trim());
+    else
+      onSubmit(column3, undefined);
+    onSubmit(column4, event.target.elements[4].value.trim());
+    onSubmit(column5, event.target.elements[5].value.trim());
+
+    onSubmit(column6, (old = []) => [event.target.elements[7].value ? event.target.elements[7].value.trim() : undefined, old[1]]);
+    onSubmit(column6, (old = []) => [event.target.elements[6].value ? event.target.elements[6].value.trim() : undefined, old[0]]);
+
+    if (headquarters !== '' || idasset !== '' || area !== '' || team !== '' || manager !== '' || application_dateSD !== '' || application_dateED !== '') {
+      const state = {
+        headquarters: headquarters,
+        headquartersOption: headquartersOption,
+        idasset: idasset,
+        area: area,
+        team: team,
+        manager: manager,
+        application_dateSD: application_dateSD,
+        application_dateED: application_dateED,
+      };
+      // 상태값이 변경될 때마다 로컬 스토리지에 저장
+      const stateString = JSON.stringify(state);
+      localStorage.setItem('SEARCHTERM_HARDDISK', stateString);
+    }
+    else {
+      const term = localStorage.getItem("SEARCHTERM_HARDDISK");
+      if (term)
+        localStorage.removeItem("SEARCHTERM_HARDDISK");
+    }
+  };
+
+  useEffect(() => {
+
+    // 로컬 스토리지에서 'SEARCHTERM_HARDDISK' 가져옴
+    const stateString = localStorage.getItem('SEARCHTERM_HARDDISK');
+    // JSON 문자열을 JavaScript 객체로 변환
+    if (stateString) {
+      const state = JSON.parse(stateString);
+
+      if (state.headquarters) setHeadquarters(state.headquarters);
+      if (state.headquartersOption) setHeadquartersOption(state.headquartersOption);
+      if (state.idasset) setIdasset(state.idasset);
+      if (state.area) setArea(state.area);
+      if (state.team) setTeam(state.team);
+      if (state.manager) setManager(state.manager);
+      if (state.application_dateSD) setApplication_dateSD(state.application_dateSD);
+      if (state.application_dateED) setApplication_dateED(state.application_dateED);
+
+      if (btnRef.current) {
+        const timeoutId = setTimeout(() => {
+          btnRef.current.click();
+        }, 3000); // 3초 후에 클릭 이벤트 발생
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, []);
+
+  return (
+    <form onSubmit={hSubmit}>
+
+      <div className="searchFrm">
+        <div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '355px' }}>
+              <div className="filterItem">
+                <label htmlFor='headquarters'>본부</label>
+                <input className='underline2' id='headquarters' name={column1} placeholder='' onChange={headquartersHandler} value={headquarters} />
+              </div>
+              <select className="selectOption" value={headquartersOption} onChange={headquartersOptionHandler}>
+                <option value="0">포함</option>
+                <option value="1">제외</option>
+              </select>
+            </div>
+            <div className="filterItem"><label htmlFor='idasset'>자산관리번호</label><input className='underline' id='idasset' name={column2} placeholder='' onChange={idassetHandler} value={idasset} /></div>
+            <div className="filterItem"><label htmlFor='areainstall'>설치지역</label>
+              <select className="selectItem" id='area' name={column3} onChange={areaHandler} value={area}>
+                <option value="">― 선택안함 ―</option>
+                <option value="남양">남양</option>
+                <option value="마북">마북</option>
+                <option value="의왕">의왕</option>
+                <option value="광명">광명</option>
+                <option value="화성">화성</option>
+                <option value="광주">광주</option>
+                <option value="전주">전주</option>
+                <option value="울산">울산</option>
+                <option value="아산">아산</option>
+                <option value="본사">본사</option>
+                <option value="대치">대치</option>
+                <option value="삼성">삼성</option>
+                <option value="판교">판교</option>
+                <option value="원효로">원효로</option>
+                <option value="대방">대방</option>
+                <option value="기타">기타</option>
+              </select>
+            </div>
+            <div className="filterItem"><label htmlFor='team'>팀명</label><input className='underline' id='team' name={column4} placeholder='' onChange={teamHandler} value={team} /></div>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
+            <div className="filterItem"><label htmlFor='manager'>담당자</label><input className='underline' id='manager' name={column5} placeholder='' onChange={managerHandler} value={manager} /></div>
+            <div className="filterItem"><label htmlFor='application_date'>지원일자</label>
+              <input className='selectDate' id='application_dateSD' name={column6} placeholder='' type='date' onChange={application_dateSDHandler} value={application_dateSD} />
+              <span>~</span>
+              <input className='selectDate' id='application_dateED' name={column6} placeholder='' type='date' onChange={application_dateEDHandler} value={application_dateED} />
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <button className="btnSearch" type="submit" id="submitPwsBtn" ref={btnRef}>조회</button>
+          <button className="btnReset" type="submit" onClick={resetHandler}>리셋</button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+export function SearchRetireeDisk({ column1, column2, column3, column4, column5, onSubmit }) {
+
+  const [team, setTeam] = useState('');
+  const [retireeName, setRetireeName] = useState('');
+  const [retireeId, setRetireeId] = useState('');
+  const [idasset, setIdasset] = useState('');
+  const [return_dateSD, setReturn_dateSD] = useState('');
+  const [return_dateED, setReturn_dateED] = useState('');
+
+  const btnRef = useRef(null);
+
+  const teamHandler = (e) => {
+    setTeam(e.target.value);
+  }
+
+  const retireeNameHandler = (e) => {
+    setRetireeName(e.target.value);
+  }
+
+  const retireeIdHandler = (e) => {
+    setRetireeId(e.target.value);
+  }
+
+  const idassetHandler = (e) => {
+    setIdasset(e.target.value);
+  }
+
+  const return_dateSDHandler = (e) => {
+    setReturn_dateSD(e.target.value);
+  }
+
+  const return_dateEDHandler = (e) => {
+    setReturn_dateED(e.target.value);
+  }
+
+  const resetHandler = (event) => {
+    setTeam('');
+    setRetireeName('');
+    setRetireeId('');
+    setIdasset('');
+    setReturn_dateSD('');
+    setReturn_dateED('');
+  }
+
+  const hSubmit = (event) => {
+    event.preventDefault();
+
+    onSubmit(column1, event.target.elements[0].value.trim());
+    onSubmit(column2, event.target.elements[1].value.trim());
+    onSubmit(column3, event.target.elements[2].value.trim());
+    onSubmit(column4, event.target.elements[3].value.trim());
+
+    onSubmit(column5, (old = []) => [event.target.elements[5].value ? event.target.elements[5].value.trim() : undefined, old[1]]);
+    onSubmit(column5, (old = []) => [event.target.elements[4].value ? event.target.elements[4].value.trim() : undefined, old[0]]);
+
+    if (team !== '' || retireeName !== '' || retireeId !== '' || idasset !== '' || return_dateSD !== '' || return_dateED !== '') {
+      const state = {
+        team: team,
+        retireeName: retireeName,
+        retireeId: retireeId,
+        idasset: idasset,
+        return_dateSD: return_dateSD,
+        return_dateED: return_dateED,
+      };
+      // 상태값이 변경될 때마다 로컬 스토리지에 저장
+      const stateString = JSON.stringify(state);
+      localStorage.setItem('SEARCHTERM_RETIREEDISK', stateString);
+    }
+    else {
+      const term = localStorage.getItem("SEARCHTERM_RETIREEDISK");
+      if (term)
+        localStorage.removeItem("SEARCHTERM_RETIREEDISK");
+    }
+  };
+
+  useEffect(() => {
+
+    // 로컬 스토리지에서 'SEARCHTERM_RETIREEDISK' 가져옴
+    const stateString = localStorage.getItem('SEARCHTERM_RETIREEDISK');
+    // JSON 문자열을 JavaScript 객체로 변환
+    if (stateString) {
+      const state = JSON.parse(stateString);
+
+      if (state.team) setTeam(state.team);
+      if (state.retireeName) setRetireeName(state.retireeName);
+      if (state.retireeId) setRetireeName(state.retireeId);
+      if (state.idasset) setIdasset(state.idasset);
+      if (state.return_dateSD) setReturn_dateSD(state.return_dateSD);
+      if (state.return_dateED) setReturn_dateED(state.return_dateED);
+
+      if (btnRef.current) {
+        const timeoutId = setTimeout(() => {
+          btnRef.current.click();
+        }, 3000); // 3초 후에 클릭 이벤트 발생
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, []);
+
+  return (
+    <form onSubmit={hSubmit}>
+      <div className="searchFrm">
+        <div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div className="filterItem"><label htmlFor='team'>팀명</label><input className='underline' id='team' name={column1} placeholder='' onChange={teamHandler} value={team} /></div>
+            <div className="filterItem"><label htmlFor='retireeName'>퇴사자</label><input className='underline' id='retireeName' name={column2} placeholder='' onChange={retireeNameHandler} value={retireeName} /></div>
+            <div className="filterItem"><label htmlFor='retireeId'>사번</label><input className='underline' id='retireeId' name={column3} placeholder='' onChange={retireeIdHandler} value={retireeId} /></div>
+            <div className="filterItem"><label htmlFor='idasset'>자산관리번호</label><input className='underline' id='idasset' name={column4} placeholder='' onChange={idassetHandler} value={idasset} /></div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
+            <div className="filterItem"><label htmlFor='introductiondate'>장비 반납일</label>
+              <input className='selectDate' id='return_dateSD' name={column5} placeholder='' type='date' onChange={return_dateSDHandler} value={return_dateSD} />
+              <span>~</span>
+              <input className='selectDate' id='return_dateED' name={column5} placeholder='' type='date' onChange={return_dateEDHandler} value={return_dateED} />
+            </div>
+          </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <button className="btnSearch" type="submit" id="submitPwsBtn" ref={btnRef}>조회</button>
+          <button className="btnReset" type="submit" onClick={resetHandler}>리셋</button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+export function SearchDiskRestoration({ column1, column2, column3, column4, column5, onSubmit, setFilterHeadquarters }) {
+
+  const [headquarters, setHeadquarters] = useState('');
+  const [headquartersOption, setHeadquartersOption] = useState('1');
+  const [team, setTeam] = useState('');
+  const [requestor, setRequestor] = useState('');
+  const [idasset, setIdasset] = useState('');
+  const [area, setArea] = useState('');
+
+  const btnRef = useRef(null);
+
+  const headquartersHandler = (e) => {
+    setHeadquarters(e.target.value);
+  }
+
+  const headquartersOptionHandler = (e) => {
+    setHeadquartersOption(e.target.value);
+  };
+
+  const teamHandler = (e) => {
+    setTeam(e.target.value);
+  }
+
+  const requestorHandler = (e) => {
+    setRequestor(e.target.value);
+  }
+
+  const idassetHandler = (e) => {
+    setIdasset(e.target.value);
+  }
+
+  const areaHandler = (e) => {
+    setArea(e.target.value);
+  }
+
+  const resetHandler = (event) => {
+    setHeadquarters('');
+    setHeadquartersOption('1');
+    setTeam('');
+    setRequestor('');
+    setIdasset('');
+    setArea('');
+  }
+
+  const hSubmit = (event) => {
+    event.preventDefault();
+
+    setFilterHeadquarters(headquartersOption);
+
+    onSubmit(column1, event.target.elements[0].value.trim());
+    onSubmit(column2, event.target.elements[2].value.trim());
+    onSubmit(column3, event.target.elements[3].value.trim());
+    onSubmit(column4, event.target.elements[4].value.trim());
+    if (event.target.elements[5].value !== '')
+      onSubmit(column5, event.target.elements[5].value.trim());
+    else
+      onSubmit(column5, undefined);
+
+    if (headquarters !== '' || team !== '' || requestor !== '' || idasset !== '' || area !== '') {
+      const state = {
+        headquarters: headquarters,
+        headquartersOption: headquartersOption,
+        team: team,
+        requestor: requestor,
+        idasset: idasset,
+        area: area,
+      };
+      // 상태값이 변경될 때마다 로컬 스토리지에 저장
+      const stateString = JSON.stringify(state);
+      localStorage.setItem('SEARCHTERM_DISKRESOTRATION', stateString);
+    }
+    else {
+      const term = localStorage.getItem("SEARCHTERM_DISKRESOTRATION");
+      if (term)
+        localStorage.removeItem("SEARCHTERM_DISKRESOTRATION");
+    }
+  };
+
+  useEffect(() => {
+
+    // 로컬 스토리지에서 'SEARCHTERM_DISKRESOTRATION' 가져옴
+    const stateString = localStorage.getItem('SEARCHTERM_DISKRESOTRATION');
+    // JSON 문자열을 JavaScript 객체로 변환
+    if (stateString) {
+      const state = JSON.parse(stateString);
+
+      if (state.headquarters) setHeadquarters(state.headquarters);
+      if (state.headquartersOption) setHeadquartersOption(state.headquartersOption);
+      if (state.team) setTeam(state.team);
+      if (state.requestor) setTeam(state.requestor);
+      if (state.idasset) setIdasset(state.idasset);
+      if (state.area) setArea(state.area);
+
+      if (btnRef.current) {
+        const timeoutId = setTimeout(() => {
+          btnRef.current.click();
+        }, 3000); // 3초 후에 클릭 이벤트 발생
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, []);
+
+  return (
+    <form onSubmit={hSubmit}>
+
+      <div className="searchFrm">
+        <div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '355px' }}>
+              <div className="filterItem">
+                <label htmlFor='headquarters'>본부</label>
+                <input className='underline2' id='headquarters' name={column1} placeholder='' onChange={headquartersHandler} value={headquarters} />
+              </div>
+              <select className="selectOption" value={headquartersOption} onChange={headquartersOptionHandler}>
+                <option value="0">포함</option>
+                <option value="1">제외</option>
+              </select>
+            </div>
+            <div className="filterItem"><label htmlFor='team'>팀</label><input className='underline' id='team' name={column2} placeholder='' onChange={teamHandler} value={team} /></div>
+            <div className="filterItem"><label htmlFor='requestor'>요청자</label><input className='underline' id='requestor' name={column3} placeholder='' onChange={requestorHandler} value={requestor} /></div>
+            <div className="filterItem"><label htmlFor='idasset'>자산관리번호</label><input className='underline' id='idasset' name={column2} placeholder='' onChange={idassetHandler} value={idasset} /></div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
+            <div className="filterItem"><label htmlFor='area'>설치지역</label>
+              <select className="selectItem" id='area' name={column3} onChange={areaHandler} value={area}>
+                <option value="">― 선택안함 ―</option>
+                <option value="남양">남양</option>
+                <option value="마북">마북</option>
+                <option value="의왕">의왕</option>
+                <option value="광명">광명</option>
+                <option value="화성">화성</option>
+                <option value="광주">광주</option>
+                <option value="전주">전주</option>
+                <option value="울산">울산</option>
+                <option value="아산">아산</option>
+                <option value="본사">본사</option>
+                <option value="대치">대치</option>
+                <option value="삼성">삼성</option>
+                <option value="판교">판교</option>
+                <option value="원효로">원효로</option>
+                <option value="대방">대방</option>
+                <option value="기타">기타</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <button className="btnSearch" type="submit" id="submitPwsBtn" ref={btnRef}>조회</button>
           <button className="btnReset" type="submit" onClick={resetHandler}>리셋</button>

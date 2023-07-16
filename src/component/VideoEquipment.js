@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import "../css/btnImportExport.css";
-import TableProvision from "./TableProvision";
 import UseConfirm from "./UseConfirm";
 import ExcelDB from "../excel_db.png";
 import ExcelToDB from "../exceltodb2.png";
@@ -9,10 +8,11 @@ import { useDetectOutsideClick } from "./useDetectOutsideClick";
 import jwt_decode from "jwt-decode";
 import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from "./Filter";
 import { useLocation, useNavigate } from "react-router-dom";
+import TableVideoEquipment from "./TableVideoEqupiment";
 
-const BASE_URL = 'http://localhost:8181/api/provision';
+const BASE_URL = 'http://localhost:8181/api/videoequipment';
 
-function Provision({ account }) {
+function VideoEquipment({ account }) {
     const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
     const navigate = useNavigate();
     const { pathname } = useLocation();
@@ -32,7 +32,6 @@ function Provision({ account }) {
     function dateFormat(date) {
         let month = date.getMonth() + 1;
         let day = date.getDate();
-
         month = month >= 10 ? month : '0' + month;
         day = day >= 10 ? day : '0' + day;
 
@@ -63,14 +62,21 @@ function Provision({ account }) {
                 let copyDatas = [];
                 for (let i = 0; i < json.count; i++) {
                     let copyData = {};
-                    copyData = json.pwsProvisionDtos[i];
-                    for(const key in json.pwsProvisionDtos[i]) {                  
-                        if(key.includes('date') && json.pwsProvisionDtos[i][key]!=null) {
-                            let day = new Date(json.pwsProvisionDtos[i][key]);
+                    copyData = json.videoEquiqmentDtos[i];
+                    for(const key in json.videoEquiqmentDtos[i]) {                  
+                        if(key.includes('date') && json.videoEquiqmentDtos[i][key]!=null) {
+                            let day = new Date(json.videoEquiqmentDtos[i][key]);
                             copyData[key] = dateFormat(day);
                         }
-                    } 
+                    }    
 
+                    if (json.videoEquiqmentDtos[i].headset === 0)
+                        copyData['headset'] = null;           
+                    if (json.videoEquiqmentDtos[i].webcam === 0)
+                        copyData['webcam'] = null;           
+                    if (json.videoEquiqmentDtos[i].usbgender === 0)
+                        copyData['usbgender'] = null;                             
+                    
                     copyDatas.push(copyData);
                 }
                 setData(copyDatas);
@@ -104,11 +110,11 @@ function Provision({ account }) {
                     for (let i = 0; i < json.length; i++) {
                         let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
                         copyColumn.accessor = json[i].column_name;
-                        if (copyColumn.accessor === 'areainstall')
+                        if (copyColumn.accessor === 'area')
                             copyColumn.filter = 'equals';
                         if (copyColumn.accessor === 'headquarters')
                             copyColumn.filter = exclusionFilterFn;   // 본부는 exclusion 필터 적용
-                        if (copyColumn.accessor.includes('period') || copyColumn.accessor.includes('date')) {
+                        if (copyColumn.accessor.includes('date')) {
                             copyColumn.Filter = DateRangeColumnFilter;
                             copyColumn.filter = dateBetweenFilterFn;
                         }
@@ -190,6 +196,7 @@ function Provision({ account }) {
                     for (let r = 2; r <= sheet.rowCount; r++) {
                         let isEmpty = { idasset: false, sn: false };
                         let obj = {};
+
                         for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
 
                             let str = sheet.getRow(r).getCell(c).toString();
@@ -204,16 +211,33 @@ function Provision({ account }) {
                             if (columns[c - 1].accessor === 'idasset' && str === '') isEmpty.idasset = true;
                             if (columns[c - 1].accessor === 'sn' && str === '') isEmpty.sn = true;
                             if (isEmpty.idasset & isEmpty.sn) {
-                                getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 자산관리번호와 S/N가 둘다 빈칸입니다.\n import를 취소합니다.`);
+                                getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 자산관리번호가 빈칸입니다.\n import를 취소합니다.`);
                                 return;
                             }
-
                             if (columns[c - 1].accessor.includes('date')) {
                                 if (str !== '')
                                     obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
                                 else
                                     obj[columns[c - 1].accessor] = null;
                             }     
+                            else if (columns[c - 1].accessor === 'headset') {
+                                if(Number(str) === 0)
+                                    obj[columns[c - 1].accessor] = null;
+                                else
+                                    obj[columns[c - 1].accessor] = str;
+                            }
+                            else if (columns[c - 1].accessor === 'webcam') {
+                                if(Number(str) === 0)
+                                    obj[columns[c - 1].accessor] = null;
+                                else
+                                    obj[columns[c - 1].accessor] = str;
+                            }
+                            else if (columns[c - 1].accessor === 'usbgender') {
+                                if(Number(str) === 0)
+                                    obj[columns[c - 1].accessor] = null;
+                                else
+                                    obj[columns[c - 1].accessor] = str;
+                            }
                             else if (str === '_x000d_' || str === '')
                                 obj[columns[c - 1].accessor] = null;
 
@@ -287,10 +311,10 @@ function Provision({ account }) {
 
             // addWorksheet() 함수를 사용하여 엑셀 시트를 추가한다.
             // 엑셀 시트는 순차적으로 생성된다.
-            workbook.addWorksheet('PWS지급');
+            workbook.addWorksheet('영상회의용 장비');
 
             // 1. getWorksheet() 함수에서 시트 명칭 전달
-            const sheetOne = workbook.getWorksheet('PWS지급');
+            const sheetOne = workbook.getWorksheet('영상회의용 장비');
 
             sheetOne.columns = columns.map(item => {
                 let obj = {};
@@ -342,7 +366,7 @@ function Provision({ account }) {
 
             workbook.xlsx.writeBuffer().then((data) => {
                 const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-                saveFile(blob, `PWS지급리스트${currentDayFormat}`);
+                saveFile(blob, `영상회의용장비사용현황리스트${currentDayFormat}`);
             })
             setIsActive(false);
         } catch (error) {
@@ -382,7 +406,7 @@ function Provision({ account }) {
         // 로컬 스토리지에서 데이터 삭제
         localStorage.removeItem('ACCESS_TOKEN');
         localStorage.removeItem('LOGIN_USERNAME');
-        localStorage.removeItem('SEARCHTERM_PROVISION');
+        localStorage.removeItem('SEARCHTERM_VIDEOEQUIPMENT');
     };
     console.log(account);
     return (
@@ -429,10 +453,10 @@ function Provision({ account }) {
                 onClick={(event) => {
                     event.target.value = null
                 }} ref={$fileInput} hidden></input>
-            <TableProvision columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} account={account} />
+            <TableVideoEquipment columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} account={account} />
         </>
 
     );
 }
 
-export default Provision;
+export default VideoEquipment;

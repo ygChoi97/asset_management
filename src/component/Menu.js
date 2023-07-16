@@ -17,6 +17,10 @@ export default function Menu() {
         localStorage.removeItem('SEARCHTERM_PROVISION');
         localStorage.removeItem('SEARCHTERM_RETURN');
         localStorage.removeItem('SEARCHTERM_DISPOSAL');
+        localStorage.removeItem('SEARCHTERM_DISKRESTORATION');
+        localStorage.removeItem('SEARCHTERM_MEMORY');
+        localStorage.removeItem('SEARCHTERM_HARDDISK');
+        localStorage.removeItem('SEARCHTERM_VIDEOEQUIPMENT');
         navigate('/login', { state: { previousPath: pathname } });
     };
     const button = USERNAME
@@ -71,6 +75,66 @@ export default function Menu() {
                                 매각
                             </Link>
                         </li>
+                        {/* <li className="menu-item">
+                            <Link
+                                to="/retireedisk" state = {{ previousPath: pathname}}
+                                className={`menu-link${location.pathname === '/retireedisk' ? ' menu-link--active' : ''}`}
+                            >
+                                퇴직자디스크
+                            </Link>
+                        </li>
+                        <li className="menu-item">
+                            <Link
+                                to="/diskrestoration" state = {{ previousPath: pathname}}
+                                className={`menu-link${location.pathname === '/diskrestoration' ? ' menu-link--active' : ''}`}
+                            >
+                                디스크복구
+                            </Link>
+                        </li>
+                        <li className="menu-item">
+                            <Link
+                                to="/memory" state = {{ previousPath: pathname}}
+                                className={`menu-link${location.pathname === '/memory' ? ' menu-link--active' : ''}`}
+                            >
+                                메모리
+                            </Link>
+                        </li>
+                        <li className="menu-item">
+                            <Link
+                                to="/harddisk" state = {{ previousPath: pathname}}
+                                className={`menu-link${location.pathname === '/harddisk' ? ' menu-link--active' : ''}`}
+                            >
+                                하드디스크
+                            </Link>
+                        </li>
+                        <li className="menu-item">
+                            <Link
+                                to="/videoequipment" state = {{ previousPath: pathname}}
+                                className={`menu-link${location.pathname === '/videoequipment' ? ' menu-link--active' : ''}`}
+                            >
+                                영상용장비
+                            </Link>
+                        </li> */}
+                        {/* <div className="container">
+                            <input id="dropdown" type="checkbox" />
+                            <label className="dropdownLabel" for="dropdown">
+                                부품 및 주변기기 지원
+                                <Link
+                                    to="/memory" state={{ previousPath: pathname }}
+                                    className={`menu-link${location.pathname === '/memory' ? ' menu-link--active' : ''}`}
+                                >
+                                </Link>
+                            </label>
+                            <div className="content">
+                                <ul>
+                                    <li>Option 1</li>
+                                    <li>Option 2</li>
+                                    <li>Option 3</li>
+                                    <li>Option 4</li>
+                                </ul>
+                            </div>
+                        </div> */}
+
                     </ul>
 
                 </nav>

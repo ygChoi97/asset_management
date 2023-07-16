@@ -65,14 +65,12 @@ function Return({ account }) {
                 for (let i = 0; i < json.count; i++) {
                     let copyData = {};
                     copyData = json.pwsReturnDtos[i];
-                    if (json.pwsReturnDtos[i].resigndate !== null) {
-                        let day = new Date(json.pwsReturnDtos[i].resigndate);
-                        copyData['resigndate'] = dateFormat(day);
-                    }
-                    if (json.pwsReturnDtos[i].returndate !== null) {
-                        let day = new Date(json.pwsReturnDtos[i].returndate);
-                        copyData['returndate'] = dateFormat(day);
-                    }
+                    for(const key in json.pwsReturnDtos[i]) {                  
+                        if(key.includes('date') && json.pwsReturnDtos[i][key]!=null) {
+                            let day = new Date(json.pwsReturnDtos[i][key]);
+                            copyData[key] = dateFormat(day);
+                        }
+                    }   
 
                     copyDatas.push(copyData);
                 }
@@ -109,7 +107,7 @@ function Return({ account }) {
                         copyColumn.accessor = json[i].column_name;
                         if (copyColumn.accessor === 'headquarters')
                             copyColumn.filter = exclusionFilterFn;   // 본부는 exclusion 필터 적용
-                        if (copyColumn.accessor === 'resigndate' || copyColumn.accessor === 'returndate') {
+                        if (copyColumn.accessor.includes('date')) {
                             copyColumn.Filter = DateRangeColumnFilter;
                             copyColumn.filter = dateBetweenFilterFn;
                         }
@@ -149,7 +147,7 @@ function Return({ account }) {
         console.log(headquartersOption);
         copyColumns.forEach(el => {
             if (el.accessor === 'headquarters') {
-                if (headquartersOption === 1)
+                if (headquartersOption === '1')
                     el.filter = exclusionFilterFn
                 else
                     el.filter = ''
@@ -210,18 +208,12 @@ function Return({ account }) {
                                 return;
                             }
 
-                            if (columns[c - 1].accessor === 'resigndate')
+                            if (columns[c - 1].accessor.includes('date')) {
                                 if (str !== '')
                                     obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
                                 else
                                     obj[columns[c - 1].accessor] = null;
-
-                            else if (columns[c - 1].accessor === 'returndate')
-                                if (str !== '')
-                                    obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
-                                else
-                                    obj[columns[c - 1].accessor] = null;
-
+                            }     
                             else if (str === '_x000d_' || str === '')
                                 obj[columns[c - 1].accessor] = null;
                             else

@@ -1,0 +1,172 @@
+body {
+  height: 100%;
+}
+
+retireedisk-table {
+  border-collapse: collapse;
+  margin: 0 0;
+  font-size: 0.9rem;
+  font-family: sans-serif;
+  width: 200%;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+retireedisk-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  height: 30px;
+}
+
+retireedisk-table th {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: center;
+  font-size: 0.8rem;
+  /* min-width: 20%;
+  max-width: 20%; */
+  position: sticky;
+  top: 0px;
+  background-color: #34343b !important;
+}
+
+retireedisk-table td {
+  padding: 4px 10px;
+  border: 1px solid #dddddd;
+  font-size: 0.7rem;
+
+  /* 글자 td width 넘어가면 ... 표시 */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 1px;
+}
+
+/* 팀명 */
+retireedisk-table td:nth-child(1) {
+  width: 80px;
+}
+
+/* 퇴사자 */
+retireedisk-table td:nth-child(2) {
+  width: 50px;
+}
+
+/* 사번 */
+retireedisk-table td:nth-child(3) {
+  width: 60px;
+}
+
+/* S/N */
+retireedisk-table td:nth-child(4) {
+  width: 50px;
+}
+
+/* 품명 */
+retireedisk-table td:nth-child(5) {
+  width: 30px;
+}
+
+/* 지역 */
+retireedisk-table td:nth-child(6) {
+  width: 40px;
+}
+
+/* 장비 반납일 */
+retireedisk-table td:nth-child(7) {
+  width: 60px;
+}
+
+/* 1 HDD S/N */
+retireedisk-table td:nth-child(8) {
+  width: 80px;
+}
+
+/* 2 HDD S/N */
+retireedisk-table td:nth-child(9) {
+  width: 80px;
+}
+
+/* 3 HDD S/N */
+retireedisk-table td:nth-child(10) {
+  width: 80px;
+}
+
+/* 4 HDD S/N */
+retireedisk-table td:nth-child(11) {
+  width: 80px;
+}
+
+/* HDD 용량 */
+retireedisk-table td:nth-child(12) {
+  width: 80px;
+}
+
+/* 반납자 */
+retireedisk-table td:nth-child(13) {
+  width: 50px;
+}
+
+/* 사번 */
+retireedisk-table td:nth-child(14) {
+  width: 60px;
+}
+
+/* 인계일 */
+retireedisk-table td:nth-child(15) {
+  width: 60px;
+}
+
+/* 인계자 */
+retireedisk-table td:nth-child(16) {
+  width: 40px;
+}
+
+/* 보안팀 인계 */
+retireedisk-table td:nth-child(17) {
+  width: 60px;
+}
+
+/* 총무 인수일 */
+retireedisk-table td:nth-child(18) {
+  width: 60px;
+}
+
+/* 인수자 */
+retireedisk-table td:nth-child(19) {
+  width: 50px;
+}
+
+/* 보관BOX NO */
+retireedisk-table td:nth-child(20) {
+  width: 60px;
+}
+
+/* 비고 */
+retireedisk-table td:nth-child(21) {
+  width: 230px;
+}
+
+retireedisk-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+  height: 23px;
+}
+
+retireedisk-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+retireedisk-table tbody tr:hover {
+  cursor: pointer;
+  background-color: lightgoldenrodyellow;
+}
+
+retireedisk-table tbody tr:last-of-type {
+  border-bottom: 2px solid #34343b;
+}
+
+retireedisk-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+}

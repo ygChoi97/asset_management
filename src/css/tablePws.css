@@ -11,7 +11,7 @@ body {
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
- 
+
 .pws-table thead tr {
   background-color: #009879;
   color: #ffffff;
@@ -32,103 +32,132 @@ body {
 }
 
 .pws-table td {
-    padding: 4px 10px;
-    border: 1px solid #dddddd;
-    font-size: 0.7rem;
+  padding: 4px 10px;
+  border: 1px solid #dddddd;
+  font-size: 0.7rem;
+
+  /* 글자 td width 넘어가면 ... 표시 */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 1px;
 }
 
 /* 사용구분 */
 .pws-table td:nth-child(1) {
   width: 40px;
 }
+
 /* 회사 */
 .pws-table td:nth-child(2) {
   width: 40px;
 }
+
 /* 본부 */
 .pws-table td:nth-child(3) {
   width: 80px;
 }
+
 /* 센터 */
 .pws-table td:nth-child(4) {
   width: 100px;
 }
+
 /* 관리부서 */
 .pws-table td:nth-child(5) {
   width: 100px;
 }
+
 /* 사용자 */
 .pws-table td:nth-child(6) {
   width: 50px;
 }
+
 /* 사용자ID */
 .pws-table td:nth-child(7) {
   width: 60px;
 }
+
 /* 코트트센터CD */
 .pws-table td:nth-child(8) {
   width: 60px;
 }
+
 /* 모델명 */
 .pws-table td:nth-child(9) {
   width: 50px;
 }
+
 /* 자산번호 */
 .pws-table td:nth-child(10) {
   width: 55px;
 }
+
 /* 자산관리번호 */
-.pws-table td:nth-child(11) { 
+.pws-table td:nth-child(11) {
   width: 75px;
 }
+
 /* S/N */
 .pws-table td:nth-child(12) {
   width: 50px;
 }
+
 /* 그래픽카드 */
 .pws-table td:nth-child(13) {
   width: 100px;
 }
+
 /* 메모리 */
 .pws-table td:nth-child(14) {
   width: 40px;
 }
+
 /* 모니터 */
 .pws-table td:nth-child(15) {
   width: 60px;
 }
+
 /* 지역 */
 .pws-table td:nth-child(16) {
   width: 40px;
 }
+
 /* 건물명 */
 .pws-table td:nth-child(17) {
   width: 100px;
 }
+
 /* 층수 */
 .pws-table td:nth-child(18) {
   width: 30px;
 }
+
 /* 상세위치 */
 .pws-table td:nth-child(19) {
   width: 90px;
 }
+
 /* 구매용도 */
 .pws-table td:nth-child(20) {
   width: 50px;
 }
+
 /* 사용용도 */
 .pws-table td:nth-child(21) {
   width: 50px;
 }
+
 /* 상세업무 */
 .pws-table td:nth-child(22) {
   width: 120px;
 }
+
 /* 도입년월 */
 .pws-table td:nth-child(23) {
   width: 60px;
 }
+
 /* 비고 */
 .pws-table td:nth-child(24) {
   width: 230px;
@@ -156,4 +185,3 @@ body {
   font-weight: bold;
   color: #009879;
 }
-

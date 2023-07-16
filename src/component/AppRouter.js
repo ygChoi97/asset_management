@@ -8,6 +8,10 @@ import Disposal from "./Disposal";
 import NotFoundPage from "./NotFoundPage";
 import Login from "./Login";
 import PrivateRoute2 from "./PrivateRoute2";
+import Memory from "./Memory";
+import Harddisk from "./Harddisk";
+import VideoEquipment from "./VideoEquipment";
+import DiskRestoration from "./DiskRestoration";
 
 const AppRouter = () => {
 
@@ -18,8 +22,8 @@ const AppRouter = () => {
   console.log(process.env.NODE_ENV)
   // 배포 환경에서 console.log, console.warn 지우기
   if (process.env.NODE_ENV == 'production') {
-    console.log = function no_console() { };
-    console.warn = function no_console() { };
+    // console.log = function no_console() { };
+    // console.warn = function no_console() { };
   }
   
   return (
@@ -33,6 +37,10 @@ const AppRouter = () => {
           <Route path="/provision" element={<Provision account={account} />} />
           <Route path="/return" element={<Return account={account} />} />
           <Route path="/disposal" element={<Disposal account={account} />} />
+          <Route path="/diskrestoration" element={<DiskRestoration account={account} />} />
+          <Route path="/memory" element={<Memory account={account} />} />
+          <Route path="/harddisk" element={<Harddisk account={account} />} />
+          <Route path="/videoequipment" element={<VideoEquipment account={account} />} />
         </Route>
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>

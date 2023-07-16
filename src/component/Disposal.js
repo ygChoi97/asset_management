@@ -64,10 +64,12 @@ function Disposal({ account }) {
         for (let i = 0; i < json.count; i++) {
           let copyData = {};
           copyData = json.pwsDtos[i];
-          if (json.pwsDtos[i].introductiondate !== null) {
-            let day = new Date(json.pwsDtos[i].introductiondate);
-            copyData['introductiondate'] = dateFormat(day);
-          }
+          for(const key in json.pwsDtos[i]) {                  
+            if(key.includes('date') && json.pwsDtos[i][key]!=null) {
+                let day = new Date(json.pwsDtos[i][key]);
+                copyData[key] = dateFormat(day);
+            }
+        }  
 
           copyDatas.push(copyData);
         }
@@ -108,9 +110,9 @@ function Disposal({ account }) {
               copyColumn.filter = 'equals';  // select 타입은 equals 필터 적용
             if (copyColumn.accessor === 'headquarters')
               copyColumn.filter = exclusionFilterFn;   // 본부는 exclusion 필터 적용
-            if (copyColumn.accessor === 'introductiondate') {
-              // copyColumn.Filter = DateRangeColumnFilter;
-              copyColumn.filter = dateBetweenFilterFn;  // 날짜 구간 필터 적용
+            if (copyColumn.accessor.includes('date')) {
+              copyColumn.Filter = DateRangeColumnFilter;
+              copyColumn.filter = dateBetweenFilterFn;
             }
             copyColumn.Header = json[i].column_comment; // 메뉴명
             copyColumns.push(copyColumn);
@@ -147,7 +149,7 @@ function Disposal({ account }) {
     console.log(headquartersOption);
     copyColumns.forEach(el => {
       if (el.accessor === 'headquarters') {
-        if (headquartersOption === 1)
+        if (headquartersOption === '1')
           el.filter = exclusionFilterFn
         else
           el.filter = ''
@@ -201,13 +203,12 @@ function Disposal({ account }) {
                 return;
               }
 
-              if (columns[c - 1].accessor === 'introductiondate') {
-                if (str !== '') {
+              if (columns[c - 1].accessor.includes('date')) {
+                if (str !== '')
                   obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
-                }
                 else
                   obj[columns[c - 1].accessor] = null;
-              }
+              }     
               else if (str === '_x000d_' || str === '')
                 obj[columns[c - 1].accessor] = null;
               else

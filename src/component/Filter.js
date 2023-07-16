@@ -1,90 +1,90 @@
 import { React, useMemo, useState } from "react";
 import { useAsyncDebounce } from "react-table";
 import { Label, Input } from "reactstrap";
- 
+
 // Component for Global Filter
-export function GlobalFilter({ 
-   globalFilter, 
-   setGlobalFilter 
+export function GlobalFilter({
+  globalFilter,
+  setGlobalFilter
 }) {
- const [value, setValue] = useState(globalFilter);
- 
- const onChange = useAsyncDebounce((value) => {
-   setGlobalFilter(value || undefined);
- }, 200);
- 
- return (
-   <div>
-     <Label>Search Table: </Label>
-     <Input
-       value={value || ""}
-       onChange={(e) => {
-         setValue(e.target.value);
-         onChange(e.target.value);
-       }}
-       placeholder=" Enter value "
-       className="w-25"
-       style={{
-         fontSize: "1.1rem",
-         margin: "15px",
-         display: "inline",
-       }}
-     />
-   </div>
- );
+  const [value, setValue] = useState(globalFilter);
+
+  const onChange = useAsyncDebounce((value) => {
+    setGlobalFilter(value || undefined);
+  }, 200);
+
+  return (
+    <div>
+      <Label>Search Table: </Label>
+      <Input
+        value={value || ""}
+        onChange={(e) => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
+        placeholder=" Enter value "
+        className="w-25"
+        style={{
+          fontSize: "1.1rem",
+          margin: "15px",
+          display: "inline",
+        }}
+      />
+    </div>
+  );
 }
- 
+
 // Component for Default Column Filter
 export function DefaultFilterForColumn({
- column: {
-   filterValue,
-   preFilteredRows: { length },
-   setFilter,
- },
+  column: {
+    filterValue,
+    preFilteredRows: { length },
+    setFilter,
+  },
 }) {
- return (
-   <Input
-     value={filterValue || ""}
-     onChange={(e) => {
-       // Set undefined to remove the filter entirely
-       setFilter(e.target.value || undefined);
-     }}
-     placeholder={`Search ${length} records..`}
-     style={{ marginTop: "10px" }}
-   />
- );
+  return (
+    <Input
+      value={filterValue || ""}
+      onChange={(e) => {
+        // Set undefined to remove the filter entirely
+        setFilter(e.target.value || undefined);
+      }}
+      placeholder={`Search ${length} records..`}
+      style={{ marginTop: "10px" }}
+    />
+  );
 }
- 
+
 // Component for Custom Select Filter
 export function SelectColumnFilter({
- column: { filterValue, setFilter, preFilteredRows, id },
+  column: { filterValue, setFilter, preFilteredRows, id },
 }) {
- 
- // Use preFilteredRows to calculate the options
- const options = useMemo(() => {
-   const options = new Set();
-   preFilteredRows.forEach((row) => {
-     options.add(row.values[id]);
-   });
-   return [...options.values()];
- }, [id, preFilteredRows]);
- 
- // UI for Multi-Select box
- return (
-   <select
-     value={filterValue}
-     onChange={(e) => {
-       setFilter(e.target.value || undefined);
-     }}
-   >
-     <option value="">All</option>
-     {options.map((option, i) => (
-       <option key={i} value={option}>
-         {option}
-       </option>
-     ))}
-   </select>
- );
+
+  // Use preFilteredRows to calculate the options
+  const options = useMemo(() => {
+    const options = new Set();
+    preFilteredRows.forEach((row) => {
+      options.add(row.values[id]);
+    });
+    return [...options.values()];
+  }, [id, preFilteredRows]);
+
+  // UI for Multi-Select box
+  return (
+    <select
+      value={filterValue}
+      onChange={(e) => {
+        setFilter(e.target.value || undefined);
+      }}
+    >
+      <option value="">All</option>
+      {options.map((option, i) => (
+        <option key={i} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  );
 }
 
 export function dateBetweenFilterFn(rows, id, filterValues) {
@@ -96,9 +96,9 @@ export function dateBetweenFilterFn(rows, id, filterValues) {
 
       if (ed && sd) {
         return cellDate >= sd && cellDate <= ed
-      } else if (sd){
+      } else if (sd) {
         return cellDate >= sd
-      } else if (ed){
+      } else if (ed) {
         return cellDate <= ed
       }
     })
@@ -109,6 +109,7 @@ export function dateBetweenFilterFn(rows, id, filterValues) {
 
 export function exclusionFilterFn(rows, id, filterValues) {
   const searchTerm = filterValues.trim();
+  console.log(searchTerm)
   if (searchTerm) {
     return rows.filter(r => r.values[id] === null || !r.values[id].includes(searchTerm))
   }
@@ -122,8 +123,7 @@ export function DateRangeColumnFilter({
     preFilteredRows,
     setFilter,
     id
-  }})
-{
+  } }) {
   const [min, max] = useMemo(() => {
     let min = preFilteredRows.length ? new Date(preFilteredRows[0].values[id]) : new Date(0)
     let max = preFilteredRows.length ? new Date(preFilteredRows[0].values[id]) : new Date(0)

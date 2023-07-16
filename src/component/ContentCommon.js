@@ -69,7 +69,43 @@ function ContentCommon({ item, update }) {
                         </Typography>
                     </Grid>
                     <Grid item xs={9}>
-                        {item.req === 'y' ?
+                        { item.number === 'y' ?
+                        <TextField
+                        //placeholder={item.value}
+                        fullWidth
+                        id="standard-number"
+                        type="number"
+                        
+                        inputProps={{ min: 0, max: 4, style: { height: 9, fontSize: '0.7rem', fontWeight: 400 } }}
+                        //label={item.columnName}
+                        value={item.data||''}
+                        onChange={handleChangeInput}
+                        sx={{
+                            width: 1,
+                            "& .MuiInputBase-root": {
+                                height: '1.6rem'
+                            }
+                        }}
+                        />
+                        : item.readOnly === 'y' ? 
+                            <TextField
+                            //placeholder={item.value}
+                            fullWidth
+                            id="outlined-disabled"
+                            disabled
+                            
+                            inputProps={{ style: { height: 9, fontSize: '0.7rem', fontWeight: 400 } }}
+                            //label={item.columnName}
+                            value={item.data||''}
+                            onChange={handleChangeInput}
+                            sx={{
+                                width: 1,
+                                "& .MuiInputBase-root": {
+                                    height: '1.6rem'
+                                }
+                            }}
+                            />
+                        : item.req === 'y' ?
                             <TextField
                                 // placeholder={item.value}
                                 fullWidth

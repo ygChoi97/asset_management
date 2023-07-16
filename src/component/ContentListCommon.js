@@ -35,6 +35,36 @@ function ContentListCommon({ idasset, id, doRefresh, doClose, url, account }) {
                 break;
             }
         }
+        console.log(copyContents)
+        let totalVolume = 0;
+        for (let i = 0; i < copyContents.length; i++) {
+            
+                if (copyContents[i].dbColumn === 'gb4') {
+                    totalVolume += copyContents[i].data * 4;
+                    continue;
+                }
+                if (copyContents[i].dbColumn === 'gb8') {
+                    totalVolume += copyContents[i].data * 8;
+                    continue;
+                }
+                if (copyContents[i].dbColumn === 'gb16') {
+                    totalVolume += copyContents[i].data * 16;
+                    continue;
+                }
+                if (copyContents[i].dbColumn === 'gb32') {
+                    totalVolume += copyContents[i].data * 32;
+                    continue;
+                }
+                if(copyContents[i].dbColumn === 'volume') {
+                    if(totalVolume !== 0)
+                        copyContents[i].data = `${totalVolume}GB`;
+                    else
+                        copyContents[i].data = null;  
+                    break;
+                
+            }
+        }
+
         setContents(copyContents);
         console.log('contents updated: ', contents);
         let info = {};
@@ -103,12 +133,14 @@ function ContentListCommon({ idasset, id, doRefresh, doClose, url, account }) {
                 console.log(json);
                 let copyContents = [...contents];
                 for (let i = 0; i < json.length; i++) {
-                    /* if (json[i].column_name === 'id')
-                        continue; */
                     let copyContent = {};
                     copyContent.columnName = json[i].column_comment;
                     copyContent.dbColumn = json[i].column_name;
-                    if (json[i].column_name === 'idasset')
+                    if (json[i].column_name === 'id' || json[i].column_name === 'volume') 
+                        copyContent.readOnly = 'y';
+                    else if (json[i].column_name === 'gb4' || json[i].column_name === 'gb8' || json[i].column_name === 'gb16' || json[i].column_name === 'gb32' || json[i].column_name === 'ssd_500gb' || json[i].column_name === 'sata_1tb' || json[i].column_name === 'm2_512gb' || json[i].column_name === 'sata_2tb' || json[i].column_name === 'headset' || json[i].column_name === 'webcam' || json[i].column_name === 'usbgender')
+                        copyContent.number = 'y';
+                    else if (json[i].column_name === 'idasset')
                         copyContent.req = 'y';
                     else if (json[i].column_name === 'uptake')
                         copyContent.uptake = 'y';

@@ -1,0 +1,202 @@
+body {
+  height: 100%;
+}
+
+.diskrestoration-table {
+  border-collapse: collapse;
+  margin: 0 0;
+  font-size: 0.9rem;
+  font-family: sans-serif;
+  width: 150%;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.diskrestoration-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  height: 30px;
+}
+
+.diskrestoration-table th {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: center;
+  font-size: 0.8rem;
+  /* min-width: 20%;
+  max-width: 20%; */
+  position: sticky;
+  top: 0px;
+  background-color: #34343b !important;
+}
+
+.diskrestoration-table td {
+  padding: 4px 10px;
+  border: 1px solid #dddddd;
+  font-size: 0.7rem;
+
+  /* 글자 td width 넘어가면 ... 표시 */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 1px;
+}
+
+/* 번호 */
+.diskrestoration-table td:nth-child(1) {
+  width: calc((150% / 27)*.4);
+}
+
+/* 본부 */
+.diskrestoration-table td:nth-child(2) {
+  width: calc((150% / 27)*1);
+}
+
+/* 센터 */
+.diskrestoration-table td:nth-child(3) {
+  width: calc((150% / 27)*1);
+}
+
+/* 팀 */
+.diskrestoration-table td:nth-child(4) {
+  width: calc((150% / 27)*1);
+}
+
+/* 요청자 */
+.diskrestoration-table td:nth-child(5) {
+  width: calc((150% / 27)*.5);
+}
+
+/* 모델명 */
+.diskrestoration-table td:nth-child(6) {
+  width: calc((150% / 27)*.5);
+}
+
+/* 자산관리번호 */
+.diskrestoration-table td:nth-child(7) {
+  width: calc((150% / 27)*.6);
+}
+
+/* S/N */
+.diskrestoration-table td:nth-child(8) {
+  width: calc((150% / 27)*.6);
+}
+
+/* 지역 */
+.diskrestoration-table td:nth-child(9) {
+  width: calc((150% / 27)*.4);
+}
+
+/* 건물명 */
+.diskrestoration-table td:nth-child(10) {
+  width: calc((150% / 27)*1);
+}
+
+/* 층수 */
+.diskrestoration-table td:nth-child(11) {
+  width: calc((150% / 27)*.4);
+}
+
+/* 상세위치 */
+.diskrestoration-table td:nth-child(12) {
+  width: calc((150% / 27)*.7);
+}
+
+/* 복구신청 HDD S/N */
+.diskrestoration-table td:nth-child(13) {
+  width: calc((150% / 27)*.7);
+}
+
+/* 교체 HDD S/N */
+.diskrestoration-table td:nth-child(14) {
+  width: calc((150% / 27)*.7);
+}
+
+/* 첨부 */
+.diskrestoration-table td:nth-child(15) {
+  width: calc((150% / 27)*.4);
+}
+
+/* 장애신고 접수일자 */
+.diskrestoration-table td:nth-child(16) {
+  width: calc((150% / 27)*.6);
+}
+
+/* 복구HDD 접수일자 */
+.diskrestoration-table td:nth-child(17) {
+  width: calc((150% / 27)*.5);
+}
+
+/* 복구HDD 반입일자 */
+.diskrestoration-table td:nth-child(18) {
+  width: calc((150% / 27)*.5);
+}
+
+/* 대여HDD 반입일자 */
+.diskrestoration-table td:nth-child(19) {
+  width: calc((150% / 27)*.5);
+}
+
+/* 복구HDD 반출일자 */
+.diskrestoration-table td:nth-child(20) {
+  width: calc((150% / 27)*.5);
+}
+
+/* 현업 로드일자 */
+.diskrestoration-table td:nth-child(21) {
+  width: calc((150% / 27)*.5);
+}
+
+/* 대여HDD 포맷일자 */
+.diskrestoration-table td:nth-child(22) {
+  width: calc((150% / 27)*.5);
+}
+
+/* 대여HDD 반출일자 */
+.diskrestoration-table td:nth-child(23) {
+  width: calc((150% / 27)*.5);
+}
+
+/* 복구HDD 디가우징일자 */
+.diskrestoration-table td:nth-child(24) {
+  width: calc((150% / 27)*.5);
+}
+
+/* 복구HDD 폐기일자 */
+.diskrestoration-table td:nth-child(25) {
+  width: calc((150% / 27)*.5);
+}
+
+/* 복구진행상태 */
+.diskrestoration-table td:nth-child(26) {
+  width: calc((150% / 27)*.4);
+}
+
+/* 비고 */
+.diskrestoration-table td:nth-child(27) {
+  width: calc((150% / 27)*1);
+}
+
+.diskrestoration-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+  height: 23px;
+}
+
+.diskrestoration-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.diskrestoration-table tbody tr:hover {
+  cursor: pointer;
+  background-color: lightgoldenrodyellow;
+}
+
+.diskrestoration-table tbody tr:last-of-type {
+  border-bottom: 2px solid #34343b;
+}
+
+.diskrestoration-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+}

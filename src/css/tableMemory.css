@@ -1,0 +1,157 @@
+body {
+  height: 100%;
+}
+
+.memory-table {
+  border-collapse: collapse;
+  margin: 0 0;
+  font-size: 0.9rem;
+  font-family: sans-serif;
+  width: 100%;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.memory-table thead tr {
+  background-color: #009879;
+  color: #ffffff;
+  text-align: left;
+  height: 30px;
+}
+
+.memory-table th {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: center;
+  font-size: 0.8rem;
+  /* min-width: 20%;
+  max-width: 20%; */
+  position: sticky;
+  top: 0px;
+  background-color: #34343b !important;
+}
+
+.memory-table td {
+  padding: 4px 10px;
+  border: 1px solid #dddddd;
+  font-size: 0.7rem;
+
+  /* 글자 td width 넘어가면 ... 표시 */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 1px;
+}
+
+/* 번호 */
+.memory-table td:nth-child(1) {
+  width: calc((100% / 17)*.5);
+}
+
+/* 회사명 */
+.memory-table td:nth-child(2) {
+  width: calc((100% / 17)*.6);
+}
+
+/* 본부 */
+.memory-table td:nth-child(3) {
+  width: calc((100% / 17)*1.6);
+}
+
+/* 자산관리번호 */
+.memory-table td:nth-child(4) {
+  width: calc((100% / 17)*1);
+}
+
+/* 모델명 */
+.memory-table td:nth-child(5) {
+  width: calc((100% / 17)*.6);
+}
+
+/* 도입년월 */
+.memory-table td:nth-child(6) {
+  width: calc((100% / 17)*.8);
+}
+
+/* 설치지역 */
+.memory-table td:nth-child(7) {
+  width: calc((100% / 17)*.7);
+}
+
+/* 팀명 */
+.memory-table td:nth-child(8) {
+  width: calc((100% / 17)*1.6);
+}
+
+/* 담당자 */
+.memory-table td:nth-child(9) {
+  width: calc((100% / 17)*.6);
+}
+
+/* 위치 */
+.memory-table td:nth-child(10) {
+  width: calc((100% / 17)*1);
+}
+
+/* 사용구분 */
+.memory-table td:nth-child(11) {
+  width: calc((100% / 17)*1.6);
+}
+
+/* 지원일자 */
+.memory-table td:nth-child(12) {
+  width: calc((100% / 17)*.8);
+}
+
+/* 4GB */
+.memory-table td:nth-child(13) {
+  width: calc((100% / 17)*.5);
+}
+
+/* 8GB */
+.memory-table td:nth-child(14) {
+  width: calc((100% / 17)*.5);
+}
+
+/* 16GB */
+.memory-table td:nth-child(15) {
+  width: calc((100% / 17)*.5);
+}
+
+/* 32GB */
+.memory-table td:nth-child(16) {
+  width: calc((100% / 17)*.5);
+}
+
+/* 증설용량 */
+.memory-table td:nth-child(17) {
+  width: calc((100% / 17)*.7);
+}
+
+/* 비고 */
+.memory-table td:nth-child(18) {
+  width: calc((100% / 17)*3.1);
+}
+
+.memory-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+  height: 23px;
+}
+
+.memory-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
+}
+
+.memory-table tbody tr:hover {
+  cursor: pointer;
+  background-color: lightgoldenrodyellow;
+}
+
+.memory-table tbody tr:last-of-type {
+  border-bottom: 2px solid #34343b;
+}
+
+.memory-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009879;
+}

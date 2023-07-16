@@ -89,7 +89,7 @@ label {
   /* 네이티브 외형 감추기 */
   -moz-appearance: none;
   appearance: none;
-  margin: 0px 15px;
+  margin: 0.5rem 15px;
 }
 
 .selectOption {
