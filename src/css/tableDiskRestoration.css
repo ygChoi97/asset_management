@@ -120,7 +120,7 @@ body {
 
 /* 장애신고 접수일자 */
 .diskrestoration-table td:nth-child(16) {
-  width: calc((150% / 27)*.6);
+  width: calc((150% / 27)*.5);
 }
 
 /* 복구HDD 접수일자 */
@@ -160,7 +160,7 @@ body {
 
 /* 복구HDD 디가우징일자 */
 .diskrestoration-table td:nth-child(24) {
-  width: calc((150% / 27)*.5);
+  width: calc((150% / 27)*.55);
 }
 
 /* 복구HDD 폐기일자 */
@@ -175,7 +175,7 @@ body {
 
 /* 비고 */
 .diskrestoration-table td:nth-child(27) {
-  width: calc((150% / 27)*1);
+  width: calc((150% / 27)*1.05);
 }
 
 .diskrestoration-table tbody tr {

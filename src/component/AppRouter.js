@@ -12,6 +12,7 @@ import Memory from "./Memory";
 import Harddisk from "./Harddisk";
 import VideoEquipment from "./VideoEquipment";
 import DiskRestoration from "./DiskRestoration";
+import RetireeDisk from "./RetireeDisk";
 
 const AppRouter = () => {
 
@@ -37,6 +38,7 @@ const AppRouter = () => {
           <Route path="/provision" element={<Provision account={account} />} />
           <Route path="/return" element={<Return account={account} />} />
           <Route path="/disposal" element={<Disposal account={account} />} />
+          <Route path="/retireedisk" element={<RetireeDisk account={account} />} />
           <Route path="/diskrestoration" element={<DiskRestoration account={account} />} />
           <Route path="/memory" element={<Memory account={account} />} />
           <Route path="/harddisk" element={<Harddisk account={account} />} />

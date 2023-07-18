@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
 import { SearchReturn } from "./Search";
@@ -38,6 +38,10 @@ function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters, do
     const searchs = columns.map((col) => {
         return col.Header + "";
     });
+
+    const thRef = useRef(null);
+    const [initialWidth, setInitialWidth] = useState(100);
+    const [width, setWidth] = useState(initialWidth);
 
     useEffect(() => { dataWasFiltered(rows); }, [rows, dataWasFiltered]);
 
@@ -82,7 +86,9 @@ function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters, do
                         {headerGroups.map((headerGroup) => (
                             <tr {...headerGroup.getHeaderGroupProps()}>
                                 {headerGroup.headers.map((column) => (
-                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                    <th ref={thRef} 
+                                        style={{ width: `${width}px` }}
+                                        {...column.getHeaderProps(column.getSortByToggleProps())}>
                                         {column.render("Header")}
                                         <span>
                                             {column.isSorted
@@ -107,7 +113,7 @@ function TableReturn({ columns, data, dataWasFiltered, setFilterHeadquarters, do
                             return (
                                 <tr onClick={(event) => handleRowClick(event, row.values)} {...row.getRowProps()}>
                                     {row.cells.map((cell) => (
-                                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                        <td title={cell.value} {...cell.getCellProps()}>{cell.render("Cell")}</td>
                                     ))}
                                 </tr>
                             );

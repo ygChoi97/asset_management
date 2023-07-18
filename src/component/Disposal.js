@@ -188,7 +188,7 @@ function Disposal({ account }) {
 
           let tempDbData = [];
           for (let r = 2; r <= sheet.rowCount; r++) {
-            let isEmpty = { idasset: false, sn: false };
+            let isEmpty = { idasset: false };
             let obj = {};
             for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
 
@@ -197,9 +197,9 @@ function Disposal({ account }) {
               str = str.trim();             // 양쪽 공백 제거
 
               if (columns[c - 1].accessor === 'idasset' && str === '') isEmpty.idasset = true;
-              if (columns[c - 1].accessor === 'sn' && str === '') isEmpty.sn = true;
+
               if (isEmpty.idasset & isEmpty.sn) {
-                getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 자산관리번호와 S/N가 둘다 빈칸입니다.\n import를 취소합니다.`);
+                getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 자산관리번호가 빈칸입니다.\n import를 취소합니다.`);
                 return;
               }
 

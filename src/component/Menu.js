@@ -17,6 +17,7 @@ export default function Menu() {
         localStorage.removeItem('SEARCHTERM_PROVISION');
         localStorage.removeItem('SEARCHTERM_RETURN');
         localStorage.removeItem('SEARCHTERM_DISPOSAL');
+        localStorage.removeItem('SEARCHTERM_RETIREEDISK');
         localStorage.removeItem('SEARCHTERM_DISKRESTORATION');
         localStorage.removeItem('SEARCHTERM_MEMORY');
         localStorage.removeItem('SEARCHTERM_HARDDISK');

@@ -128,7 +128,7 @@ function TableHarddisk({ columns, data, dataWasFiltered, setFilterHeadquarters, 
                             return (
                                 <tr onClick={(event) => handleRowClick(event, row.values)} {...row.getRowProps()}>
                                     {row.cells.map((cell) => (
-                                        <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                        <td title={cell.value} {...cell.getCellProps()}>{cell.render("Cell")}</td>
                                     ))}
                                 </tr>
                             );

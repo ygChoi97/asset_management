@@ -2,24 +2,24 @@ body {
   height: 100%;
 }
 
-retireedisk-table {
+.retireedisk-table {
   border-collapse: collapse;
   margin: 0 0;
   font-size: 0.9rem;
   font-family: sans-serif;
-  width: 200%;
+  width: 150%;
   min-width: 400px;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
-retireedisk-table thead tr {
+.retireedisk-table thead tr {
   background-color: #009879;
   color: #ffffff;
   text-align: left;
   height: 30px;
 }
 
-retireedisk-table th {
+.retireedisk-table th {
   border: 1px solid #dddddd;
   padding: 8px;
   text-align: center;
@@ -31,7 +31,7 @@ retireedisk-table th {
   background-color: #34343b !important;
 }
 
-retireedisk-table td {
+.retireedisk-table td {
   padding: 4px 10px;
   border: 1px solid #dddddd;
   font-size: 0.7rem;
@@ -44,129 +44,139 @@ retireedisk-table td {
 }
 
 /* 팀명 */
-retireedisk-table td:nth-child(1) {
-  width: 80px;
+.retireedisk-table td:nth-child(1) {
+  width: calc((100% / 23)*1.75);
 }
 
 /* 퇴사자 */
-retireedisk-table td:nth-child(2) {
-  width: 50px;
+.retireedisk-table td:nth-child(2) {
+  width: calc((100% / 23)*0.75);
 }
 
 /* 사번 */
-retireedisk-table td:nth-child(3) {
-  width: 60px;
+.retireedisk-table td:nth-child(3) {
+  width: calc((100% / 23)*0.75);
+}
+
+/* 자산관리번호 */
+.retireedisk-table td:nth-child(4) {
+  width: calc((100% / 23)*1);
 }
 
 /* S/N */
-retireedisk-table td:nth-child(4) {
-  width: 50px;
+.retireedisk-table td:nth-child(5) {
+  width: calc((100% / 23)*1);
 }
 
 /* 품명 */
-retireedisk-table td:nth-child(5) {
-  width: 30px;
+.retireedisk-table td:nth-child(6) {
+  width: calc((100% / 23)*1);
 }
 
 /* 지역 */
-retireedisk-table td:nth-child(6) {
-  width: 40px;
+.retireedisk-table td:nth-child(7) {
+  width: calc((100% / 23)*0.75);
 }
 
 /* 장비 반납일 */
-retireedisk-table td:nth-child(7) {
-  width: 60px;
+.retireedisk-table td:nth-child(8) {
+  width: calc((100% / 23)*1);
+}
+
+/* 퇴사일 */
+.retireedisk-table td:nth-child(9) {
+  width: calc((100% / 23)*0.75);
 }
 
 /* 1 HDD S/N */
-retireedisk-table td:nth-child(8) {
-  width: 80px;
+.retireedisk-table td:nth-child(10) {
+  width: calc((100% / 23)*1.25);
 }
 
 /* 2 HDD S/N */
-retireedisk-table td:nth-child(9) {
-  width: 80px;
+.retireedisk-table td:nth-child(11) {
+  width: calc((100% / 23)*1.25);
 }
 
 /* 3 HDD S/N */
-retireedisk-table td:nth-child(10) {
-  width: 80px;
+.retireedisk-table td:nth-child(12) {
+  width: calc((100% / 23)*1.25);
 }
 
 /* 4 HDD S/N */
-retireedisk-table td:nth-child(11) {
-  width: 80px;
+.retireedisk-table td:nth-child(13) {
+  width: calc((100% / 23)*1.25);
 }
 
 /* HDD 용량 */
-retireedisk-table td:nth-child(12) {
-  width: 80px;
+.retireedisk-table td:nth-child(14) {
+  width: calc((100% / 23)*1.5);
 }
 
 /* 반납자 */
-retireedisk-table td:nth-child(13) {
-  width: 50px;
+.retireedisk-table td:nth-child(15) {
+  width: calc((100% / 23)*0.75);
 }
 
 /* 사번 */
-retireedisk-table td:nth-child(14) {
-  width: 60px;
+.retireedisk-table td:nth-child(16) {
+  width: calc((100% / 23)*0.75);
 }
 
 /* 인계일 */
-retireedisk-table td:nth-child(15) {
-  width: 60px;
+.retireedisk-table td:nth-child(17) {
+  width: calc((100% / 23)*0.75);
 }
 
 /* 인계자 */
-retireedisk-table td:nth-child(16) {
-  width: 40px;
+.retireedisk-table td:nth-child(18) {
+  width: calc((100% / 23)*0.75);
 }
 
 /* 보안팀 인계 */
-retireedisk-table td:nth-child(17) {
-  width: 60px;
+.retireedisk-table td:nth-child(19) {
+  width: calc((100% / 23)*1);
 }
 
 /* 총무 인수일 */
-retireedisk-table td:nth-child(18) {
-  width: 60px;
+.retireedisk-table td:nth-child(20) {
+  width: calc((100% / 23)*1);
 }
 
 /* 인수자 */
-retireedisk-table td:nth-child(19) {
-  width: 50px;
+.retireedisk-table td:nth-child(21) {
+  width: calc((100% / 23)*0.75);
 }
 
 /* 보관BOX NO */
-retireedisk-table td:nth-child(20) {
-  width: 60px;
+.retireedisk-table td:nth-child(22) {
+  width: calc((100% / 23)*1);
 }
 
 /* 비고 */
-retireedisk-table td:nth-child(21) {
-  width: 230px;
+.retireedisk-table td:nth-child(23) {
+  width: calc((100% / 23)*1);
 }
 
-retireedisk-table tbody tr {
+.retireedisk-table tbody tr {
   border-bottom: 1px solid #dddddd;
   height: 23px;
 }
 
-retireedisk-table tbody tr:nth-of-type(even) {
+.retireedisk-table tbody tr:nth-of-type(even) {
   background-color: #f3f3f3;
 }
 
-retireedisk-table tbody tr:hover {
+.retireedisk-table tbody tr:hover {
   cursor: pointer;
   background-color: lightgoldenrodyellow;
 }
 
-retireedisk-table tbody tr:last-of-type {
+.retireedisk-table tbody tr:last-of-type {
   border-bottom: 2px solid #34343b;
 }
 
-retireedisk-table tbody tr.active-row {
+.retireedisk-table tbody tr.active-row {
   font-weight: bold;
   color: #009879;
 }

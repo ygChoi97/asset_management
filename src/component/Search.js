@@ -1705,19 +1705,19 @@ export function SearchDiskRestoration({ column1, column2, column3, column4, colu
       };
       // 상태값이 변경될 때마다 로컬 스토리지에 저장
       const stateString = JSON.stringify(state);
-      localStorage.setItem('SEARCHTERM_DISKRESOTRATION', stateString);
+      localStorage.setItem('SEARCHTERM_DISKRESTORATION', stateString);
     }
     else {
-      const term = localStorage.getItem("SEARCHTERM_DISKRESOTRATION");
+      const term = localStorage.getItem("SEARCHTERM_DISKRESTORATION");
       if (term)
-        localStorage.removeItem("SEARCHTERM_DISKRESOTRATION");
+        localStorage.removeItem("SEARCHTERM_DISKRESTORATION");
     }
   };
 
   useEffect(() => {
 
-    // 로컬 스토리지에서 'SEARCHTERM_DISKRESOTRATION' 가져옴
-    const stateString = localStorage.getItem('SEARCHTERM_DISKRESOTRATION');
+    // 로컬 스토리지에서 'SEARCHTERM_DISKRESTORATION' 가져옴
+    const stateString = localStorage.getItem('SEARCHTERM_DISKRESTORATION');
     // JSON 문자열을 JavaScript 객체로 변환
     if (stateString) {
       const state = JSON.parse(stateString);

@@ -65,7 +65,7 @@ function Provision({ account }) {
                     let copyData = {};
                     copyData = json.pwsProvisionDtos[i];
                     for(const key in json.pwsProvisionDtos[i]) {                  
-                        if(key.includes('date') && json.pwsProvisionDtos[i][key]!=null) {
+                        if(key.includes('period') && json.pwsProvisionDtos[i][key]!=null || key.includes('date') && json.pwsProvisionDtos[i][key]!=null) {
                             let day = new Date(json.pwsProvisionDtos[i][key]);
                             copyData[key] = dateFormat(day);
                         }
@@ -208,7 +208,7 @@ function Provision({ account }) {
                                 return;
                             }
 
-                            if (columns[c - 1].accessor.includes('date')) {
+                            if (columns[c - 1].accessor.includes('period') || columns[c - 1].accessor.includes('date')) {
                                 if (str !== '')
                                     obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
                                 else

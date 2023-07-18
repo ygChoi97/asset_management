@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../css/btnImportExport.css";
 import "../css/dropdownmenu.css"
-import TablePws from "./TablePws";
 import UseConfirm from "./UseConfirm";
 import ExcelDB from "../excel_db.png";
 import ExcelToDB from "../exceltodb2.png";
@@ -10,10 +9,11 @@ import { useDetectOutsideClick } from "./useDetectOutsideClick";
 import jwt_decode from "jwt-decode";
 import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from "./Filter";
 import { useLocation, useNavigate } from "react-router-dom";
+import TableRetireeDisk from "./TableRetireeDisk";
 
-const BASE_URL = 'http://localhost:8181/api/pws';
+const BASE_URL = 'http://localhost:8181/api/retireedisk';
 
-function Pws({ account }) {
+function RetireeDisk({ account }) {
   
   const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
   const navigate = useNavigate();
@@ -34,15 +34,9 @@ function Pws({ account }) {
   function dateFormat(date) {
     let month = date.getMonth() + 1;
     let day = date.getDate();
-    // let hour = date.getHours();
-    // let minute = date.getMinutes();
-    // let second = date.getSeconds();
 
     month = month >= 10 ? month : '0' + month;
     day = day >= 10 ? day : '0' + day;
-    // hour = hour >= 10 ? hour : '0' + hour;
-    // minute = minute >= 10 ? minute : '0' + minute;
-    // second = second >= 10 ? second : '0' + second;
 
     return date.getFullYear() + '-' + month + '-' + day;
   }
@@ -71,10 +65,10 @@ function Pws({ account }) {
         let copyDatas = [];
         for (let i = 0; i < json.count; i++) {
           let copyData = {};
-          copyData = json.pwsDtos[i];
-          for(const key in json.pwsDtos[i]) {                  
-            if(key.includes('date') && json.pwsDtos[i][key]!=null) {
-                let day = new Date(json.pwsDtos[i][key]);
+          copyData = json.retireeDiskDtos[i];
+          for(const key in json.retireeDiskDtos[i]) {                  
+            if(key.includes('date') && json.retireeDiskDtos[i][key]!=null) {
+                let day = new Date(json.retireeDiskDtos[i][key]);
                 copyData[key] = dateFormat(day);
             }
         }    
@@ -196,7 +190,7 @@ function Pws({ account }) {
 
           let tempDbData = [];
           for (let r = 2; r <= sheet.rowCount; r++) {
-            let isEmpty = { idasset: false };
+            let isEmpty = { retiree_id: false };
             let obj = {};
             for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
 
@@ -204,10 +198,10 @@ function Pws({ account }) {
               str = str.replace(/\n/g, ""); // 개행문자 제거
               str = str.trim();             // 양쪽 공백 제거
 
-              if (columns[c - 1].accessor === 'idasset' && str === '') isEmpty.idasset = true;
+              if (columns[c - 1].accessor === 'retiree_id' && str === '') isEmpty.retiree_id = true;
 
-              if (isEmpty.idasset) {
-                getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 자산관리번호가 빈칸입니다.\n import를 취소합니다.`);
+              if (isEmpty.retiree_id) {
+                getConfirmationOK(`${sheet.rowCount}실패 : 선택한 엑셀파일의 ${r}번째 행의 사번이 빈칸입니다.\n import를 취소합니다.`);
                 return;
               }
 
@@ -289,10 +283,10 @@ function Pws({ account }) {
 
       // addWorksheet() 함수를 사용하여 엑셀 시트를 추가한다.
       // 엑셀 시트는 순차적으로 생성된다.
-      workbook.addWorksheet('PWS현황');
+      workbook.addWorksheet('퇴직자디스크현황');
 
       // 1. getWorksheet() 함수에서 시트 명칭 전달
-      const sheetOne = workbook.getWorksheet('PWS현황');
+      const sheetOne = workbook.getWorksheet('퇴직자디스크현황');
 
       sheetOne.columns = columns.map(item => {
         let obj = {};
@@ -344,7 +338,7 @@ function Pws({ account }) {
 
       workbook.xlsx.writeBuffer().then((data) => {
         const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-        saveFile(blob, `PWS현황리스트${currentDayFormat}`);
+        saveFile(blob, `퇴직자디스크현황리스트${currentDayFormat}`);
       })
       setIsActive(false);
     } catch (error) {
@@ -383,7 +377,7 @@ function Pws({ account }) {
     // 로컬 스토리지에서 데이터 삭제
     localStorage.removeItem('ACCESS_TOKEN');
     localStorage.removeItem('LOGIN_USERNAME');
-    localStorage.removeItem('SEARCHTERM_PWS');
+    localStorage.removeItem('SEARCHTERM_RETIREEDISK');
   };
 
   return (
@@ -430,9 +424,9 @@ function Pws({ account }) {
         onClick={(event) => {
           event.target.value = null
         }} ref={$fileInput} hidden></input>
-      <TablePws columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} account={account}/>
+      <TableRetireeDisk columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} account={account}/>
     </>
   );
 }
 
-export default Pws;
+export default RetireeDisk;

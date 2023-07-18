@@ -6,7 +6,7 @@ import UseConfirm from "./UseConfirm";
 import ContentCommon from "./ContentCommon";
 import { useLocation, useNavigate } from "react-router-dom";
 
-function ContentListCommon({ idasset, id, doRefresh, doClose, url, account }) {
+function ContentListCommon({ idasset, id, retiree_id, doRefresh, doClose, url, account }) {
 
     const BASE_URL = `http://localhost:8181${url}`;
 
@@ -136,7 +136,7 @@ function ContentListCommon({ idasset, id, doRefresh, doClose, url, account }) {
                     let copyContent = {};
                     copyContent.columnName = json[i].column_comment;
                     copyContent.dbColumn = json[i].column_name;
-                    if (json[i].column_name === 'id' || json[i].column_name === 'volume') 
+                    if (json[i].column_name === 'id' || json[i].column_name === 'volume' || json[i].column_name === 'retiree_id') 
                         copyContent.readOnly = 'y';
                     else if (json[i].column_name === 'gb4' || json[i].column_name === 'gb8' || json[i].column_name === 'gb16' || json[i].column_name === 'gb32' || json[i].column_name === 'ssd_500gb' || json[i].column_name === 'sata_1tb' || json[i].column_name === 'm2_512gb' || json[i].column_name === 'sata_2tb' || json[i].column_name === 'headset' || json[i].column_name === 'webcam' || json[i].column_name === 'usbgender')
                         copyContent.number = 'y';
@@ -241,6 +241,46 @@ function ContentListCommon({ idasset, id, doRefresh, doClose, url, account }) {
         }
     }, [idasset]);
 
+    // retiree_id 감지
+    useEffect(() => {
+        if (retiree_id !== '' && retiree_id !== null && retiree_id !== undefined) {
+            fetch(BASE_URL + `/retiree_id/${retiree_id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + ACCESS_TOKEN
+                }
+            })
+                .then(res => {
+                    if (res.status === 403) {                      
+                        async function gotoLoginPage (){
+                            localStorage.removeItem('ACCESS_TOKEN');
+                            localStorage.removeItem('LOGIN_USERNAME');
+                            await getConfirmationOK('토큰이 만료되었습니다. 로그인 페이지로 이동합니다.');                        
+                            navigate("/login", { state: { previousPath: pathname } })                        
+                        }
+                        gotoLoginPage();
+                    }
+                    else if (!res.ok) {
+                        throw new Error(res.status);
+                    }
+                    else {
+                        setBtnMode(true);
+                        setBModifyDisabled(false);
+                        return res.json();
+                    }
+                })
+                .then(json => {
+                    console.log('json : ', json);
+                    insertPwsFromDB(json);
+                })
+                .catch((error) => {
+                    console.log('error: ' + error);
+                    getConfirmationOK(`사번(${retiree_id}) 조회 실패(${error})`);
+                })
+            setIsOpen(true);
+        }
+    }, [retiree_id]);
+
     const onClickModifyHandler = e => {
 
         for (let key in pwsInfo) {
@@ -316,7 +356,7 @@ function ContentListCommon({ idasset, id, doRefresh, doClose, url, account }) {
             <ConfirmationYN />
             <ConfirmationOK />
             <Paper sx={{
-                width: 400,
+                width: 440,
                 borderRadius: 1, borderColor: "#000",
                 backgroundColor: (theme) =>
                     theme.palette.mode === 'dark' ? '#1A2027' : '#FFFFFC',

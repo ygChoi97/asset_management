@@ -63,7 +63,7 @@ function ContentCommon({ item, update }) {
                 <ThemeProvider theme={theme}>
                     <Grid item xs={3}>
                         <Typography
-                            sx={{ fontSize: '0.7rem', fontWeight: 600 }}
+                            sx={{ fontSize: '0.7rem', fontWeight: 600, width: '100px' }}
                         >
                             {item.columnName}
                         </Typography>

@@ -3,7 +3,7 @@
     flex-direction: row;
     align-items :flex-start;
     position: absolute;
-    top: 28%;
+    top: 23%;
     right: calc(18px);
     margin: 0.5rem 0;
     z-index: 3;
@@ -16,7 +16,7 @@
     flex-direction: row;
     align-items :flex-start;
     position: absolute;
-    top: 28%;
+    top: 22.5%;
     right: calc(18px);
     margin: 0.5rem 0;
     z-index: 3;
