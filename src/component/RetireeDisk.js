@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { createRef, useEffect, useRef, useState } from "react";
 import "../css/btnImportExport.css";
 import "../css/dropdownmenu.css"
 import UseConfirm from "./UseConfirm";
@@ -7,7 +7,7 @@ import ExcelToDB from "../exceltodb2.png";
 import DBToExcel from "../dbtoexcel2.png";
 import { useDetectOutsideClick } from "./useDetectOutsideClick";
 import jwt_decode from "jwt-decode";
-import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from "./Filter";
+import { DateRangeColumnFilter, dateBetweenFilterFn} from "./Filter";
 import { useLocation, useNavigate } from "react-router-dom";
 import TableRetireeDisk from "./TableRetireeDisk";
 
@@ -51,7 +51,7 @@ function RetireeDisk({ account }) {
       .then(res => {
         if (!res.ok) {
           console.log(res);
-          if(res.status == 404) 
+          if(res.status === 404) 
             getConfirmationOK(`${res.status}Error - DB 테이블의 데이터가 존재하지 않습니다.`)
           else    
             getConfirmationOK(`${res.status}Error - DB 테이블의 데이터를 가져올 수 없습니다.`)
@@ -105,12 +105,11 @@ function RetireeDisk({ account }) {
         if (json != null) {
           let copyColumns = [];
           for (let i = 0; i < json.length; i++) {
-            let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
+            const ref = createRef();
+            let copyColumn = { accessor: '', Header: '', ref: ref, Filter: '', filter: '' };
             copyColumn.accessor = json[i].column_name;
             if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area' || copyColumn.accessor === 'company')
               copyColumn.filter = 'equals';   // select 타입은 equals 필터 적용
-            if (copyColumn.accessor === 'headquarters')
-              copyColumn.filter = exclusionFilterFn;   // 본부는 exclusion 필터 적용
             if (copyColumn.accessor.includes('date')) {
               copyColumn.Filter = DateRangeColumnFilter;
               copyColumn.filter = dateBetweenFilterFn;
@@ -145,23 +144,6 @@ function RetireeDisk({ account }) {
     setRefresh(!refresh);
   }
 
-  const setFilterHeadquarters = (headquartersOption) => {
-    let copyColumns = [...columns];
-    console.log(headquartersOption);
-    copyColumns.forEach(el => {
-      if (el.accessor === 'headquarters') {
-        if (headquartersOption === '1') {
-          el.filter = exclusionFilterFn
-        }
-        else {
-          el.filter = ''
-        }    
-        setColumns(copyColumns);
-        return false;
-      }
-    })
-  }
-
   const isTokenExpired = (token) => {
     const decodedToken = jwt_decode(token);
     const currentTime = Date.now() / 1000;
@@ -181,12 +163,21 @@ function RetireeDisk({ account }) {
       wb.xlsx.load(buffer).then(workbook => {
         console.log(workbook, 'workbook instance')
         workbook.eachSheet((sheet, id) => {
+          if(id > 1) return;
           for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
-            if (columns[c - 1].Header !== sheet.getRow(1).getCell(c).toString()) {
-              getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
-              return;
+            let strDB = columns[c - 1].Header;
+            strDB = strDB.replace(/\n/g, "");
+            strDB = strDB.replace(/\s*/g, "");
+            let strExcel = sheet.getRow(1).getCell(c).toString();
+            strExcel = strExcel.replace(/\n/g, "");
+            strExcel = strExcel.replace(/\s*/g, "");
+            if (strDB !== strExcel) {
+                console.log(columns[c - 1].Header, ' : ' ,sheet.getRow(1).getCell(c).toString())
+                console.log(strDB, ' : ' ,strExcel)
+                getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                return;
             }
-          }
+        }
 
           let tempDbData = [];
           for (let r = 2; r <= sheet.rowCount; r++) {
@@ -424,7 +415,7 @@ function RetireeDisk({ account }) {
         onClick={(event) => {
           event.target.value = null
         }} ref={$fileInput} hidden></input>
-      <TableRetireeDisk columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} account={account}/>
+      <TableRetireeDisk columns={columns} minCellWidth={50} data={data} dataWasFiltered={dataWasFiltered} doRefresh={doRefresh} account={account}/>
     </>
   );
 }

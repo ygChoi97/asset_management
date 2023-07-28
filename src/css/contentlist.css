@@ -1,9 +1,9 @@
-.show-list{
+.show-list {
     display: flex;
     flex-direction: row;
-    align-items :flex-start;
+    align-items: flex-start;
     position: absolute;
-    top: 23%;
+    bottom: 5%;
     right: calc(18px);
     margin: 0.5rem 0;
     z-index: 3;
@@ -11,23 +11,23 @@
     transition: .4s;
 }
 
-.show-list:hover{
+.show-list:hover {
     display: flex;
     flex-direction: row;
-    align-items :flex-start;
+    align-items: flex-start;
     position: absolute;
-    top: 22.5%;
+    bottom: 5%;
     right: calc(18px);
     margin: 0.5rem 0;
     z-index: 3;
     opacity: 1;
     transition: .3s;
 }
-    
- .hide-list{
+
+.hide-list {
     display: flex;
     flex-direction: row;
-    align-items :flex-end;
+    align-items: flex-end;
     position: absolute;
     top: -100%;
     right: calc(18px);
@@ -35,4 +35,4 @@
     z-index: 3;
     opacity: 0;
     transition: .4s;
- }
+}

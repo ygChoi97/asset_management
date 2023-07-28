@@ -1,14 +1,77 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
 import { SearchPwsDisposal } from "./Search";
-import "../css/tablePws.css";
+import "../css/tableLayout.css";
 import "../css/foot.css";
 import ContentListCommon from "./ContentListCommon";
 
-function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh, account }) {
+function TableDisposal({ columns, minCellWidth, data, classifications, models, uptakes, areas, companys, dataWasFiltered, doRefresh, account }) {
 
     const [idasset, setIdasset] = useState('');
+
+    const [tableHeight, setTableHeight] = useState("auto");
+    const [activeIndex, setActiveIndex] = useState(null);
+    const tableElement = useRef(null);
+    const tableContainerElement = useRef(null);
+    const numColumns = columns.length;
+    // 스크롤바 x position - 화면 밖 영역 column 너비계산 적용하기 위함
+    useEffect(() => {
+        setTableHeight(tableElement.current.offsetHeight);
+    }, []);
+
+    const mouseDown = (index) => {
+        setActiveIndex(index);
+    };
+
+    const mouseMove = useCallback(
+        (e) => {
+            const gridColumns = columns.map((col, i) => {
+                if (i === activeIndex) {
+                    //const width = e.clientX - col.ref.current.offsetLeft;
+                    const width = e.clientX + tableContainerElement.current.scrollLeft - col.ref.current.offsetLeft;
+                    if (width >= minCellWidth) {
+                        return `${width}px`;
+                    }
+                }
+                return `${col.ref.current.offsetWidth}px`;
+            });
+
+            tableElement.current.style.gridTemplateColumns = `${gridColumns.join(
+                " "
+            )}`;
+        },
+        [activeIndex, columns, minCellWidth]
+    );
+
+    const removeListeners = useCallback(() => {
+        window.removeEventListener("mousemove", mouseMove);
+        window.removeEventListener("mouseup", removeListeners);
+    }, [mouseMove]);
+
+    const mouseUp = useCallback(() => {
+        setActiveIndex(null);
+        removeListeners();
+    }, [setActiveIndex, removeListeners]);
+
+    useEffect(() => {
+        if (activeIndex !== null) {
+            window.addEventListener("mousemove", mouseMove);
+            window.addEventListener("mouseup", mouseUp);
+        }
+        return () => {
+            removeListeners();
+        };
+    }, [activeIndex, mouseMove, mouseUp, removeListeners]);
+
+    const resetTableCells = () => {
+        tableElement.current.style.gridTemplateColumns = `repeat(${numColumns}, minmax(50px, auto))`;
+    };
+
+    const styleTable = {
+        gridTemplateColumns: `repeat(${numColumns}, minmax(50px, auto))`,
+        width: '150%',
+    }
 
     const {
         getTableProps,
@@ -60,12 +123,13 @@ function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, 
         <>
             <ContentListCommon idasset={idasset} doRefresh={doRefresh} doClose={doClose} url='/api/pws' account={account} />
             {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchPwsDisposal column1={'headquarters'} column2={'department'} column3={'model'} column4={'uptake'} column5={'userid'} column6={'idasset'} column7={'sn'} column8={'area'} column9={'username'} column10={'introductiondate'} column11={'company'} onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
+            <SearchPwsDisposal column1={'classification'} column2={'headquarters'} column3={'department'} column4={'model'} column5={'uptake'} column6={'userid'} column7={'idasset'} column8={'sn'} column9={'area'} column10={'username'} column11={'introductiondate'} column12={'company'} classifications={classifications} models={models} uptakes={uptakes} areas={areas} companys={companys} onSubmit={setFilter} />
             {/* {searchs} */}
-            <div style={{ width: '100vw', height: `calc(100vh - 250px)`, overflow: 'auto' }}>
-                <table className="pws-table" {...getTableProps()}>
-                    <thead>
-                        {/* <tr>            
+            <div style={{ width: '100vw', height: `calc(100vh - 287px)`, overflow: 'hidden' }}>
+                <div ref={tableContainerElement} style={{ width: '100%', height: `calc(100vh - 287px)`, overflowX: 'auto' }}>
+                    <table className="return-table" style={styleTable} ref={tableElement} {...getTableProps()} >
+                        <thead>
+                            {/* <tr>            
                         <th
                             colSpan={visibleColumns.length}
                             style={{
@@ -80,41 +144,50 @@ function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, 
                             />
                         </th>
                     </tr> */}
-                        {headerGroups.map((headerGroup) => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                        {column.render("Header")}
-                                        <span>
-                                            {column.isSorted
-                                                ? column.isSortedDesc
-                                                    ? '⬇'
-                                                    : '⬆'
-                                                : '⇳'}
-                                        </span>
-                                        {/* Rendering Default Column Filter */}
-                                        {/* <div>
+                            {headerGroups.map((headerGroup) => (
+                                <tr {...headerGroup.getHeaderGroupProps()}>
+                                    {headerGroup.headers.map((column, i) => (
+                                        <th ref={column.ref} key={`column.accessor(${i})`}
+                                            {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                            <span>
+                                                {column.render("Header")}
+                                                {column.isSorted
+                                                    ? column.isSortedDesc
+                                                        ? '🔽'
+                                                        : '🔼'
+                                                    : ''}
+                                            </span>
+                                            <div
+                                                style={{ height: tableHeight }}
+                                                onMouseDown={() => mouseDown(i)}
+                                                className={`resize-handle ${activeIndex === i ? "active" : "idle"}`}
+                                            />
+                                            {/* Rendering Default Column Filter */}
+                                            {/* <div>
                                         {column.canFilter ? column.render("Filter")
                                             : null}
                                     </div> */}
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                        {page.map((row) => {
-                            prepareRow(row);
-                            return (
-                                <tr onClick={(event) => handleRowClick(event, row.values)} {...row.getRowProps()}>
-                                    {row.cells.map((cell) => (
-                                        <td title={cell.value} {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                        </th>
                                     ))}
                                 </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                            ))}
+                        </thead>
+                        <tbody {...getTableBodyProps()}>
+                            {page.map((row) => {
+                                prepareRow(row);
+                                return (
+                                    <tr onClick={(event) => handleRowClick(event, row.values)} {...row.getRowProps()}>
+                                        {row.cells.map((cell) => (
+                                            <td title={cell.value} {...cell.getCellProps()}>
+                                                <span>{cell.render("Cell")}</span>
+                                            </td>
+                                        ))}
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
                 <button className="btnPagePwsSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
@@ -162,6 +235,7 @@ function TableDisposal({ columns, data, dataWasFiltered, setFilterHeadquarters, 
                     ))}
                 </select>
                 <span style={{ marginLeft: '1rem' }}>{rows.length} rows</span>
+                <button className="btnPagePws" style={{ margin: '0 30px' }} onClick={resetTableCells}>Layout Reset</button>
             </div>
         </>
     );

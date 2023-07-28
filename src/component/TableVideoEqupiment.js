@@ -1,14 +1,77 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
 import { SearchVideoEquipment } from "./Search";
-import "../css/tableVideoEquipment.css";
+import "../css/tableLayout.css";
 import "../css/foot.css";
 import ContentListCommon from "./ContentListCommon";
 
-function TableVideoEquipment({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh, account }) {
+function TableVideoEquipment({ columns, minCellWidth, data, classifications, areas, dataWasFiltered, doRefresh, account }) {
 
     const [id, setId] = useState('');
+
+    const [tableHeight, setTableHeight] = useState("auto");
+    const [activeIndex, setActiveIndex] = useState(null);
+    const tableElement = useRef(null);
+    const tableContainerElement = useRef(null);
+    const numColumns = columns.length;
+    // 스크롤바 x position - 화면 밖 영역 column 너비계산 적용하기 위함
+    useEffect(() => {
+        setTableHeight(tableElement.current.offsetHeight);
+    }, []);
+
+    const mouseDown = (index) => {
+        setActiveIndex(index);
+    };
+
+    const mouseMove = useCallback(
+        (e) => {
+            const gridColumns = columns.map((col, i) => {
+                if (i === activeIndex) {
+                    //const width = e.clientX - col.ref.current.offsetLeft;
+                    const width = e.clientX + tableContainerElement.current.scrollLeft - col.ref.current.offsetLeft;
+                    if (width >= minCellWidth) {
+                        return `${width}px`;
+                    }
+                }
+                return `${col.ref.current.offsetWidth}px`;
+            });
+
+            tableElement.current.style.gridTemplateColumns = `${gridColumns.join(
+                " "
+            )}`;
+        },
+        [activeIndex, columns, minCellWidth]
+    );
+
+    const removeListeners = useCallback(() => {
+        window.removeEventListener("mousemove", mouseMove);
+        window.removeEventListener("mouseup", removeListeners);
+    }, [mouseMove]);
+
+    const mouseUp = useCallback(() => {
+        setActiveIndex(null);
+        removeListeners();
+    }, [setActiveIndex, removeListeners]);
+
+    useEffect(() => {
+        if (activeIndex !== null) {
+            window.addEventListener("mousemove", mouseMove);
+            window.addEventListener("mouseup", mouseUp);
+        }
+        return () => {
+            removeListeners();
+        };
+    }, [activeIndex, mouseMove, mouseUp, removeListeners]);
+
+    const resetTableCells = () => {
+        tableElement.current.style.gridTemplateColumns = `repeat(${numColumns}, minmax(50px, auto))`;
+    };
+
+    const styleTable = {
+        gridTemplateColumns: `repeat(${numColumns}, minmax(50px, auto))`,
+        width: '100%',
+    }
 
     const {
         getTableProps,
@@ -70,12 +133,13 @@ function TableVideoEquipment({ columns, data, dataWasFiltered, setFilterHeadquar
         <>
             <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/videoequipment' account={account} />
             {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchVideoEquipment column1={'headquarters'} column2={'idasset'} column3={'area'} column4={'requestor_id'} column5={'user_id'} column6={'provision_date'}  onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
+            <SearchVideoEquipment column1={'classification'} column2={'headquarters'} column3={'idasset'} column4={'area'} column5={'requestor_id'} column6={'user_id'} column7={'provision_date'} classifications={classifications}  areas={areas} onSubmit={setFilter} />
             {/* {searchs} */}
-            <div style={{ width: '100%', height: `calc(100vh - 250px)`, overflow: 'auto' }}>
-                <table className="videoequipment-table" {...getTableProps()} >
-                    <thead>
-                        {/* <tr>            
+            <div style={{ width: '100%',height: `calc(100vh - 250px)`, overflow: 'hidden' }}>
+            <div ref={tableContainerElement} style={{ width: '100%',height: `calc(100vh - 250px)`, overflowX: 'auto' }}>
+                <table className="return-table" style={styleTable} ref={tableElement} {...getTableProps()} >
+                        <thead>
+                            {/* <tr>            
                         <th
                             colSpan={visibleColumns.length}
                             style={{
@@ -90,51 +154,60 @@ function TableVideoEquipment({ columns, data, dataWasFiltered, setFilterHeadquar
                             />
                         </th>
                     </tr> */}
-                        {headerGroups.map((headerGroup) => (
-                            <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                        {column.render("Header")}
-                                        <span>
-                                            {column.isSorted
-                                                ? column.isSortedDesc
-                                                    ? '⬇'
-                                                    : '⬆'
-                                                : '⇳'}
-                                        </span>
-                                        {/* Rendering Default Column Filter */}
-                                        {/*  <div>
+                            {headerGroups.map((headerGroup) => (
+                                <tr {...headerGroup.getHeaderGroupProps()}>
+                                    {headerGroup.headers.map((column, i) => (
+                                        <th ref={column.ref} key={`column.accessor(${i})`}
+                                            {...column.getHeaderProps(column.getSortByToggleProps())}>
+                                            <span>
+                                                {column.render("Header")}
+                                                {column.isSorted
+                                                    ? column.isSortedDesc
+                                                        ? '🔽'
+                                                        : '🔼'
+                                                    : ''}
+                                            </span>
+                                            <div
+                                                style={{ height: tableHeight }}
+                                                onMouseDown={() => mouseDown(i)}
+                                                className={`resize-handle ${activeIndex === i ? "active" : "idle"}`}
+                                            />
+                                            {/* Rendering Default Column Filter */}
+                                            {/*  <div>
                                         {column.canFilter ? column.render("Filter")
                                             : null}
                                     </div> */}
-                                    </th>
-                                ))}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody {...getTableBodyProps()}>
-                        {page.map((row) => {
-                            prepareRow(row);
-                            if (page.length === row.index + 1) {
-                                // console.log("렌더링 완료 ", page.length)
-                            }
-                            // 해당 페이지 렌더링 완료하면
-                            /* if(page.length === row.index+1 && submit === null) {
-                                console.log(row.index)
-                                // isSubmit = true;
-                                setSubmit(true);
-                                // document.getElementById('submitPwsBtn').click();                                   
-                            } */
-                            return (
-                                <tr onClick={(event) => handleRowClick(event, row.values)} {...row.getRowProps()}>
-                                    {row.cells.map((cell) => (
-                                        <td title={cell.value} {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                        </th>
                                     ))}
                                 </tr>
-                            );
-                        })}
-                    </tbody>
-                </table>
+                            ))}
+                        </thead>
+                        <tbody {...getTableBodyProps()}>
+                            {page.map((row) => {
+                                prepareRow(row);
+                                if (page.length === row.index + 1) {
+                                    // console.log("렌더링 완료 ", page.length)
+                                }
+                                // 해당 페이지 렌더링 완료하면
+                                /* if(page.length === row.index+1 && submit === null) {
+                                    console.log(row.index)
+                                    // isSubmit = true;
+                                    setSubmit(true);
+                                    // document.getElementById('submitPwsBtn').click();                                   
+                                } */
+                                return (
+                                    <tr onClick={(event) => handleRowClick(event, row.values)} {...row.getRowProps()}>
+                                        {row.cells.map((cell) => (
+                                            <td title={cell.value} {...cell.getCellProps()}>
+                                                <span>{cell.render("Cell")}</span>
+                                            </td>
+                                        ))}
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
                 <button className="btnPagePwsSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
@@ -182,6 +255,7 @@ function TableVideoEquipment({ columns, data, dataWasFiltered, setFilterHeadquar
                     ))}
                 </select>
                 <span style={{ marginLeft: '1rem' }}>{rows.length} rows</span>
+                <button className="btnPagePws" style={{ margin: '0 30px' }} onClick={resetTableCells}>Layout Reset</button>
             </div>
         </>
     );

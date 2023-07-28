@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { createRef, useEffect, useRef, useState } from "react";
 import "../css/btnImportExport.css";
 import "../css/dropdownmenu.css"
 import TablePws from "./TablePws";
@@ -14,7 +14,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 const BASE_URL = 'http://localhost:8181/api/pws';
 
 function Pws({ account }) {
-  
+
   const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -22,7 +22,11 @@ function Pws({ account }) {
 
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
-
+  const [models, setModels] = useState([]);
+  const [classifications, setClassifications] = useState([]);
+  const [uptakes, setUptakes] = useState([]);
+  const [areas, setAreas] = useState([]);
+  const [companys, setCompanys] = useState([]);
   const $fileInput = useRef();
 
   const [, , getConfirmationOK, ConfirmationOK] = UseConfirm();
@@ -57,9 +61,9 @@ function Pws({ account }) {
       .then(res => {
         if (!res.ok) {
           console.log(res);
-          if(res.status == 404) 
+          if (res.status === 404)
             getConfirmationOK(`${res.status}Error - DB 테이블의 데이터가 존재하지 않습니다.`)
-          else    
+          else
             getConfirmationOK(`${res.status}Error - DB 테이블의 데이터를 가져올 수 없습니다.`)
           throw new Error(res.status);
         }
@@ -72,22 +76,125 @@ function Pws({ account }) {
         for (let i = 0; i < json.count; i++) {
           let copyData = {};
           copyData = json.pwsDtos[i];
-          for(const key in json.pwsDtos[i]) {                  
-            if(key.includes('date') && json.pwsDtos[i][key]!=null) {
-                let day = new Date(json.pwsDtos[i][key]);
-                copyData[key] = dateFormat(day);
+          for (const key in json.pwsDtos[i]) {
+            if (key.includes('date') && json.pwsDtos[i][key] != null) {
+              let day = new Date(json.pwsDtos[i][key]);
+              copyData[key] = dateFormat(day);
             }
-        }    
+          }
 
           copyDatas.push(copyData);
         }
         setData(copyDatas);
+              
+        let result1 = [];
+        copyDatas.map((item, i) => {
+          result1.push(item.model);
+        })
+        let result2 = [...new Set(result1)];
+        let result3 = [];
+        result2.map((item, i) => {
+          if (item != null)
+            result3.push(
+              <option key={i + "_"} value={item}>{item}</option>
+            )
+        });
+        setModels(result3);
+
+        result1 = [];
+        result2 = [];
+        result3 = [];
+
+        copyDatas.map((item, i) => {
+          result1.push(item.classification);
+        })
+        result2 = [...new Set(result1)];
+        result2.map((item, i) => {
+          if (item != null)
+            result3.push(
+              <option key={i + "_"} value={item}>{item}</option>
+            )
+        });
+        setClassifications(result3);
+
+        result1 = [];
+        result2 = [];
+        result3 = [];
+
+        copyDatas.map((item, i) => {
+          result1.push(item.uptake);
+        })
+        result2 = [...new Set(result1)];
+        result2.map((item, i) => {
+          if (item != null)
+            result3.push(
+              <option key={i + "_"} value={item}>{item}</option>
+            )
+        });
+        setUptakes(result3);
+
+        result1 = [];
+        result2 = [];
+        result3 = [];
+
+        copyDatas.map((item, i) => {
+          result1.push(item.area);
+        })
+        result2 = [...new Set(result1)];
+        result2.map((item, i) => {
+          if (item != null)
+            result3.push(
+              <option key={i + "_"} value={item}>{item}</option>
+            )
+        });
+        setAreas(result3);
+
+        result1 = [];
+        result2 = [];
+        result3 = [];
+
+        copyDatas.map((item, i) => {
+          result1.push(item.company);
+        })
+        result2 = [...new Set(result1)];
+        result2.map((item, i) => {
+          if (item != null)
+            result3.push(
+              <option key={i + "_"} value={item}>{item}</option>
+            )
+        });
+        setCompanys(result3);
+
         console.log('all data : ', copyDatas);
       })
       .catch(error => {
         console.log(error);
       });
   }
+
+  const getModel = () => {
+    let result1 = [];
+    data.map((item, i) => {
+      result1.push(item.model);
+    })
+    let result2 = [...new Set(result1)];
+    let result3 = [];
+    result2.map((item, i) => {
+      if (item != null)
+        result3.push(
+          <option key={i + "_"} value={item}>{item}</option>
+        )
+    });
+    setModels(result3);
+    console.log(result3)
+    console.log('PWS getModels()')
+
+  }
+
+  useEffect(() => {
+    // getModel();
+  }, []);
+
 
   useEffect(() => {
     fetch(BASE_URL + `/menu`, {
@@ -111,12 +218,13 @@ function Pws({ account }) {
         if (json != null) {
           let copyColumns = [];
           for (let i = 0; i < json.length; i++) {
-            let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
+            const ref = createRef();
+            let copyColumn = { accessor: '', Header: '', ref: ref, Filter: '', filter: '' };
             copyColumn.accessor = json[i].column_name;
-            if (copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area' || copyColumn.accessor === 'company')
+            if (copyColumn.accessor === 'classification' || copyColumn.accessor === 'model' || copyColumn.accessor === 'uptake' || copyColumn.accessor === 'area' || copyColumn.accessor === 'company')
               copyColumn.filter = 'equals';   // select 타입은 equals 필터 적용
-            if (copyColumn.accessor === 'headquarters')
-              copyColumn.filter = exclusionFilterFn;   // 본부는 exclusion 필터 적용
+            /* if (copyColumn.accessor === 'headquarters')
+              copyColumn.filter = exclusionFilterFn;   // 본부는 exclusion 필터 적용 */
             if (copyColumn.accessor.includes('date')) {
               copyColumn.Filter = DateRangeColumnFilter;
               copyColumn.filter = dateBetweenFilterFn;
@@ -161,7 +269,7 @@ function Pws({ account }) {
         }
         else {
           el.filter = ''
-        }    
+        }
         setColumns(copyColumns);
         return false;
       }
@@ -187,8 +295,17 @@ function Pws({ account }) {
       wb.xlsx.load(buffer).then(workbook => {
         console.log(workbook, 'workbook instance')
         workbook.eachSheet((sheet, id) => {
+          if(id > 1) return;
           for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
-            if (columns[c - 1].Header !== sheet.getRow(1).getCell(c).toString()) {
+            let strDB = columns[c - 1].Header;
+            strDB = strDB.replace(/\n/g, "");
+            strDB = strDB.replace(/\s*/g, "");
+            let strExcel = sheet.getRow(1).getCell(c).toString();
+            strExcel = strExcel.replace(/\n/g, "");
+            strExcel = strExcel.replace(/\s*/g, "");
+            if (strDB !== strExcel) {
+              console.log(columns[c - 1].Header, ' : ', sheet.getRow(1).getCell(c).toString())
+              console.log(strDB, ' : ', strExcel)
               getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
               return;
             }
@@ -213,10 +330,10 @@ function Pws({ account }) {
 
               if (columns[c - 1].accessor.includes('date')) {
                 if (str !== '')
-                    obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
+                  obj[columns[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
                 else
-                    obj[columns[c - 1].accessor] = null;
-            }    
+                  obj[columns[c - 1].accessor] = null;
+              }
               else if (str === '_x000d_' || str === '')
                 obj[columns[c - 1].accessor] = null;
               else
@@ -402,19 +519,19 @@ function Pws({ account }) {
             </button>
             <nav className={`menu ${isActive ? "active" : "inactive"}`}>
               <ul>
-              {account.role === 'admin' ?
-                <li>                  
-                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                    <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
-                    <button className="btnImport" onClick={importHandler}> Import data to DB</button>
-                  </div>
-                </li> : 
-                    <li>                  
+                {account.role === 'admin' ?
+                  <li>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                      <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
+                      <button className="btnImport" onClick={importHandler}> Import data to DB</button>
+                    </div>
+                  </li> :
+                  <li>
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                       <img src={ExcelToDB} alt="ExcelToDB" width='20%' />
                       <button className="btnImportDisabled" onClick={importHandler} disabled={true}> Import data to DB</button>
                     </div>
-                  </li> }
+                  </li>}
                 <li>
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                     <img src={DBToExcel} alt="DBToExcel" width='20%' />
@@ -430,7 +547,7 @@ function Pws({ account }) {
         onClick={(event) => {
           event.target.value = null
         }} ref={$fileInput} hidden></input>
-      <TablePws columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} account={account}/>
+      <TablePws columns={columns} minCellWidth={50} data={data} classifications={classifications} models={models} uptakes={uptakes} areas={areas} companys={companys} dataWasFiltered={dataWasFiltered} /* setFilterHeadquarters={setFilterHeadquarters} */ doRefresh={doRefresh} account={account} />
     </>
   );
 }

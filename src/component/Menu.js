@@ -76,7 +76,7 @@ export default function Menu() {
                                 매각
                             </Link>
                         </li>
-                        {/* <li className="menu-item">
+                        <li className="menu-item">
                             <Link
                                 to="/retireedisk" state = {{ previousPath: pathname}}
                                 className={`menu-link${location.pathname === '/retireedisk' ? ' menu-link--active' : ''}`}
@@ -115,7 +115,7 @@ export default function Menu() {
                             >
                                 영상용장비
                             </Link>
-                        </li> */}
+                        </li>
                         {/* <div className="container">
                             <input id="dropdown" type="checkbox" />
                             <label className="dropdownLabel" for="dropdown">

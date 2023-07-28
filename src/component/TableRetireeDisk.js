@@ -1,14 +1,77 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
 import { SearchRetireeDisk } from "./Search";
-import "../css/tableRetireeDisk.css";
+import "../css/tableLayout.css";
 import "../css/foot.css";
 import ContentListCommon from "./ContentListCommon";
 
-function TableRetireeDisk({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh, account }) {
+function TableRetireeDisk({ columns, minCellWidth, data, dataWasFiltered, setFilterHeadquarters, doRefresh, account }) {
 
     const [retiree_id, setRetiree_id] = useState('');
+
+    const [tableHeight, setTableHeight] = useState("auto");
+    const [activeIndex, setActiveIndex] = useState(null);
+    const tableElement = useRef(null);
+    const tableContainerElement = useRef(null);
+    const numColumns = columns.length;
+
+    useEffect(() => {
+        setTableHeight(tableElement.current.offsetHeight);
+    }, []);
+
+    const mouseDown = (index) => {
+        setActiveIndex(index);
+    };
+
+    const mouseMove = useCallback(
+        (e) => {
+            const gridColumns = columns.map((col, i) => {
+                if (i === activeIndex) {
+                    const width = e.clientX + tableContainerElement.current.scrollLeft - col.ref.current.offsetLeft;
+
+                    if (width >= minCellWidth) {
+                        return `${width}px`;
+                    }
+                }
+                return `${col.ref.current.offsetWidth}px`;
+            });
+
+            tableElement.current.style.gridTemplateColumns = `${gridColumns.join(
+                " "
+            )}`;
+        },
+        [activeIndex, columns, minCellWidth]
+    );
+
+    const removeListeners = useCallback(() => {
+        window.removeEventListener("mousemove", mouseMove);
+        window.removeEventListener("mouseup", removeListeners);
+    }, [mouseMove]);
+
+    const mouseUp = useCallback(() => {
+        setActiveIndex(null);
+        removeListeners();
+    }, [setActiveIndex, removeListeners]);
+
+    useEffect(() => {
+        if (activeIndex !== null) {
+            window.addEventListener("mousemove", mouseMove);
+            window.addEventListener("mouseup", mouseUp);
+        }
+        return () => {
+            removeListeners();
+        };
+    }, [activeIndex, mouseMove, mouseUp, removeListeners]);
+
+    const resetTableCells = () => {
+        tableElement.current.style.gridTemplateColumns = `repeat(${numColumns}, minmax(50px, auto))`;
+    };
+
+    const styleTable = {
+        gridTemplateColumns: `repeat(${numColumns}, minmax(50px, auto))`,
+        width: '100%'
+    }
 
     const {
         getTableProps,
@@ -69,10 +132,11 @@ function TableRetireeDisk({ columns, data, dataWasFiltered, setFilterHeadquarter
         <>
             <ContentListCommon retiree_id={retiree_id} doRefresh={doRefresh} doClose={doClose} url='/api/retireedisk' account={account} />
             {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchRetireeDisk column1={'team'} column2={'retiree_name'} column3={'retiree_id'} column4={'idasset'} column5={'return_date'} onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
+            <SearchRetireeDisk column1={'team'} column2={'retiree_name'} column3={'retiree_id'} column4={'idasset'} column5={'return_date'} onSubmit={setFilter} />
             {/* {searchs} */}
-            <div style={{ width: '100%', height: `calc(100vh - 250px)`, overflow: 'auto' }}>
-                <table className="retireedisk-table" {...getTableProps()} >
+            <div style={{ width: '100vw', height: `calc(100vh - 250px)`, overflow: 'hidden' }}>
+            <div ref={tableContainerElement} style={{ width: '100%',height: `calc(100vh - 250px)`, overflowX: 'auto' }}>
+                <table className="return-table" style={styleTable} ref={tableElement} {...getTableProps()} >
                     <thead>
                         {/* <tr>            
                         <th
@@ -91,21 +155,22 @@ function TableRetireeDisk({ columns, data, dataWasFiltered, setFilterHeadquarter
                     </tr> */}
                         {headerGroups.map((headerGroup) => (
                             <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                        {column.render("Header")}
+                                {headerGroup.headers.map((column, i) => (
+                                    <th ref={column.ref} key={`column.accessor(${i})`}
+                                        {...column.getHeaderProps(column.getSortByToggleProps())}>
                                         <span>
+                                            {column.render("Header")}
                                             {column.isSorted
                                                 ? column.isSortedDesc
-                                                    ? '⬇'
-                                                    : '⬆'
-                                                : '⇳'}
+                                                    ? '🔽'
+                                                    : '🔼'
+                                                : ''}
                                         </span>
-                                        {/* Rendering Default Column Filter */}
-                                        {/*  <div>
-                                        {column.canFilter ? column.render("Filter")
-                                            : null}
-                                    </div> */}
+                                        <div
+                                            style={{ height: tableHeight }}
+                                            onMouseDown={() => mouseDown(i)}
+                                            className={`resize-handle ${activeIndex === i ? "active" : "idle"}`}
+                                        />
                                     </th>
                                 ))}
                             </tr>
@@ -127,13 +192,16 @@ function TableRetireeDisk({ columns, data, dataWasFiltered, setFilterHeadquarter
                             return (
                                 <tr onClick={(event) => handleRowClick(event, row.values)} {...row.getRowProps()}>
                                     {row.cells.map((cell) => (
-                                        <td title={cell.value} {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                        <td title={cell.value} {...cell.getCellProps()}>
+                                            <span>{cell.render("Cell")}</span>
+                                        </td>
                                     ))}
                                 </tr>
                             );
                         })}
                     </tbody>
                 </table>
+                </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
                 <button className="btnPagePwsSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
@@ -181,6 +249,7 @@ function TableRetireeDisk({ columns, data, dataWasFiltered, setFilterHeadquarter
                     ))}
                 </select>
                 <span style={{ marginLeft: '1rem' }}>{rows.length} rows</span>
+                <button className="btnPagePws" style={{ margin: '0 30px' }} onClick={resetTableCells}>Layout Reset</button>
             </div>
         </>
     );

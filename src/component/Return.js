@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import "../css/btnImportExport.css";
 import TableReturn from "./TableReturn";
 import UseConfirm from "./UseConfirm";
@@ -21,7 +21,9 @@ function Return({ account }) {
 
     const [columns, setColumns] = useState([]);
     const [data, setData] = useState([]);
-
+    const [classifications, setClassifications] = useState([]);
+    const [models, setModels] = useState([]);
+    const [areas, setAreas] = useState([]);
     const $fileInput = useRef();
 
     const [, , getConfirmationOK, ConfirmationOK] = UseConfirm();
@@ -29,6 +31,17 @@ function Return({ account }) {
 
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false);
+
+    /* const createColumns = (columns) => {
+        const ref = createRef();
+        return columns.map((item) => ({
+            accessor : item.accessor,
+            Header: item.Header,
+            ref : ref,
+            Filter: item.Filter,
+            filter: item.filter
+        }));
+    }; */
 
     function dateFormat(date) {
         let month = date.getMonth() + 1;
@@ -49,7 +62,7 @@ function Return({ account }) {
         })
             .then(res => {
                 if (!res.ok) {
-                    if (res.status == 404)
+                    if (res.status === 404)
                         getConfirmationOK(`${res.status}Error - DB 테이블의 데이터가 존재하지 않습니다.`)
                     else
                         getConfirmationOK(`${res.status}Error - DB 테이블의 데이터를 가져올 수 없습니다.`)
@@ -75,6 +88,53 @@ function Return({ account }) {
                     copyDatas.push(copyData);
                 }
                 setData(copyDatas);
+
+                let result1 = [];
+                copyDatas.map((item, i) => {
+                    result1.push(item.classification);
+                })
+                let result2 = [...new Set(result1)];
+                let result3 = [];
+                result2.map((item, i) => {
+                    if (item != null)
+                        result3.push(
+                            <option key={i + "_"} value={item}>{item}</option>
+                        )
+                });
+                setClassifications(result3);
+
+                result1 = [];
+                result2 = [];
+                result3 = [];
+
+                copyDatas.map((item, i) => {
+                    result1.push(item.model);
+                })
+                result2 = [...new Set(result1)];
+                result2.map((item, i) => {
+                    if (item != null)
+                        result3.push(
+                            <option key={i + "_"} value={item}>{item}</option>
+                        )
+                });
+                setModels(result3);
+
+                result1 = [];
+                result2 = [];
+                result3 = [];
+
+                copyDatas.map((item, i) => {
+                    result1.push(item.area);
+                })
+                result2 = [...new Set(result1)];
+                result2.map((item, i) => {
+                    if (item != null)
+                        result3.push(
+                            <option key={i + "_"} value={item}>{item}</option>
+                        )
+                });
+                setAreas(result3);
+
                 console.log('all data : ', copyDatas);
             })
             .catch(error => {
@@ -103,7 +163,8 @@ function Return({ account }) {
                 if (json != null) {
                     let copyColumns = [];
                     for (let i = 0; i < json.length; i++) {
-                        let copyColumn = { accessor: '', Header: '', Filter: '', filter: '' };
+                        const ref = createRef();
+                        let copyColumn = { accessor: '', Header: '', ref: ref, Filter: '', filter: '' };
                         copyColumn.accessor = json[i].column_name;
                         if (copyColumn.accessor === 'headquarters')
                             copyColumn.filter = exclusionFilterFn;   // 본부는 exclusion 필터 적용
@@ -177,10 +238,17 @@ function Return({ account }) {
             wb.xlsx.load(buffer).then(workbook => {
                 console.log(workbook, 'workbook instance')
                 workbook.eachSheet((sheet, id) => {
+                    if(id > 1) return;
                     for (let c = 1; c <= sheet.getRow(1).cellCount; c++) {
-                        if (!sheet.getRow(1).getCell(c).toString().includes(columns[c - 1].Header)) {
-                            console.log(columns[c - 1].Header);
-                            console.log(sheet.getRow(1).getCell(c).toString());
+                        let strDB = columns[c - 1].Header;
+                        strDB = strDB.replace(/\n/g, "");
+                        strDB = strDB.replace(/\s*/g, "");
+                        let strExcel = sheet.getRow(1).getCell(c).toString();
+                        strExcel = strExcel.replace(/\n/g, "");
+                        strExcel = strExcel.replace(/\s*/g, "");
+                        if (strDB !== strExcel) {
+                            console.log(columns[c - 1].Header, ' : ' ,sheet.getRow(1).getCell(c).toString())
+                            console.log(strDB, ' : ' ,strExcel)
                             getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
                             return;
                         }
@@ -429,7 +497,7 @@ function Return({ account }) {
                 onClick={(event) => {
                     event.target.value = null
                 }} ref={$fileInput} hidden></input>
-            <TableReturn columns={columns} data={data} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} account={account} />
+            <TableReturn columns={columns} minCellWidth={50} data={data} classifications={classifications} models={models} areas={areas} dataWasFiltered={dataWasFiltered} setFilterHeadquarters={setFilterHeadquarters} doRefresh={doRefresh} account={account} />
         </>
     );
 }

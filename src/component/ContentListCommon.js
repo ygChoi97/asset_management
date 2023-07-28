@@ -102,7 +102,7 @@ function ContentListCommon({ idasset, id, retiree_id, doRefresh, doClose, url, a
         if (item.data === null) {
 
             console.log(item)
-            if (item.dbColumn === 'period' || item.dbColumn.includes('date')) {
+            if (item.dbColumn.includes('date')) {
                 console.log(item)
                 item.data = null;
             }
@@ -144,10 +144,10 @@ function ContentListCommon({ idasset, id, retiree_id, doRefresh, doClose, url, a
                         copyContent.req = 'y';
                     else if (json[i].column_name === 'uptake')
                         copyContent.uptake = 'y';
-                    else if (json[i].column_name === 'period' || json[i].column_name.includes('date'))
+                    else if (json[i].column_name.includes('date'))
                         copyContent.dateType = 'y';
-                    else if (json[i].column_name.includes('area'))
-                        copyContent.area = 'y';
+                    /* else if (json[i].column_name.includes('area'))
+                        copyContent.area = 'y'; */
                     copyContents.push(copyContent);
                 }
                 setContents(copyContents);

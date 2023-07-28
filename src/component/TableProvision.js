@@ -1,14 +1,77 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTable, usePagination, useFilters, useGlobalFilter, useSortBy } from "react-table";
 import { GlobalFilter, DefaultFilterForColumn } from "./Filter";
 import { SearchProvision } from "./Search";
-import "../css/tableProvision.css";
+import "../css/tableLayout.css";
 import "../css/foot.css";
 import ContentListCommon from "./ContentListCommon";
 
-function TableProvision({ columns, data, dataWasFiltered, setFilterHeadquarters, doRefresh, account }) {
+function TableProvision({ columns, minCellWidth, data, classifications, areas, models, dataWasFiltered, doRefresh, account }) {
 
     const [id, setId] = useState('');
+
+    const [tableHeight, setTableHeight] = useState("auto");
+    const [activeIndex, setActiveIndex] = useState(null);
+    const tableElement = useRef(null);
+    const tableContainerElement = useRef(null);
+    const numColumns = columns.length;
+
+    useEffect(() => {
+        setTableHeight(tableElement.current.offsetHeight);
+    }, []);
+
+    const mouseDown = (index) => {
+        setActiveIndex(index);
+    };
+
+    const mouseMove = useCallback(
+        (e) => {
+            const gridColumns = columns.map((col, i) => {
+                if (i === activeIndex) {
+                    const width = e.clientX + tableContainerElement.current.scrollLeft - col.ref.current.offsetLeft;
+
+                    if (width >= minCellWidth) {
+                        return `${width}px`;
+                    }
+                }
+                return `${col.ref.current.offsetWidth}px`;
+            });
+
+            tableElement.current.style.gridTemplateColumns = `${gridColumns.join(
+                " "
+            )}`;
+        },
+        [activeIndex, columns, minCellWidth]
+    );
+
+    const removeListeners = useCallback(() => {
+        window.removeEventListener("mousemove", mouseMove);
+        window.removeEventListener("mouseup", removeListeners);
+    }, [mouseMove]);
+
+    const mouseUp = useCallback(() => {
+        setActiveIndex(null);
+        removeListeners();
+    }, [setActiveIndex, removeListeners]);
+
+    useEffect(() => {
+        if (activeIndex !== null) {
+            window.addEventListener("mousemove", mouseMove);
+            window.addEventListener("mouseup", mouseUp);
+        }
+        return () => {
+            removeListeners();
+        };
+    }, [activeIndex, mouseMove, mouseUp, removeListeners]);
+
+    const resetTableCells = () => {
+        tableElement.current.style.gridTemplateColumns = `repeat(${numColumns}, minmax(50px, auto))`;
+    };
+
+    const styleTable = {
+        gridTemplateColumns: `repeat(${numColumns}, minmax(50px, auto))`,
+        width: '100%'
+    }
 
     const {
         getTableProps,
@@ -57,10 +120,11 @@ function TableProvision({ columns, data, dataWasFiltered, setFilterHeadquarters,
     return (
         <>
             <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/provision' account={account} />
-            <SearchProvision column1={'headquarters'} column2={'assetno'} column3={'department'} column4={'idasset'} column5={'sn'} column6={'areainstall'} column7={'model'} column8={'provisiondate'} onSubmit={setFilter} setFilterHeadquarters={setFilterHeadquarters} />
+            <SearchProvision column1={'classification'} column2={'headquarters'} column3={'assetno'} column4={'department'} column5={'idasset'} column6={'sn'} column7={'area'} column8={'model'} column9={'provisiondate'} classifications={classifications} areas={areas} models={models} onSubmit={setFilter} />
             {/* {searchs} */}
-            <div style={{ width: '100vw', height: `calc(100vh - 250px)`, overflow: 'auto' }}>
-                <table className="provision-table" {...getTableProps()}>
+            <div style={{ width: '100vw', height: `calc(100vh - 287px)`, overflow: 'hidden' }}>
+            <div ref={tableContainerElement} style={{ width: '100%',height: `calc(100vh - 287px)`, overflowX: 'auto' }}>
+                <table className="return-table" style={styleTable} ref={tableElement} {...getTableProps()} >
                     <thead>
                         {/* <tr>            
                         <th
@@ -79,16 +143,22 @@ function TableProvision({ columns, data, dataWasFiltered, setFilterHeadquarters,
                     </tr> */}
                         {headerGroups.map((headerGroup) => (
                             <tr {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                                        {column.render("Header")}
+                                {headerGroup.headers.map((column, i) => (
+                                    <th ref={column.ref} key={`column.accessor(${i})`}
+                                        {...column.getHeaderProps(column.getSortByToggleProps())}>
                                         <span>
+                                        {column.render("Header")}                                        
                                             {column.isSorted
                                                 ? column.isSortedDesc
-                                                    ? '⬇'
-                                                    : '⬆'
-                                                : '⇳'}
+                                                ? '🔽'
+                                                : '🔼'
+                                            : ''}
                                         </span>
+                                        <div
+                                            style={{ height: tableHeight }}
+                                            onMouseDown={() => mouseDown(i)}
+                                            className={`resize-handle ${activeIndex === i ? "active" : "idle"}`}
+                                        />
                                         {/* Rendering Default Column Filter */}
                                         {/* <div>
                                         {column.canFilter ? column.render("Filter")
@@ -105,13 +175,16 @@ function TableProvision({ columns, data, dataWasFiltered, setFilterHeadquarters,
                             return (
                                 <tr onClick={(event) => handleRowClick(event, row.values)} {...row.getRowProps()}>
                                     {row.cells.map((cell) => (
-                                        <td title={cell.value} {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                                        <td title={cell.value} {...cell.getCellProps()}>
+                                        <span>{cell.render("Cell")}</span>
+                                    </td>
                                     ))}
                                 </tr>
                             );
                         })}
                     </tbody>
                 </table>
+                </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem' }}>
                 <button className="btnPagePwsSE" onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
@@ -159,6 +232,7 @@ function TableProvision({ columns, data, dataWasFiltered, setFilterHeadquarters,
                     ))}
                 </select>
                 <span style={{ marginLeft: '1rem' }}>{rows.length} rows</span>
+                <button className="btnPagePws" style={{ margin: '0 30px' }} onClick={resetTableCells}>Layout Reset</button>
             </div>
         </>
     );
