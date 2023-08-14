@@ -22,6 +22,7 @@ export default function Menu() {
         localStorage.removeItem('SEARCHTERM_MEMORY');
         localStorage.removeItem('SEARCHTERM_HARDDISK');
         localStorage.removeItem('SEARCHTERM_VIDEOEQUIPMENT');
+        localStorage.removeItem('SEARCHTERM_HANDOVER');
         navigate('/login', { state: { previousPath: pathname } });
     };
     const button = USERNAME
@@ -39,8 +40,8 @@ export default function Menu() {
     
     return (
         <>
-            <div style={{ display: 'flex', backgroundColor: 'lightslategray', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', borderBottom: '2px solid' }}>
-                <div style={{ width: '290px', fontSize: '1.2rem', fontWeight: '900', color: 'whitesmoke', fontStyle: 'oblique', textShadow: '2px 2px 3px black', marginLeft: '0.4rem' }}>PWS Asset Manager</div>
+            <div style={{ display: 'flex', backgroundColor: 'lightslategray', flexDirection: 'row', justifyContent:'space-between', alignItems: 'center', borderBottom: '2px solid' }}>
+                <div style={{fontSize: '1.2rem', fontWeight: '900', color: 'whitesmoke', fontStyle: 'oblique', textShadow: '2px 2px 3px black', marginLeft: '0.5rem' }}>PWS Asset Manager</div>
                 <nav className="menu">
 
                     <ul className="menu-list">
@@ -76,6 +77,14 @@ export default function Menu() {
                                 매각
                             </Link>
                         </li>
+                        {/* <li className="menu-item">
+                            <Link
+                                to="/handover" state = {{ previousPath: pathname}}
+                                className={`menu-link${location.pathname === '/handover' ? ' menu-link--active' : ''}`}
+                            >
+                                인수인계
+                            </Link>
+                        </li> */}
                         <li className="menu-item">
                             <Link
                                 to="/retireedisk" state = {{ previousPath: pathname}}

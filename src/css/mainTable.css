@@ -1,0 +1,18 @@
+.main-table {
+    width: 95vw;
+    border: 1px solid;
+    border-collapse: collapse;
+    font-size: .8rem;
+    font-family: sans-serif;
+    margin: 20px;
+}
+
+.main-table thead th {
+    border: 1px solid;
+    background-color: #d6b5f5;
+    position: sticky;
+}
+
+.main-table td {
+    border: 1px solid;
+}

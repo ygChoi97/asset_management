@@ -1,8 +1,9 @@
 import { React } from "react";
 import {Grid, Button, Container, Typography, TextField} from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/host-config";
 
-const API_BASE_URL = 'http://localhost:8181';
+const BASE_URL = `${API_BASE_URL}/auth/signin`;
 
 const Login = ({onLogin}) => {
 
@@ -25,7 +26,7 @@ const Login = ({onLogin}) => {
         // console.log($password.value);
 
         // 서버에 로그인 요청
-        fetch(`${API_BASE_URL}/auth/signin`, {
+        fetch(`${BASE_URL}`, {
             method: 'POST',
             headers: { 'Content-type': 'application/json' },
             body: JSON.stringify({

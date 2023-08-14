@@ -5,13 +5,16 @@ import '../css/contentlist.css';
 import UseConfirm from "./UseConfirm";
 import ContentCommon from "./ContentCommon";
 import { useLocation, useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/host-config";
 
 function ContentListCommon({ idasset, id, retiree_id, doRefresh, doClose, url, account }) {
 
-    const BASE_URL = `http://localhost:8181${url}`;
+
+    const BASE_URL = `${API_BASE_URL}${url}`;
+    // const BASE_URL = `http://localhost:8181${url}`;
 
     const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
-    const {pathname} = useLocation();
+    const { pathname } = useLocation();
     const navigate = useNavigate();
     // PWS UI정보
     const [contents, setContents] = useState([]);
@@ -38,30 +41,30 @@ function ContentListCommon({ idasset, id, retiree_id, doRefresh, doClose, url, a
         console.log(copyContents)
         let totalVolume = 0;
         for (let i = 0; i < copyContents.length; i++) {
-            
-                if (copyContents[i].dbColumn === 'gb4') {
-                    totalVolume += copyContents[i].data * 4;
-                    continue;
-                }
-                if (copyContents[i].dbColumn === 'gb8') {
-                    totalVolume += copyContents[i].data * 8;
-                    continue;
-                }
-                if (copyContents[i].dbColumn === 'gb16') {
-                    totalVolume += copyContents[i].data * 16;
-                    continue;
-                }
-                if (copyContents[i].dbColumn === 'gb32') {
-                    totalVolume += copyContents[i].data * 32;
-                    continue;
-                }
-                if(copyContents[i].dbColumn === 'volume') {
-                    if(totalVolume !== 0)
-                        copyContents[i].data = `${totalVolume}GB`;
-                    else
-                        copyContents[i].data = null;  
-                    break;
-                
+
+            if (copyContents[i].dbColumn === 'gb4') {
+                totalVolume += copyContents[i].data * 4;
+                continue;
+            }
+            if (copyContents[i].dbColumn === 'gb8') {
+                totalVolume += copyContents[i].data * 8;
+                continue;
+            }
+            if (copyContents[i].dbColumn === 'gb16') {
+                totalVolume += copyContents[i].data * 16;
+                continue;
+            }
+            if (copyContents[i].dbColumn === 'gb32') {
+                totalVolume += copyContents[i].data * 32;
+                continue;
+            }
+            if (copyContents[i].dbColumn === 'volume') {
+                if (totalVolume !== 0)
+                    copyContents[i].data = `${totalVolume}GB`;
+                else
+                    copyContents[i].data = null;
+                break;
+
             }
         }
 
@@ -136,9 +139,14 @@ function ContentListCommon({ idasset, id, retiree_id, doRefresh, doClose, url, a
                     let copyContent = {};
                     copyContent.columnName = json[i].column_comment;
                     copyContent.dbColumn = json[i].column_name;
-                    if (json[i].column_name === 'id' || json[i].column_name === 'volume' || json[i].column_name === 'retiree_id') 
+                    if (json[i].column_name === 'id' || json[i].column_name === 'volume' || json[i].column_name === 'retiree_id')
                         copyContent.readOnly = 'y';
-                    else if (json[i].column_name === 'gb4' || json[i].column_name === 'gb8' || json[i].column_name === 'gb16' || json[i].column_name === 'gb32' || json[i].column_name === 'ssd_500gb' || json[i].column_name === 'sata_1tb' || json[i].column_name === 'm2_512gb' || json[i].column_name === 'sata_2tb' || json[i].column_name === 'headset' || json[i].column_name === 'webcam' || json[i].column_name === 'usbgender')
+                    else if (json[i].column_name === 'gb4' || json[i].column_name === 'gb8' ||
+                        json[i].column_name === 'gb16' || json[i].column_name === 'gb32' ||
+                        json[i].column_name === 'ssd_500gb' || json[i].column_name === 'sata_1tb' ||
+                        json[i].column_name === 'm2_512gb' || json[i].column_name === 'sata_2tb' ||
+                        json[i].column_name === 'headset' || json[i].column_name === 'webcam' ||
+                        json[i].column_name === 'usbgender')
                         copyContent.number = 'y';
                     else if (json[i].column_name === 'idasset')
                         copyContent.req = 'y';
@@ -171,12 +179,12 @@ function ContentListCommon({ idasset, id, retiree_id, doRefresh, doClose, url, a
                 }
             })
                 .then(res => {
-                    if (res.status === 403) {                      
-                        async function gotoLoginPage (){
+                    if (res.status === 403) {
+                        async function gotoLoginPage() {
                             localStorage.removeItem('ACCESS_TOKEN');
                             localStorage.removeItem('LOGIN_USERNAME');
-                            await getConfirmationOK('토큰이 만료되었습니다. 로그인 페이지로 이동합니다.');                        
-                            navigate("/login", { state: { previousPath: pathname } })                        
+                            await getConfirmationOK('토큰이 만료되었습니다. 로그인 페이지로 이동합니다.');
+                            navigate("/login", { state: { previousPath: pathname } })
                         }
                         gotoLoginPage();
                     }
@@ -212,13 +220,13 @@ function ContentListCommon({ idasset, id, retiree_id, doRefresh, doClose, url, a
             })
                 .then(res => {
                     if (res.status === 403) {
-                        async function gotoLoginPage (){
+                        async function gotoLoginPage() {
                             localStorage.removeItem('ACCESS_TOKEN');
                             localStorage.removeItem('LOGIN_USERNAME');
-                            await getConfirmationOK('토큰이 만료되었습니다. 로그인 페이지로 이동합니다.');                        
-                            navigate("/login", { state: { previousPath: pathname } })                        
+                            await getConfirmationOK('토큰이 만료되었습니다. 로그인 페이지로 이동합니다.');
+                            navigate("/login", { state: { previousPath: pathname } })
                         }
-                        gotoLoginPage();                      
+                        gotoLoginPage();
                     }
                     else if (!res.ok) {
                         throw new Error(res.status);
@@ -251,12 +259,12 @@ function ContentListCommon({ idasset, id, retiree_id, doRefresh, doClose, url, a
                 }
             })
                 .then(res => {
-                    if (res.status === 403) {                      
-                        async function gotoLoginPage (){
+                    if (res.status === 403) {
+                        async function gotoLoginPage() {
                             localStorage.removeItem('ACCESS_TOKEN');
                             localStorage.removeItem('LOGIN_USERNAME');
-                            await getConfirmationOK('토큰이 만료되었습니다. 로그인 페이지로 이동합니다.');                        
-                            navigate("/login", { state: { previousPath: pathname } })                        
+                            await getConfirmationOK('토큰이 만료되었습니다. 로그인 페이지로 이동합니다.');
+                            navigate("/login", { state: { previousPath: pathname } })
                         }
                         gotoLoginPage();
                     }

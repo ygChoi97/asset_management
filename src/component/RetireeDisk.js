@@ -10,8 +10,9 @@ import jwt_decode from "jwt-decode";
 import { DateRangeColumnFilter, dateBetweenFilterFn} from "./Filter";
 import { useLocation, useNavigate } from "react-router-dom";
 import TableRetireeDisk from "./TableRetireeDisk";
+import { API_BASE_URL } from "../config/host-config";
 
-const BASE_URL = 'http://localhost:8181/api/retireedisk';
+const BASE_URL = `${API_BASE_URL}/api/retireedisk`;
 
 function RetireeDisk({ account }) {
   

@@ -9,8 +9,9 @@ import jwt_decode from "jwt-decode";
 import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from "./Filter";
 import { useLocation, useNavigate } from "react-router-dom";
 import TableDiskRestoration from "./TableDiskRestoration";
+import { API_BASE_URL } from "../config/host-config";
 
-const BASE_URL = 'http://localhost:8181/api/diskrestoration';
+const BASE_URL = `${API_BASE_URL}/api/diskrestoration`;
 
 function DiskRestoration({ account }) {
     const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');

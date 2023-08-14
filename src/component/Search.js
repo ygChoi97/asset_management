@@ -118,7 +118,7 @@ export function SearchPws({ column1, column2, column3, column4, column5, column6
       onSubmit(column1, undefined);
     onSubmit(column2, event.target.elements[1].value.trim());
     onSubmit(column3, event.target.elements[2].value.trim());
-  
+
     if (event.target.elements[3].value !== '')
       onSubmit(column4, event.target.elements[3].value.trim());
     else
@@ -457,7 +457,7 @@ export function SearchProvision({ column1, column2, column3, column4, column5, c
             </div>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>            
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
             <div className="filterItem"><label htmlFor='introductiondate'>지급일자</label>
               <input className='selectDate' id='provisiondateSD' name={column9} placeholder='' type='date' onChange={provisiondateSDHandler} value={provisiondateSD} />
               <span>~</span>
@@ -476,7 +476,7 @@ export function SearchProvision({ column1, column2, column3, column4, column5, c
 
 export function SearchReturn({ column1, column2, column3, column4, column5, column6, column7, column8, column9, column10, column11, classifications, models, areas, onSubmit }) {
   const [classification, setClassification] = useState('');
-  const [headquarters, setHeadquarters] = useState(''); 
+  const [headquarters, setHeadquarters] = useState('');
   const [assetno, setAssetno] = useState('');
   const [hoteam, setHoteam] = useState('');
   const [housername, setHousername] = useState('');
@@ -664,7 +664,7 @@ export function SearchReturn({ column1, column2, column3, column4, column5, colu
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-          <div className="filterItem"><label htmlFor='housername'>인계자</label><input className='underline' id='housername' name={column5} placeholder='' onChange={housernameHandler} value={housername} /></div>
+            <div className="filterItem"><label htmlFor='housername'>인계자</label><input className='underline' id='housername' name={column5} placeholder='' onChange={housernameHandler} value={housername} /></div>
             <div className="filterItem"><label htmlFor='idasset'>자산관리번호</label><input className='underline' id='idasset' name={column6} placeholder='' onChange={idassetHandler} value={idasset} /></div>
             <div className="filterItem"><label htmlFor='sn'>S/N</label><input className='underline' id='sn' name={column7} placeholder='' onChange={snHandler} value={sn} /></div>
             <div className="filterItem"><label htmlFor='model'>모델명</label>
@@ -676,7 +676,7 @@ export function SearchReturn({ column1, column2, column3, column4, column5, colu
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-          <div className="filterItem"><label htmlFor='area'>지역</label>
+            <div className="filterItem"><label htmlFor='area'>지역</label>
               <select className="selectItem" id='area' name={column9} onChange={areaSelectHandler} value={area}>
                 <option value="">― 선택안함 ―</option>
                 {areas}
@@ -806,7 +806,7 @@ export function SearchPwsDisposal({ column1, column2, column3, column4, column5,
       onSubmit(column1, undefined);
     onSubmit(column2, event.target.elements[1].value.trim());
     onSubmit(column3, event.target.elements[2].value.trim());
-  
+
     if (event.target.elements[3].value !== '')
       onSubmit(column4, event.target.elements[3].value.trim());
     else
@@ -1100,7 +1100,7 @@ export function SearchMemory({ column1, column2, column3, column4, column5, colu
       <div className="searchFrm">
         <div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div className="filterItem"><label htmlFor='classification'>자산구분</label>
+            <div className="filterItem"><label htmlFor='classification'>자산구분</label>
               <select className="selectItem" id='classification' name={column1} onChange={classificationSelectHandler} value={classification}>
                 <option value="">― 선택안함 ―</option>
                 {classifications}
@@ -1113,11 +1113,11 @@ export function SearchMemory({ column1, column2, column3, column4, column5, colu
                 <option value="">― 선택안함 ―</option>
                 {areas}
               </select>
-            </div>            
+            </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-          <div className="filterItem"><label htmlFor='team'>팀명</label><input className='underline' id='team' name={column5} placeholder='' onChange={teamHandler} value={team} /></div>
+            <div className="filterItem"><label htmlFor='team'>팀명</label><input className='underline' id='team' name={column5} placeholder='' onChange={teamHandler} value={team} /></div>
             <div className="filterItem"><label htmlFor='manager'>담당자</label><input className='underline' id='manager' name={column6} placeholder='' onChange={managerHandler} value={manager} /></div>
             <div className="filterItem"><label htmlFor='introductiondate'>지원일자</label>
               <input className='selectDate' id='application_dateSD' name={column7} placeholder='' type='date' onChange={application_dateSDHandler} value={application_dateSD} />
@@ -1263,8 +1263,8 @@ export function SearchVideoEquipment({ column1, column2, column3, column4, colum
 
       <div className="searchFrm">
         <div>
-        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div className="filterItem"><label htmlFor='classification'>자산구분</label>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div className="filterItem"><label htmlFor='classification'>자산구분</label>
               <select className="selectItem" id='classification' name={column1} onChange={classificationSelectHandler} value={classification}>
                 <option value="">― 선택안함 ―</option>
                 {classifications}
@@ -1277,11 +1277,11 @@ export function SearchVideoEquipment({ column1, column2, column3, column4, colum
                 <option value="">― 선택안함 ―</option>
                 {areas}
               </select>
-            </div>            
+            </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-          <div className="filterItem"><label htmlFor='requestor_id'>요청자 사번</label><input className='underline' id='requestor_id' name={column5} placeholder='' onChange={requestorIdHandler} value={requestor_id} /></div>
+            <div className="filterItem"><label htmlFor='requestor_id'>요청자 사번</label><input className='underline' id='requestor_id' name={column5} placeholder='' onChange={requestorIdHandler} value={requestor_id} /></div>
             <div className="filterItem"><label htmlFor='user_id'>실사용자 사번</label><input className='underline' id='user_id' name={column6} placeholder='' onChange={userIdHandler} value={user_id} /></div>
             <div className="filterItem"><label htmlFor='provision_date'>지급일</label>
               <input className='selectDate' id='provision_dateSD' name={column7} placeholder='' type='date' onChange={provision_dateSDHandler} value={provision_dateSD} />
@@ -1428,7 +1428,7 @@ export function SearchHarddisk({ column1, column2, column3, column4, column5, co
       <div className="searchFrm">
         <div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div className="filterItem"><label htmlFor='classification'>자산구분</label>
+            <div className="filterItem"><label htmlFor='classification'>자산구분</label>
               <select className="selectItem" id='classification' name={column1} onChange={classificationSelectHandler} value={classification}>
                 <option value="">― 선택안함 ―</option>
                 {classifications}
@@ -1441,11 +1441,11 @@ export function SearchHarddisk({ column1, column2, column3, column4, column5, co
                 <option value="">― 선택안함 ―</option>
                 {areas}
               </select>
-            </div>            
+            </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-          <div className="filterItem"><label htmlFor='team'>팀명</label><input className='underline' id='team' name={column5} placeholder='' onChange={teamHandler} value={team} /></div>
+            <div className="filterItem"><label htmlFor='team'>팀명</label><input className='underline' id='team' name={column5} placeholder='' onChange={teamHandler} value={team} /></div>
             <div className="filterItem"><label htmlFor='manager'>담당자</label><input className='underline' id='manager' name={column6} placeholder='' onChange={managerHandler} value={manager} /></div>
             <div className="filterItem"><label htmlFor='introductiondate'>지원일자</label>
               <input className='selectDate' id='application_dateSD' name={column7} placeholder='' type='date' onChange={application_dateSDHandler} value={application_dateSD} />
@@ -1457,6 +1457,113 @@ export function SearchHarddisk({ column1, column2, column3, column4, column5, co
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <button className="btnSearch" type="submit" id="submitPwsBtn" ref={btnRef}>조회</button>
           <button className="btnReset" type="submit" onClick={resetHandler}>리셋</button>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+
+export function SearchHandOver({ column1, column2, column3, areas, onSubmit }) {
+
+  const [department, setDepartment] = useState('');
+  const [writer, setWriter] = useState('');
+  const [provisiondateSD, setProvisiondateSD] = useState('');
+  const [provisiondateED, setProvisiondateED] = useState('');
+
+  const btnRef = useRef(null);
+
+  const departmentHandler = (e) => {
+    setDepartment(e.target.value);
+  };
+
+  const writerHandler = (e) => {
+    setWriter(e.target.value);
+  };
+
+
+  const provisiondateSDHandler = (e) => {
+    setProvisiondateSD(e.target.value);
+  };
+
+  const provisiondateEDHandler = (e) => {
+    setProvisiondateED(e.target.value);
+  };
+
+  const resetHandler = (event) => {
+    setDepartment('');
+    setWriter('');
+    setProvisiondateSD('');
+    setProvisiondateED('');
+  }
+
+  const hSubmit = (event) => {
+    event.preventDefault();
+
+    onSubmit(column1, event.target.elements[0].value.trim());
+    onSubmit(column2, event.target.elements[1].value.trim());
+
+    onSubmit(column3, (old = []) => [event.target.elements[3].value ? event.target.elements[3].value.trim() : undefined, old[1]]);
+    onSubmit(column3, (old = []) => [event.target.elements[2].value ? event.target.elements[2].value.trim() : undefined, old[0]]);
+
+    if (department !== '' || writer !== '' || provisiondateSD !== '' || provisiondateED !== '') {
+      const state = {
+        department: department,
+        writer: writer,
+        provisiondateSD: provisiondateSD,
+        provisiondateED: provisiondateED,
+      };
+      // 상태값이 변경될 때마다 로컬 스토리지에 저장
+      const stateString = JSON.stringify(state);
+      localStorage.setItem('SEARCHTERM_HANDOVER', stateString);
+    }
+    else {
+      const term = localStorage.getItem("SEARCHTERM_HANDOVER");
+      if (term)
+        localStorage.removeItem("SEARCHTERM_HANDOVER");
+    }
+  };
+
+  useEffect(() => {
+
+    // 로컬 스토리지에서 'SEARCHTERM_HANDOVER' 가져옴
+    const stateString = localStorage.getItem('SEARCHTERM_HANDOVER');
+    // JSON 문자열을 JavaScript 객체로 변환
+    if (stateString) {
+      const state = JSON.parse(stateString);
+
+      if (state.department) setDepartment(state.department);
+      if (state.writer) setWriter(state.writer);
+      if (state.provisiondateSD) setProvisiondateSD(state.provisiondateSD);
+      if (state.provisiondateED) setProvisiondateED(state.provisiondateED);
+
+      if (btnRef.current) {
+        const timeoutId = setTimeout(() => {
+          btnRef.current.click();
+        }, 3000); // 3초 후에 클릭 이벤트 발생
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, []);
+
+  return (
+    <form onSubmit={hSubmit}>
+
+      <div className="searchFrm">
+        <div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div className="filterItem"><label htmlFor='department'>부서명</label><input className='underline' id='department' name={column1} placeholder='' onChange={departmentHandler} value={department} /></div>
+            <div className="filterItem"><label htmlFor='idasset'>작성자</label><input className='underline' id='writer' name={column2} placeholder='' onChange={writerHandler} value={writer} /></div>
+            <div className="filterItem"><label htmlFor='introductiondate'>지급일자</label>
+              <input className='selectDate' id='provisiondateSD' name={column3} placeholder='' type='date' onChange={provisiondateSDHandler} value={provisiondateSD} />
+              <span>~</span>
+              <input className='selectDate' id='provisiondateED' name={column3} placeholder='' type='date' onChange={provisiondateEDHandler} value={provisiondateED} />
+            </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <button className="btnSearch" type="submit" id="submitPwsBtn" ref={btnRef}>조회</button>
+            <button className="btnReset" type="submit" onClick={resetHandler}>리셋</button>
+          </div>
         </div>
       </div>
     </form>
@@ -1699,7 +1806,7 @@ export function SearchDiskRestoration({ column1, column2, column3, column4, colu
       <div className="searchFrm">
         <div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-          <div className="filterItem"><label htmlFor='classification'>자산구분</label>
+            <div className="filterItem"><label htmlFor='classification'>자산구분</label>
               <select className="selectItem" id='classification' name={column1} onChange={classificationSelectHandler} value={classification}>
                 <option value="">― 선택안함 ―</option>
                 {classifications}
@@ -1707,11 +1814,11 @@ export function SearchDiskRestoration({ column1, column2, column3, column4, colu
             </div>
             <div className="filterItem"><label htmlFor='headquarters'>본부</label><input className='underline' id='headquarters' name={column2} placeholder='' onChange={headquartersHandler} value={headquarters} /></div>
             <div className="filterItem"><label htmlFor='team'>팀</label><input className='underline' id='team' name={column3} placeholder='' onChange={teamHandler} value={team} /></div>
-            <div className="filterItem"><label htmlFor='requestor'>요청자</label><input className='underline' id='requestor' name={column4} placeholder='' onChange={requestorHandler} value={requestor} /></div>            
+            <div className="filterItem"><label htmlFor='requestor'>요청자</label><input className='underline' id='requestor' name={column4} placeholder='' onChange={requestorHandler} value={requestor} /></div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start' }}>
-          <div className="filterItem"><label htmlFor='idasset'>자산관리번호</label><input className='underline' id='idasset' name={column5} placeholder='' onChange={idassetHandler} value={idasset} /></div>
-          <div className="filterItem"><label htmlFor='area'>설치지역</label>
+            <div className="filterItem"><label htmlFor='idasset'>자산관리번호</label><input className='underline' id='idasset' name={column5} placeholder='' onChange={idassetHandler} value={idasset} /></div>
+            <div className="filterItem"><label htmlFor='area'>설치지역</label>
               <select className="selectItem" id='area' name={column6} onChange={areaSelectHandler} value={area}>
                 <option value="">― 선택안함 ―</option>
                 {areas}
