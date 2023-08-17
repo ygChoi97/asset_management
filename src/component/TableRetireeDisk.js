@@ -8,7 +8,7 @@ import ContentListCommon from "./ContentListCommon";
 
 function TableRetireeDisk({ columns, minCellWidth, data, dataWasFiltered, setFilterHeadquarters, doRefresh, account }) {
 
-    const [retiree_id, setRetiree_id] = useState('');
+    const [id, setId] = useState('');
 
     const [tableHeight, setTableHeight] = useState("auto");
     const [activeIndex, setActiveIndex] = useState(null);
@@ -115,8 +115,8 @@ function TableRetireeDisk({ columns, minCellWidth, data, dataWasFiltered, setFil
     }, []);
 
     const handleRowClick = (event, values) => {
-        if (values.retiree_id !== null && values.retiree_id !== '') {
-            setRetiree_id(values.retiree_id);
+        if (values.id !== null && values.id !== '') {
+            setId(values.id);
         }
         else {
             alert('해당 퇴직자다스크 정보가 조회되지 않았습니다. \n예상치 못한 오류입니다.');
@@ -124,13 +124,13 @@ function TableRetireeDisk({ columns, minCellWidth, data, dataWasFiltered, setFil
     };
 
     const doClose = () => {
-        setRetiree_id('');
+        setId('');
     }
 
     console.log('RetireeDisk Table 랜더링');
     return (
         <>
-            <ContentListCommon retiree_id={retiree_id} doRefresh={doRefresh} doClose={doClose} url='/api/retireedisk' account={account} />
+            <ContentListCommon id={id} doRefresh={doRefresh} doClose={doClose} url='/api/retireedisk' account={account} />
             {/* <Search onSubmit={setGlobalFilter} /> */}
             <SearchRetireeDisk column1={'team'} column2={'retiree_name'} column3={'retiree_id'} column4={'idasset'} column5={'return_date'} onSubmit={setFilter} />
             {/* {searchs} */}

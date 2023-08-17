@@ -193,7 +193,7 @@ function RetireeDisk({ account }) {
               if (columns[c - 1].accessor === 'retiree_id' && str === '') isEmpty.retiree_id = true;
 
               if (isEmpty.retiree_id) {
-                getConfirmationOK(`${sheet.rowCount}실패 : 선택한 엑셀파일의 ${r}번째 행의 사번이 빈칸입니다.\n import를 취소합니다.`);
+                getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 사번이 빈칸입니다.\n import를 취소합니다.`);
                 return;
               }
 
