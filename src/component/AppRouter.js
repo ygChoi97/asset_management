@@ -14,6 +14,7 @@ import VideoEquipment from "./VideoEquipment";
 import DiskRestoration from "./DiskRestoration";
 import RetireeDisk from "./RetireeDisk";
 import HandOver from "./HandOver";
+import ReturnForm from "./ReturnForm";
 
 const AppRouter = () => {
 
@@ -40,6 +41,7 @@ const AppRouter = () => {
           <Route path="/return" element={<Return account={account} />} />
           <Route path="/disposal" element={<Disposal account={account} />} />
           <Route path="/handover" element={<HandOver account={account} />} />
+          <Route path="/return_form" element={<ReturnForm account={account} />} />
           <Route path="/retireedisk" element={<RetireeDisk account={account} />} />
           <Route path="/diskrestoration" element={<DiskRestoration account={account} />} />
           <Route path="/memory" element={<Memory account={account} />} />

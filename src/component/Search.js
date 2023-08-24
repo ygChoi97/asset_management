@@ -1554,10 +1554,116 @@ export function SearchHandOver({ column1, column2, column3, areas, onSubmit }) {
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
             <div className="filterItem"><label htmlFor='department'>부서명</label><input className='underline' id='department' name={column1} placeholder='' onChange={departmentHandler} value={department} /></div>
             <div className="filterItem"><label htmlFor='idasset'>작성자</label><input className='underline' id='writer' name={column2} placeholder='' onChange={writerHandler} value={writer} /></div>
-            <div className="filterItem"><label htmlFor='introductiondate'>지급일자</label>
+            <div className="filterItem"><label htmlFor='provisiondate'>지급일자</label>
               <input className='selectDate' id='provisiondateSD' name={column3} placeholder='' type='date' onChange={provisiondateSDHandler} value={provisiondateSD} />
               <span>~</span>
               <input className='selectDate' id='provisiondateED' name={column3} placeholder='' type='date' onChange={provisiondateEDHandler} value={provisiondateED} />
+            </div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <button className="btnSearch" type="submit" id="submitPwsBtn" ref={btnRef}>조회</button>
+            <button className="btnReset" type="submit" onClick={resetHandler}>리셋</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+export function SearchReturnForm({ column1, column2, column3, areas, onSubmit }) {
+
+  const [department, setDepartment] = useState('');
+  const [writer, setWriter] = useState('');
+  const [returndateSD, setReturndateSD] = useState('');
+  const [returndateED, setReturndateED] = useState('');
+
+  const btnRef = useRef(null);
+
+  const departmentHandler = (e) => {
+    setDepartment(e.target.value);
+  };
+
+  const writerHandler = (e) => {
+    setWriter(e.target.value);
+  };
+
+
+  const returndateSDHandler = (e) => {
+    setReturndateSD(e.target.value);
+  };
+
+  const returndateEDHandler = (e) => {
+    setReturndateED(e.target.value);
+  };
+
+  const resetHandler = (event) => {
+    setDepartment('');
+    setWriter('');
+    setReturndateSD('');
+    setReturndateED('');
+  }
+
+  const hSubmit = (event) => {
+    event.preventDefault();
+
+    onSubmit(column1, event.target.elements[0].value.trim());
+    onSubmit(column2, event.target.elements[1].value.trim());
+
+    onSubmit(column3, (old = []) => [event.target.elements[3].value ? event.target.elements[3].value.trim() : undefined, old[1]]);
+    onSubmit(column3, (old = []) => [event.target.elements[2].value ? event.target.elements[2].value.trim() : undefined, old[0]]);
+
+    if (department !== '' || writer !== '' || returndateSD !== '' || returndateED !== '') {
+      const state = {
+        department: department,
+        writer: writer,
+        returndateSD: returndateSD,
+        returndateED: returndateED,
+      };
+      // 상태값이 변경될 때마다 로컬 스토리지에 저장
+      const stateString = JSON.stringify(state);
+      localStorage.setItem('SEARCHTERM_RETURNFORM', stateString);
+    }
+    else {
+      const term = localStorage.getItem("SEARCHTERM_RETURNFORM");
+      if (term)
+        localStorage.removeItem("SEARCHTERM_RETURNFORM");
+    }
+  };
+
+  useEffect(() => {
+
+    // 로컬 스토리지에서 'SEARCHTERM_RETURNFORM' 가져옴
+    const stateString = localStorage.getItem('SEARCHTERM_RETURNFORM');
+    // JSON 문자열을 JavaScript 객체로 변환
+    if (stateString) {
+      const state = JSON.parse(stateString);
+
+      if (state.department) setDepartment(state.department);
+      if (state.writer) setWriter(state.writer);
+      if (state.returndateSD) setReturndateSD(state.returndateSD);
+      if (state.returndateED) setReturndateED(state.returndateED);
+
+      if (btnRef.current) {
+        const timeoutId = setTimeout(() => {
+          btnRef.current.click();
+        }, 3000); // 3초 후에 클릭 이벤트 발생
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, []);
+
+  return (
+    <form onSubmit={hSubmit}>
+
+      <div className="searchFrm">
+        <div>
+          <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+            <div className="filterItem"><label htmlFor='department'>부서명</label><input className='underline' id='department' name={column1} placeholder='' onChange={departmentHandler} value={department} /></div>
+            <div className="filterItem"><label htmlFor='idasset'>작성자</label><input className='underline' id='writer' name={column2} placeholder='' onChange={writerHandler} value={writer} /></div>
+            <div className="filterItem"><label htmlFor='returndate'>반납일자</label>
+              <input className='selectDate' id='returndateSD' name={column3} placeholder='' type='date' onChange={returndateSDHandler} value={returndateSD} />
+              <span>~</span>
+              <input className='selectDate' id='returndateED' name={column3} placeholder='' type='date' onChange={returndateEDHandler} value={returndateED} />
             </div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>

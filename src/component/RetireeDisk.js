@@ -222,6 +222,7 @@ function RetireeDisk({ account }) {
           })
             .then(res => {
               if (!res.ok) {
+                console.log(res.status)
                 throw new Error(res.status);
               }
               else {
@@ -235,7 +236,11 @@ function RetireeDisk({ account }) {
             })
             .catch(error => {
               console.log(error);
-              getConfirmationOK(`DB 업데이트 실패 \n ${error}`);
+              if(error== 'Error: 404') {
+                getConfirmationOK(`DB 업데이트 실패 \n ${error} : 엑셀의 데이터가 존재하지 않습니다.`);
+              }
+              else
+                getConfirmationOK(`DB 업데이트 실패 \n ${error}`);
             });
         })
       })

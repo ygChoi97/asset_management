@@ -10,11 +10,13 @@ import { DateRangeColumnFilter, dateBetweenFilterFn, exclusionFilterFn } from ".
 import { useLocation, useNavigate } from "react-router-dom";
 import TableHandOver from "./TableHandOver";
 import { API_BASE_URL } from "../config/host-config";
+import { Tab } from "@mui/material";
+import TableReturnForm from "./TableReturnForm";
 
-const BASE_URL = `${API_BASE_URL}/api/handover`;
-const BASE_URL2 = `${API_BASE_URL}/api/handoverequipment`;
+const BASE_URL = `${API_BASE_URL}/api/return_form`;
+const BASE_URL2 = `${API_BASE_URL}/api/return_equipment`;
 
-function HandOver({ account }) {
+function ReturnForm({ account }) {
     const ACCESS_TOKEN = localStorage.getItem('ACCESS_TOKEN');
     const navigate = useNavigate();
     const { pathname } = useLocation();
@@ -66,15 +68,15 @@ function HandOver({ account }) {
                 let copyDatas = [];
                 for (let i = 0; i < json.count; i++) {
                     let copyData = {};
-                    copyData = json.handOverDtos[i];
-                    for (const key in json.handOverDtos[i]) {
-                        if (key.includes('date') && json.handOverDtos[i][key] != null) {
-                            let day = new Date(json.handOverDtos[i][key]);
+                    copyData = json.returnFormDtos[i];
+                    for (const key in json.returnFormDtos[i]) {
+                        if (key.includes('date') && json.returnFormDtos[i][key] != null) {
+                            let day = new Date(json.returnFormDtos[i][key]);
                             copyData[key] = dateFormat(day);
                         }
                     }
 
-                    if (json.handOverDtos[i].quantity === 0)
+                    if (json.returnFormDtos[i].quantity === 0)
                         copyData['quantity'] = null;           
 
                     copyDatas.push(copyData);
@@ -87,48 +89,6 @@ function HandOver({ account }) {
                 console.log(error);
             });
     }
-
-    // const getAllDataFromDB2 = () => {
-    //     fetch(BASE_URL2, {
-    //         method: 'GET',
-    //         headers: {
-    //             'Authorization': 'Bearer ' + ACCESS_TOKEN
-    //         }
-    //     })
-    //         .then(res => {
-    //             if (!res.ok) {
-    //                 if (res.status === 404)
-    //                     getConfirmationOK(`${res.status}Error - DB 테이블의 데이터가 존재하지 않습니다.`)
-    //                 else
-    //                     getConfirmationOK(`${res.status}Error - DB 테이블의 데이터를 가져올 수 없습니다.`)
-    //                 throw new Error(res.status);
-    //             }
-    //             else {
-    //                 return res.json();
-    //             }
-    //         })
-    //         .then(json => {
-    //             console.log(json);
-    //             let copyDatas = [];
-    //             for (let i = 0; i < json.count; i++) {
-    //                 let copyData = {};
-    //                 copyData = json.handOverEquiqmentDtos[i];
-    //                 for (const key in json.handOverEquiqmentDtos[i]) {
-    //                     if (key.includes('date') && json.handOverEquiqmentDtos[i][key] != null) {
-    //                         let day = new Date(json.handOverEquiqmentDtos[i][key]);
-    //                         copyData[key] = dateFormat(day);
-    //                     }
-    //                 }
-    //                 copyDatas.push(copyData);
-    //             }
-    //             setData2(copyDatas);
-
-    //             console.log('all data : ', copyDatas);
-    //         })
-    //         .catch(error => {
-    //             console.log(error);
-    //         });
-    // }
 
     useEffect(() => {
         fetch(BASE_URL + `/menu`, {
@@ -211,7 +171,7 @@ function HandOver({ account }) {
                         copyColumn.accessor = json[i].column_name;
                         copyColumn.Header = json[i].column_comment;
                         // foreign key 제외
-                        if(copyColumn.accessor !== 'department' && copyColumn.accessor !== 'writer' && copyColumn.accessor !== 'provisiondate')
+                        if(copyColumn.accessor !== 'department' && copyColumn.accessor !== 'writer' && copyColumn.accessor !== 'returndate')
                             copyColumns.push(copyColumn);
                     }
                     setColumns2(copyColumns);
@@ -266,7 +226,7 @@ function HandOver({ account }) {
                     let strExcel = sheet.getRow(1).getCell(2).toString();
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
-                    if (strExcel.toUpperCase() !== 'PWS장비인수/인계확인서') {
+                    if (strExcel.toUpperCase() !== '반납PWS장비인수/인계확인서') {
                         getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
                         return;
                     }
@@ -281,7 +241,7 @@ function HandOver({ account }) {
                     }
 
                     strDB = columns[1].Header;
-                    strExcel = sheet.getRow(2).getCell(4).toString();   // 부서명
+                    strExcel = sheet.getRow(2).getCell(6).toString();   // 부서명
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
@@ -290,7 +250,7 @@ function HandOver({ account }) {
                     }
 
                     strDB = columns[2].Header;
-                    strExcel = sheet.getRow(2).getCell(7).toString();   // 작성자
+                    strExcel = sheet.getRow(2).getCell(12).toString();   // 작성자
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
@@ -299,7 +259,7 @@ function HandOver({ account }) {
                     }
 
                     strDB = columns[3].Header;
-                    strExcel = sheet.getRow(2).getCell(14).toString();  // 내선
+                    strExcel = sheet.getRow(2).getCell(17).toString();  // 내선
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
@@ -308,7 +268,7 @@ function HandOver({ account }) {
                     }
 
                     strDB = columns[4].Header;
-                    strExcel = sheet.getRow(3).getCell(14).toString();  // HP
+                    strExcel = sheet.getRow(3).getCell(17).toString();  // HP
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
@@ -317,7 +277,7 @@ function HandOver({ account }) {
                     }
 
                     strDB = columns[5].Header;
-                    strExcel = sheet.getRow(4).getCell(2).toString();   // 사유
+                    strExcel = sheet.getRow(4).getCell(2).toString();   // 반납일자
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
@@ -326,7 +286,7 @@ function HandOver({ account }) {
                     }
 
                     strDB = columns[6].Header;
-                    strExcel = sheet.getRow(4).getCell(7).toString();   // 지급일자
+                    strExcel = sheet.getRow(4).getCell(8).toString();   // 사번
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
@@ -335,7 +295,25 @@ function HandOver({ account }) {
                     }
 
                     strDB = columns[7].Header;
-                    strExcel = sheet.getRow(4).getCell(12).toString();  // 수량
+                    strExcel = sheet.getRow(4).getCell(10).toString();   // 성명
+                    strExcel = strExcel.replace(/\n/g, "");
+                    strExcel = strExcel.replace(/\s*/g, "");
+                    if (strDB !== strExcel) {
+                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                        return;
+                    }
+
+                    strDB = columns[8].Header;
+                    strExcel = sheet.getRow(4).getCell(12).toString();  // SAP승인
+                    strExcel = strExcel.replace(/\n/g, "");
+                    strExcel = strExcel.replace(/\s*/g, "");
+                    if (strDB !== strExcel) {
+                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                        return;
+                    }
+
+                    strDB = columns[9].Header;
+                    strExcel = sheet.getRow(4).getCell(16).toString();  // 수량
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
@@ -348,7 +326,7 @@ function HandOver({ account }) {
                     let tempDbData = [];
                     let tempDbData2 = [];
                     let obj = {};
-                    let str = sheet.getRow(2).getCell(3).toString();    // 지역
+                    let str = sheet.getRow(2).getCell(4).toString();    // 지역
                     str = str.replace(/\n/g, ""); // 개행문자 제거
                     str = str.trim();             // 양쪽 공백 제거
                     if (str === '') {
@@ -357,7 +335,7 @@ function HandOver({ account }) {
                     }
                     obj[columns[0].accessor] = str;
 
-                    str = sheet.getRow(2).getCell(5).toString();    // 부서명
+                    str = sheet.getRow(2).getCell(8).toString();    // 부서명
                     str = str.replace(/\n/g, ""); // 개행문자 제거
                     str = str.trim();             // 양쪽 공백 제거
                     if (str === '') {
@@ -366,7 +344,7 @@ function HandOver({ account }) {
                     }
                     obj[columns[1].accessor] = str;
 
-                    str = sheet.getRow(2).getCell(8).toString();    // 작성자
+                    str = sheet.getRow(2).getCell(13).toString();    // 작성자
                     str = str.replace(/\n/g, ""); // 개행문자 제거
                     str = str.trim();             // 양쪽 공백 제거
                     if (str === '') {
@@ -375,7 +353,7 @@ function HandOver({ account }) {
                     }
                     obj[columns[2].accessor] = str;
 
-                    str = sheet.getRow(2).getCell(15).toString();   // 내선
+                    str = sheet.getRow(2).getCell(18).toString();   // 내선
                     str = str.replace(/\n/g, ""); // 개행문자 제거
                     str = str.trim();             // 양쪽 공백 제거
                     if (str === '') {
@@ -384,7 +362,7 @@ function HandOver({ account }) {
                     }
                     obj[columns[3].accessor] = str;
 
-                    str = sheet.getRow(3).getCell(15).toString();   // HP
+                    str = sheet.getRow(3).getCell(18).toString();   // HP
                     str = str.replace(/\n/g, ""); // 개행문자 제거
                     str = str.trim();             // 양쪽 공백 제거
                     if (str === '') {
@@ -393,43 +371,61 @@ function HandOver({ account }) {
                     }
                     obj[columns[4].accessor] = str;
 
-                    str = sheet.getRow(4).getCell(3).toString();    // 사유
+                    str = sheet.getRow(4).getCell(4).toString();    // 반납일자
                     str = str.replace(/\n/g, ""); // 개행문자 제거
                     str = str.trim();             // 양쪽 공백 제거
                     if (str === '') {
                         getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[5].Header}이 빈칸입니다.\n import를 취소합니다.`);
                         return;
                     }
-                    obj[columns[5].accessor] = str;
+                    obj[columns[5].accessor] = new Date(str);
 
-                    str = sheet.getRow(4).getCell(8).toString();    // 지급일자
+                    str = sheet.getRow(4).getCell(9).toString();    // 사번
                     str = str.replace(/\n/g, ""); // 개행문자 제거
                     str = str.trim();             // 양쪽 공백 제거
                     if (str === '') {
                         getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[6].Header}이 빈칸입니다.\n import를 취소합니다.`);
                         return;
                     }
-                    obj[columns[6].accessor] = new Date(str);
+                    obj[columns[6].accessor] = str;
 
-                    str = sheet.getRow(4).getCell(15).toString();   // 수량
+                    str = sheet.getRow(4).getCell(11).toString();    // 성명
                     str = str.replace(/\n/g, ""); // 개행문자 제거
                     str = str.trim();             // 양쪽 공백 제거
                     if (str === '') {
                         getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[7].Header}이 빈칸입니다.\n import를 취소합니다.`);
                         return;
                     }
-                    if(!Number(str)) {
-                        getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[7].Header}이 숫자가 아닙니다.\n import를 취소합니다.`);
+                    obj[columns[7].accessor] = str;
+
+                    str = sheet.getRow(4).getCell(13).toString();    // SAP승인
+                    str = str.replace(/\n/g, ""); // 개행문자 제거
+                    str = str.trim();             // 양쪽 공백 제거
+                    if (str === '') {
+                        getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[8].Header}이 빈칸입니다.\n import를 취소합니다.`);
                         return;
                     }
-                    obj[columns[7].accessor] = str;
+                    obj[columns[8].accessor] = str;
+
+                    str = sheet.getRow(4).getCell(18).toString();   // 수량
+                    str = str.replace(/\n/g, ""); // 개행문자 제거
+                    str = str.trim();             // 양쪽 공백 제거
+                    if (str === '') {
+                        getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[9].Header}이 빈칸입니다.\n import를 취소합니다.`);
+                        return;
+                    }
+                    if(!Number(str)) {
+                        getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[9].Header}이 숫자가 아닙니다.\n import를 취소합니다.`);
+                        return;
+                    }
+                    obj[columns[9].accessor] = str;
 
                     console.log(obj)
                     tempDbData.push(obj);
                     console.log(tempDbData);
                     console.log(columns2);
                     // PWS 리스트
-                    for (let c = 2; c <= 14; c++) {
+                    for (let c = 2; c < columns2.length+2; c++) {
                         let strDB = columns2[c - 2].Header;
                         strDB = strDB.replace(/\n/g, "");
                         strDB = strDB.replace(/\s*/g, "");
@@ -443,31 +439,16 @@ function HandOver({ account }) {
                             return;
                         }
                     }
-
-                    for (let r = 7; r <= 17; r++) {
-                        let strDB = columns2[r + 6].Header;
-                        strDB = strDB.replace(/\n/g, "");
-                        strDB = strDB.replace(/\s*/g, "");
-                        let strExcel = sheet.getRow(r).getCell(15).toString();
-                        strExcel = strExcel.replace(/\n/g, "");
-                        strExcel = strExcel.replace(/\s*/g, "");
-                        if (!strExcel.includes(strDB)) {
-                            console.log(columns2[r + 6].Header, ' : ', sheet.getRow(r).getCell(15).toString())
-                            console.log(strDB, ' : ', strExcel)
-                            getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. ${strDB}:${strExcel}`);
-                            return;
-                        }
-                    }
                     
                     for (let r = 7; r <= 6 + Number(tempDbData[0]['quantity']); r++) {
                         let obj2 = {};
-                        for (let c = 2; c < 14; c++) {
+                        for (let c = 2; c < columns2.length+2; c++) {
 
                             let str = sheet.getRow(r).getCell(c).toString();
                             str = str.replace(/\n/g, ""); // 개행문자 제거
                             str = str.trim();             // 양쪽 공백 제거
 
-                            if (str === '') {
+                            if (str === '' && columns2[c-2].accessor !== 'note') {  // 비고 빈칸 허용
                                 getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 ${columns2[c - 2].Header}가 빈칸입니다.\n import를 취소합니다.`);
                                 return;
                             }
@@ -485,21 +466,9 @@ function HandOver({ account }) {
                                 obj2[columns2[c - 2].accessor] = str;
                         }
 
-                        for (let r = 7; r <= 17; r++) {
-                            let str = sheet.getRow(r).getCell(16).toString();
-                            str = str.replace(/\n/g, ""); // 개행문자 제거
-                            str = str.trim();             // 양쪽 공백 제거
-
-                            if (str === '_x000d_' || str === '')
-                                obj2[columns2[r + 6].accessor] = null;
-
-                            else
-                                obj2[columns2[r + 6].accessor] = str;
-                        }
-
                         obj2['department'] = tempDbData[0]['department'];
                         obj2['writer'] = tempDbData[0]['writer'];
-                        obj2['provisiondate'] = tempDbData[0]['provisiondate'];
+                        obj2['returndate'] = tempDbData[0]['returndate'];
 
                         tempDbData2.push(obj2);
                     }
@@ -595,10 +564,10 @@ function HandOver({ account }) {
 
             // addWorksheet() 함수를 사용하여 엑셀 시트를 추가한다.
             // 엑셀 시트는 순차적으로 생성된다.
-            workbook.addWorksheet('PWS지급');
+            workbook.addWorksheet('반납PWS');
 
             // 1. getWorksheet() 함수에서 시트 명칭 전달
-            const sheetOne = workbook.getWorksheet('PWS지급');
+            const sheetOne = workbook.getWorksheet('반납PWS');
 
             sheetOne.columns = columns.map(item => {
                 let obj = {};
@@ -650,7 +619,7 @@ function HandOver({ account }) {
 
             workbook.xlsx.writeBuffer().then((data) => {
                 const blob = new Blob([data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-                saveFile(blob, `PWS 장비 인수/인계 확인서 리스트${currentDayFormat}`);
+                saveFile(blob, `반납 PWS 장비 인수/인계 확인서 리스트${currentDayFormat}`);
             })
             setIsActive(false);
         } catch (error) {
@@ -690,7 +659,7 @@ function HandOver({ account }) {
         // 로컬 스토리지에서 데이터 삭제
         localStorage.removeItem('ACCESS_TOKEN');
         localStorage.removeItem('LOGIN_USERNAME');
-        localStorage.removeItem('SEARCHTERM_HANDOVER');
+        localStorage.removeItem('SEARCHTERM_RETURNFORM');
     };
     console.log(account);
     return (
@@ -737,10 +706,10 @@ function HandOver({ account }) {
                 onClick={(event) => {
                     event.target.value = null
                 }} ref={$fileInput} hidden></input>
-            <TableHandOver columns={columns} columns2={columns2} minCellWidth={50} data={data} data2={data2} dataWasFiltered={dataWasFiltered} doRefresh={doRefresh} rf={refresh} account={account} />
+            <TableReturnForm columns={columns} columns2={columns2} minCellWidth={50} data={data} data2={data2} dataWasFiltered={dataWasFiltered} doRefresh={doRefresh} rf={refresh} account={account} />
         </>
 
     );
 }
 
-export default HandOver;
+export default ReturnForm;

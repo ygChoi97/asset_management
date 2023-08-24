@@ -77,14 +77,22 @@ export default function Menu() {
                                 매각
                             </Link>
                         </li>
-                        {/* <li className="menu-item">
+                        <li className="menu-item">
                             <Link
                                 to="/handover" state = {{ previousPath: pathname}}
                                 className={`menu-link${location.pathname === '/handover' ? ' menu-link--active' : ''}`}
                             >
-                                인수인계
+                                지급 확인서
                             </Link>
-                        </li> */}
+                        </li>
+                        <li className="menu-item">
+                            <Link
+                                to="/return_form" state = {{ previousPath: pathname}}
+                                className={`menu-link${location.pathname === '/return_form' ? ' menu-link--active' : ''}`}
+                            >
+                                반납 확인서
+                            </Link>
+                        </li>
                         <li className="menu-item">
                             <Link
                                 to="/retireedisk" state = {{ previousPath: pathname}}
