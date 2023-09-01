@@ -97,7 +97,7 @@ export default function ReturnFormDetailPage({ data, columns, columns2, doRefres
 
             // addWorksheet() 함수를 사용하여 엑셀 시트를 추가한다.
             // 엑셀 시트는 순차적으로 생성된다.
-            workbook.addWorksheet('반납 PWS 장비 인수인계 확인서');
+            workbook.addWorksheet('PWS 장비 인수인계 확인서');
 
             
 
@@ -350,7 +350,7 @@ export default function ReturnFormDetailPage({ data, columns, columns2, doRefres
 
             workbook.xlsx.writeBuffer().then((data1) => {
                 const blob = new Blob([data1], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-                saveFile(blob, `반납 PWS 장비 인수/인계 확인서(${data[0].department}_${data[0].writer}_${data[0].returndate})`);
+                saveFile(blob, `PWS장비인수인계_확인서_반납(${data[0].department}_${data[0].writer}_${data[0].returndate})`);
             })
 
         } catch (error) {

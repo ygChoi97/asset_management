@@ -362,7 +362,7 @@ export default function HandOverDetailPage({ data, columns, columns2, doRefresh,
 
             workbook.xlsx.writeBuffer().then((data1) => {
                 const blob = new Blob([data1], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-                saveFile(blob, `PWS 장비 인수/인계 확인서 리스트(${data[0].applicant_team}_${data[0].applicant}_${data[0].applicant_date})`);
+                saveFile(blob, `PWS장비인수인계_확인서_지급(${data[0].applicant_team}_${data[0].applicant}_${data[0].applicant_date})`);
             })
 
         } catch (error) {
