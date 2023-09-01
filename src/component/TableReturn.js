@@ -128,7 +128,7 @@ function TableReturn({ columns, minCellWidth, data, classifications, models, are
             {/* {searchs} */}
             <div style={{ width: '100vw', height: `calc(100vh - 287px)`, overflow: 'hidden' }}>
             <div ref={tableContainerElement} style={{ width: '100%',height: `calc(100vh - 287px)`, overflowX: 'auto' }}>
-                <table className="return-table" style={styleTable} ref={tableElement} {...getTableProps()} >
+                <table className="layout-table" style={styleTable} ref={tableElement} {...getTableProps()} >
                     <thead>
                         {/* <tr>            
                         <th

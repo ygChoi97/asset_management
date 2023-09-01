@@ -134,11 +134,11 @@ function TableReturnForm({ columns, columns2, minCellWidth, data, data2, areas, 
         <div style={{display: 'flex', flexDirection: 'column',alignItems: 'center'}}>
             <ReturnFormDetailPage data={writerInfo} columns={columns} columns2={columns2} doRefresh={doRefresh} rf={rf} doClose={doClose} />
             {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchReturnForm column1={'department'} column2={'writer'} column3={'returndate'}  areas={areas} onSubmit={setFilter} />
+            <SearchReturnForm column1={'department'} column2={'writer'} column3={'returndate'}  onSubmit={setFilter} />
             {/* {searchs} */}
             <div style={{ width: '100vw', height: `calc(100vh - 215px)`, overflow: 'hidden' }}>
             <div ref={tableContainerElement} style={{ width: '100%',height: `calc(100vh - 215px)`, overflowX: 'auto' }}>
-                <table className="return-table" style={styleTable} ref={tableElement} {...getTableProps()} >
+                <table className="layout-table" style={styleTable} ref={tableElement} {...getTableProps()} >
                     <thead>
                         {/* <tr>            
                         <th

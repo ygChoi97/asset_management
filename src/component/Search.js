@@ -1464,37 +1464,37 @@ export function SearchHarddisk({ column1, column2, column3, column4, column5, co
 }
 
 
-export function SearchHandOver({ column1, column2, column3, areas, onSubmit }) {
+export function SearchHandOver({ column1, column2, column3, onSubmit }) {
 
-  const [department, setDepartment] = useState('');
-  const [writer, setWriter] = useState('');
-  const [provisiondateSD, setProvisiondateSD] = useState('');
-  const [provisiondateED, setProvisiondateED] = useState('');
+  const [applicant_team, setApplicant_team] = useState('');
+  const [applicant, setApplicant] = useState('');
+  const [applicant_dateSD, setApplicant_dateSD] = useState('');
+  const [applicant_dateED, setApplicant_dateED] = useState('');
 
   const btnRef = useRef(null);
 
-  const departmentHandler = (e) => {
-    setDepartment(e.target.value);
+  const applicant_teamHandler = (e) => {
+    setApplicant_team(e.target.value);
   };
 
-  const writerHandler = (e) => {
-    setWriter(e.target.value);
+  const applicantHandler = (e) => {
+    setApplicant(e.target.value);
   };
 
 
-  const provisiondateSDHandler = (e) => {
-    setProvisiondateSD(e.target.value);
+  const applicant_dateSDHandler = (e) => {
+    setApplicant_dateSD(e.target.value);
   };
 
-  const provisiondateEDHandler = (e) => {
-    setProvisiondateED(e.target.value);
+  const applicant_dateEDHandler = (e) => {
+    setApplicant_dateED(e.target.value);
   };
 
   const resetHandler = (event) => {
-    setDepartment('');
-    setWriter('');
-    setProvisiondateSD('');
-    setProvisiondateED('');
+    setApplicant_team('');
+    setApplicant('');
+    setApplicant_dateSD('');
+    setApplicant_dateED('');
   }
 
   const hSubmit = (event) => {
@@ -1506,12 +1506,12 @@ export function SearchHandOver({ column1, column2, column3, areas, onSubmit }) {
     onSubmit(column3, (old = []) => [event.target.elements[3].value ? event.target.elements[3].value.trim() : undefined, old[1]]);
     onSubmit(column3, (old = []) => [event.target.elements[2].value ? event.target.elements[2].value.trim() : undefined, old[0]]);
 
-    if (department !== '' || writer !== '' || provisiondateSD !== '' || provisiondateED !== '') {
+    if (applicant_team !== '' || applicant !== '' || applicant_dateSD !== '' || applicant_dateED !== '') {
       const state = {
-        department: department,
-        writer: writer,
-        provisiondateSD: provisiondateSD,
-        provisiondateED: provisiondateED,
+        applicant_team: applicant_team,
+        applicant: applicant,
+        applicant_dateSD: applicant_dateSD,
+        applicant_dateED: applicant_dateED,
       };
       // 상태값이 변경될 때마다 로컬 스토리지에 저장
       const stateString = JSON.stringify(state);
@@ -1532,10 +1532,10 @@ export function SearchHandOver({ column1, column2, column3, areas, onSubmit }) {
     if (stateString) {
       const state = JSON.parse(stateString);
 
-      if (state.department) setDepartment(state.department);
-      if (state.writer) setWriter(state.writer);
-      if (state.provisiondateSD) setProvisiondateSD(state.provisiondateSD);
-      if (state.provisiondateED) setProvisiondateED(state.provisiondateED);
+      if (state.applicant_team) setApplicant_team(state.applicant_team);
+      if (state.applicant) setApplicant(state.applicant);
+      if (state.applicant_dateSD) setApplicant_dateSD(state.applicant_dateSD);
+      if (state.applicant_dateED) setApplicant_dateED(state.applicant_dateED);
 
       if (btnRef.current) {
         const timeoutId = setTimeout(() => {
@@ -1552,12 +1552,12 @@ export function SearchHandOver({ column1, column2, column3, areas, onSubmit }) {
       <div className="searchFrm">
         <div>
           <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <div className="filterItem"><label htmlFor='department'>부서명</label><input className='underline' id='department' name={column1} placeholder='' onChange={departmentHandler} value={department} /></div>
-            <div className="filterItem"><label htmlFor='idasset'>작성자</label><input className='underline' id='writer' name={column2} placeholder='' onChange={writerHandler} value={writer} /></div>
-            <div className="filterItem"><label htmlFor='provisiondate'>지급일자</label>
-              <input className='selectDate' id='provisiondateSD' name={column3} placeholder='' type='date' onChange={provisiondateSDHandler} value={provisiondateSD} />
+            <div className="filterItem"><label htmlFor='applicant_team'>팀명</label><input className='underline' id='applicant_team' name={column1} placeholder='' onChange={applicant_teamHandler} value={applicant_team} /></div>
+            <div className="filterItem"><label htmlFor='applicant'>신청자</label><input className='underline' id='applicant' name={column2} placeholder='' onChange={applicantHandler} value={applicant} /></div>
+            <div className="filterItem"><label htmlFor='applicant_date'>신청일</label>
+              <input className='selectDate' id='applicant_dateSD' name={column3} placeholder='' type='date' onChange={applicant_dateSDHandler} value={applicant_dateSD} />
               <span>~</span>
-              <input className='selectDate' id='provisiondateED' name={column3} placeholder='' type='date' onChange={provisiondateEDHandler} value={provisiondateED} />
+              <input className='selectDate' id='applicant_dateED' name={column3} placeholder='' type='date' onChange={applicant_dateEDHandler} value={applicant_dateED} />
             </div>
           </div>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -1570,7 +1570,7 @@ export function SearchHandOver({ column1, column2, column3, areas, onSubmit }) {
   );
 }
 
-export function SearchReturnForm({ column1, column2, column3, areas, onSubmit }) {
+export function SearchReturnForm({ column1, column2, column3, onSubmit }) {
 
   const [department, setDepartment] = useState('');
   const [writer, setWriter] = useState('');

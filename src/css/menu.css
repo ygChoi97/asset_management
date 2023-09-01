@@ -9,9 +9,16 @@ body {
     right: 0;
     font-family: Arial Rounded MT Bold;
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     background-color: lightslategray;
+    overflow-x: auto;
+    margin: 0 5px;
+
     /*#9e4a97; #8f4288*/
+}
+
+.menu::-webkit-scrollbar{
+  /* display:none; */
 }
 
 .menu-list {
@@ -24,6 +31,7 @@ body {
 
 .menu-item {
     margin: 0 35px;
+    /* margin: auto; */
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;

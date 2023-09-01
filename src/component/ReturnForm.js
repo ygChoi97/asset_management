@@ -227,7 +227,7 @@ function ReturnForm({ account }) {
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strExcel.toUpperCase() !== '반납PWS장비인수/인계확인서') {
-                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                        getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. (A1셀 : 반납 PWS 장비 인수/인계 확인서 가 아님) 파일을 다시 선택해주세요.`);
                         return;
                     }
 
@@ -235,8 +235,8 @@ function ReturnForm({ account }) {
                     strExcel = sheet.getRow(2).getCell(2).toString();   // 지역
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
-                    if (strDB !== strExcel) {
-                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                    if (strDB !== strExcel) {                        
+                        getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. B2셀 불일치 (${strDB}:${strExcel})`);
                         return;
                     }
 
@@ -245,7 +245,7 @@ function ReturnForm({ account }) {
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
-                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                        getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. F2셀 불일치 (${strDB}:${strExcel})`);
                         return;
                     }
 
@@ -348,7 +348,7 @@ function ReturnForm({ account }) {
                     str = str.replace(/\n/g, ""); // 개행문자 제거
                     str = str.trim();             // 양쪽 공백 제거
                     if (str === '') {
-                        getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[2].Header}이 빈칸입니다.\n import를 취소합니다.`);
+                        getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[2].Header}가 빈칸입니다.\n import를 취소합니다.`);
                         return;
                     }
                     obj[columns[2].accessor] = str;
@@ -366,7 +366,7 @@ function ReturnForm({ account }) {
                     str = str.replace(/\n/g, ""); // 개행문자 제거
                     str = str.trim();             // 양쪽 공백 제거
                     if (str === '') {
-                        getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[4].Header}이 빈칸입니다.\n import를 취소합니다.`);
+                        getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[4].Header}가 빈칸입니다.\n import를 취소합니다.`);
                         return;
                     }
                     obj[columns[4].accessor] = str;
@@ -375,7 +375,7 @@ function ReturnForm({ account }) {
                     str = str.replace(/\n/g, ""); // 개행문자 제거
                     str = str.trim();             // 양쪽 공백 제거
                     if (str === '') {
-                        getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[5].Header}이 빈칸입니다.\n import를 취소합니다.`);
+                        getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[5].Header}가 빈칸입니다.\n import를 취소합니다.`);
                         return;
                     }
                     obj[columns[5].accessor] = new Date(str);
@@ -401,10 +401,10 @@ function ReturnForm({ account }) {
                     str = sheet.getRow(4).getCell(13).toString();    // SAP승인
                     str = str.replace(/\n/g, ""); // 개행문자 제거
                     str = str.trim();             // 양쪽 공백 제거
-                    if (str === '') {
-                        getConfirmationOK(`실패 : 선택한 엑셀파일의 ${columns[8].Header}이 빈칸입니다.\n import를 취소합니다.`);
-                        return;
-                    }
+                    if (str === '') 
+                        obj[columns[8].accessor] = null;    // SAP승인 빈칸 허용            
+                    else
+
                     obj[columns[8].accessor] = str;
 
                     str = sheet.getRow(4).getCell(18).toString();   // 수량
@@ -425,17 +425,16 @@ function ReturnForm({ account }) {
                     console.log(tempDbData);
                     console.log(columns2);
                     // PWS 리스트
+                    const columnsTitle = 6;
                     for (let c = 2; c < columns2.length+2; c++) {
                         let strDB = columns2[c - 2].Header;
                         strDB = strDB.replace(/\n/g, "");
                         strDB = strDB.replace(/\s*/g, "");
-                        let strExcel = sheet.getRow(6).getCell(c).toString();
+                        let strExcel = sheet.getRow(columnsTitle).getCell(c).toString();
                         strExcel = strExcel.replace(/\n/g, "");
                         strExcel = strExcel.replace(/\s*/g, "");
-                        if (strDB !== strExcel) {
-                            console.log(columns2[c - 2].Header, ' : ', sheet.getRow(6).getCell(c).toString())
-                            console.log(strDB, ' : ', strExcel)
-                            getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. ${strDB}:${strExcel}`);
+                        if (!strExcel.includes(strDB)) {
+                            getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. ${columnsTitle}행${c}열 불일치 (${strDB}:${strExcel})`);
                             return;
                         }
                     }
@@ -448,8 +447,14 @@ function ReturnForm({ account }) {
                             str = str.replace(/\n/g, ""); // 개행문자 제거
                             str = str.trim();             // 양쪽 공백 제거
 
-                            if (str === '' && columns2[c-2].accessor !== 'note') {  // 비고 빈칸 허용
-                                getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 ${columns2[c - 2].Header}가 빈칸입니다.\n import를 취소합니다.`);
+                            if (str === '' && columns2[c-2].accessor !== 'note' && columns2[c-2].accessor !== 'retireedate') {  // 퇴직일, 비고 빈칸 허용
+                                const strHeader = columns2[c-2].Header;
+                                const lastChar = strHeader.charCodeAt(strHeader.length-1);
+                                console.log(`${strHeader} - ${lastChar} : ${parseInt(((lastChar - 44032) % (21 * 28)) % 28)}`)
+                                if(parseInt(((lastChar - 44032) % (21 * 28)) % 28) <= 0)
+                                    getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 '${columns2[c - 2].Header}'가 빈칸입니다. import를 취소합니다.`);
+                                else
+                                    getConfirmationOK(`실패 : 선택한 엑셀파일의 ${r}번째 행의 '${columns2[c - 2].Header}'이 빈칸입니다. import를 취소합니다.`);
                                 return;
                             }
 
@@ -473,7 +478,7 @@ function ReturnForm({ account }) {
                         tempDbData2.push(obj2);
                     }
                     console.log(tempDbData[0]);
-
+                    console.log(tempDbData2);
                     fetch(BASE_URL + `/import`, {
                         method: 'POST',
                         headers: {
@@ -691,12 +696,12 @@ function ReturnForm({ account }) {
                                             <button className="btnImportDisabled" onClick={importHandler} disabled={true}> Import data to DB</button>
                                         </div>
                                     </li>}
-                                <li>
+                                {/* <li>
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
                                         <img src={DBToExcel} alt="DBToExcel" width='20%' />
                                         <button className="btnImport" onClick={exportHandler}>Export data from DB</button>
                                     </div>
-                                </li>
+                                </li> */}
                             </ul>
                         </nav>
                     </div>

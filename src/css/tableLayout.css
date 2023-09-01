@@ -2,7 +2,7 @@ body {
   height: 100%;
 }
 
-.return-table {
+.layout-table {
   margin: 0 0;
   font-size: 0.9rem;
   font-family: sans-serif;
@@ -16,13 +16,13 @@ body {
   grid-template-rows: minmax(35px, 35px);
 }
 
-.return-table thead,
-.return-table tbody,
-.return-table tr {
+.layout-table thead,
+.layout-table tbody,
+.layout-table tr {
   display: contents;
 }
 
-.return-table thead th {
+.layout-table thead th {
   border: 1px solid #dddddd;
   color: #ffffff;
   padding: 8px;
@@ -35,48 +35,48 @@ body {
   max-height: 35px;
 }
 
-.return-table th span {
+.layout-table th span {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   display: block;
 }
 
-.return-table td {
+.layout-table td {
   padding: 4px 10px;
   border-top: 1px solid #dddddd;
   border-right: 1px solid #fcfbfb;
   font-size: 0.7rem;
 }
 
-.return-table td span {
+.layout-table td span {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   display: block;
 }
 
-.return-table tbody tr {
+.layout-table tbody tr {
   border-bottom: 1px solid #dddddd;
   height: 23px;
   max-height: 35px;
 }
 
-.return-table tbody tr:nth-of-type(even) > td {
+.layout-table tbody tr:nth-of-type(even) > td {
   background-color: #faf8f8;
 }
 
-.return-table tbody tr:hover > td{
+.layout-table tbody tr:hover > td{
   cursor: pointer;
   background-color: lightskyblue;
   /* color: red; */
 }
 
-.return-table tbody tr:last-of-type {
+.layout-table tbody tr:last-of-type {
   border-bottom: 2px solid #34343b;
 }
 
-.return-table::-webkit-scrollbar {
+.layout-table::-webkit-scrollbar {
   /* display: none; */
 }
 .resize-handle {

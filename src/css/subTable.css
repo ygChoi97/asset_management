@@ -33,6 +33,7 @@ body {
   position: sticky;
   top: 0px;
   background-color: #66bc7b;
+  /* background-color: #03c55c; */
   min-width: 30px;
   max-height: 35px;
 }

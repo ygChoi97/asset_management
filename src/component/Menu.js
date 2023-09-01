@@ -40,7 +40,7 @@ export default function Menu() {
     
     return (
         <>
-            <div style={{ display: 'flex', backgroundColor: 'lightslategray', flexDirection: 'row', justifyContent:'space-between', alignItems: 'center', borderBottom: '2px solid' }}>
+            <div style={{ display: 'flex', width: '100%', backgroundColor: 'lightslategray', flexDirection: 'row', justifyContent:'space-between', alignItems: 'center', borderBottom: '2px solid' }}>
                 <div style={{fontSize: '1.2rem', fontWeight: '900', color: 'whitesmoke', fontStyle: 'oblique', textShadow: '2px 2px 3px black', marginLeft: '0.5rem' }}>PWS Asset Manager</div>
                 <nav className="menu">
 

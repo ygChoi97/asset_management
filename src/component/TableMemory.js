@@ -137,7 +137,7 @@ function TableMemory({ columns, minCellWidth, data, classifications, areas, data
             {/* {searchs} */}
             <div style={{ width: '100vw', height: `calc(100vh - 250px)`, overflow: 'hidden' }}>
             <div ref={tableContainerElement} style={{ width: '100%',height: `calc(100vh - 250px)`, overflowX: 'auto' }}>
-                <table className="return-table" style={styleTable} ref={tableElement} {...getTableProps()} >
+                <table className="layout-table" style={styleTable} ref={tableElement} {...getTableProps()} >
                     <thead>
                         {/* <tr>            
                         <th

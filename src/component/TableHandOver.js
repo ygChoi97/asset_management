@@ -6,9 +6,9 @@ import "../css/tableLayout.css";
 import "../css/foot.css";
 import HandOverDetailPage from "./HandOverDetailPage";
 
-function TableHandOver({ columns, columns2, minCellWidth, data, data2, areas, dataWasFiltered, doRefresh, rf, account }) {
+function TableHandOver({ columns, columns2, minCellWidth, data, areas, dataWasFiltered, doRefresh, rf, account }) {
 
-    const [writerInfo, setWriterInfo] = useState([{}]);
+    const [applicantInfo, setApplicantInfo] = useState([{}]);
 
     const [tableHeight, setTableHeight] = useState("auto");
     const [activeIndex, setActiveIndex] = useState(null);
@@ -115,9 +115,9 @@ function TableHandOver({ columns, columns2, minCellWidth, data, data2, areas, da
     }, []);
 
     const handleRowClick = (event, values) => {
-        if (values.writer !== null && values.writer !== '') {
+        if (values.applicant !== null && values.applicant !== '') {
             console.log(values)
-            setWriterInfo([values]);
+            setApplicantInfo([values]);
         }
         else {
             alert('해당 메모리 정보가 조회되지 않았습니다. \n예상치 못한 오류입니다.');
@@ -125,19 +125,19 @@ function TableHandOver({ columns, columns2, minCellWidth, data, data2, areas, da
     };
 
     const doClose = () => {
-        setWriterInfo([{}]);
+        setApplicantInfo([{}]);
     }
 
     console.log('HandOver Table 랜더링');
     return (
         <div style={{display: 'flex', flexDirection: 'column',alignItems: 'center'}}>
-            <HandOverDetailPage data={writerInfo} columns={columns} columns2={columns2} doRefresh={doRefresh} rf={rf} doClose={doClose}></HandOverDetailPage>
+            <HandOverDetailPage data={applicantInfo} columns={columns} columns2={columns2} doRefresh={doRefresh} rf={rf} doClose={doClose}></HandOverDetailPage>
             {/* <Search onSubmit={setGlobalFilter} /> */}
-            <SearchHandOver column1={'department'} column2={'writer'} column3={'provisiondate'}  areas={areas} onSubmit={setFilter} />
+            <SearchHandOver column1={'applicant_team'} column2={'applicant'} column3={'applicant_date'}  onSubmit={setFilter} />
             {/* {searchs} */}
             <div style={{ width: '100vw', height: `calc(100vh - 215px)`, overflow: 'hidden' }}>
             <div ref={tableContainerElement} style={{ width: '100%',height: `calc(100vh - 215px)`, overflowX: 'auto' }}>
-                <table className="return-table" style={styleTable} ref={tableElement} {...getTableProps()} >
+                <table className="layout-table" style={styleTable} ref={tableElement} {...getTableProps()} >
                     <thead>
                         {/* <tr>            
                         <th

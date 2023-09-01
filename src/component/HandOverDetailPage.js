@@ -11,6 +11,7 @@ export default function HandOverDetailPage({ data, columns, columns2, doRefresh,
     const [, , getConfirmationOK, ConfirmationOK] = UseConfirm();
     const [isOpen, setIsOpen] = useState(false);
     const [data2, setData2] = useState([]);
+    const [columns3, setColumns3] = useState([]);   // 출력 안함
 
     function dateFormat(date) {
         let month = date.getMonth() + 1;
@@ -23,8 +24,8 @@ export default function HandOverDetailPage({ data, columns, columns2, doRefresh,
 
     useEffect(() => {
         if (Object.keys(data[0]).length !== 0) {
-            console.log(BASE_URL + `/eqlist/${data[0].writer}/${data[0].department}/${data[0].provisiondate}`)
-            fetch(BASE_URL + `/eqlist/${data[0].writer}/${data[0].department}/${data[0].provisiondate}`, {
+            console.log(BASE_URL + `/eqlist/${data[0].applicant_team}/${data[0].applicant}/${data[0].applicant_date}`)
+            fetch(BASE_URL + `/eqlist/${data[0].applicant_team}/${data[0].applicant}/${data[0].applicant_date}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + ACCESS_TOKEN
@@ -64,12 +65,16 @@ export default function HandOverDetailPage({ data, columns, columns2, doRefresh,
                 })
             setIsOpen(true);
             //     setData()
+            
+            // 번호, 팀명, 신청자 제외 (출력 안함)
+            columns2 = columns2.filter(element => element.accessor !== 'num' && element.accessor !== 'applicant_team' && element.accessor !== 'applicant');
+            setColumns3(columns2);   
         }
     }, [data, rf]);
 
     const onClickCloseHanler = (e) => {
         setIsOpen(!isOpen);
-        doClose();  // writer 초기화
+        doClose();  // 신청자 초기화
     };
 
     const exportHandler = e => {
@@ -175,15 +180,17 @@ export default function HandOverDetailPage({ data, columns, columns2, doRefresh,
             worksheet.getRow(4).height = 30.75;
             worksheet.getRow(5).height = 15;
 
-            worksheet.getCell('B2').value = columns[0].Header;  // 지역
-            worksheet.getCell('D2').value = columns[1].Header;  // 부서명
-            worksheet.getCell('G2').value = columns[2].Header;  // 작성자 
-            worksheet.getCell('L2').value = '연락처';            // 연락처
-            worksheet.getCell('N2').value = columns[3].Header;  // 내선
-            worksheet.getCell('N3').value = columns[4].Header;  // HP
-            worksheet.getCell('B4').value = columns[5].Header;  // 사유
-            worksheet.getCell('G4').value = columns[6].Header;  // 지급일자
-            worksheet.getCell('L4').value = columns[7].Header;  // 수량
+            worksheet.getCell('B2').value = '지역';         // 지역
+            worksheet.getCell('D2').value = '부서명';       // 부서명
+            worksheet.getCell('G2').value = '작성자';       // 작성자 
+            worksheet.getCell('L2').value = '연락처';       // 연락처
+            worksheet.getCell('N2').value = '내선';         // 내선
+            worksheet.getCell('N3').value = 'HP';           // HP
+            worksheet.getCell('B4').value = '사유';         // 사유
+            worksheet.getCell('C4').value = 'PWS 장비 지급';// 사유 value
+            worksheet.getCell('G4').value = '지급일자';     // 지급일자
+            worksheet.getCell('L4').value = '수량';         // 수량
+            worksheet.getCell('O4').value = data2.length;   // 수량 value
             
             ['B2', 'D2', 'G2', 'L2', 'N2', 'N3', 'B4', 'G4', 'L4'].map(key => {
                 worksheet.getCell(key).fill = {
@@ -199,9 +206,23 @@ export default function HandOverDetailPage({ data, columns, columns2, doRefresh,
             worksheet.getRow(6).height = 30.75;
 
             worksheet.mergeCells('O6:P6');
-            for(let i=0; i<13; i++)
-                worksheet.getRow(6).getCell(i+2).value = columns2[i].Header;
-                worksheet.getRow(6).getCell(15).value = '지급관련 정보 및 전달사항';
+            // for (let i = 0; i < 13; i++)
+            //     worksheet.getRow(6).getCell(i + 2).value = columns2[i].Header;
+
+            worksheet.getRow(6).getCell(2).value = '번호';
+            worksheet.getRow(6).getCell(3).value = '사용자';
+            worksheet.getRow(6).getCell(4).value = '사번';
+            worksheet.getRow(6).getCell(5).value = '자산번호';
+            worksheet.getRow(6).getCell(6).value = '관리번호';
+            worksheet.getRow(6).getCell(7).value = 'S/N';
+            worksheet.getRow(6).getCell(8).value = '모델명';
+            worksheet.getRow(6).getCell(9).value = `사무실위치(동 층)`;
+            worksheet.getRow(6).getCell(10).value = `모니터1`;
+            worksheet.getRow(6).getCell(11).value = `모니터2`;
+            worksheet.getRow(6).getCell(12).value = `키보드`;
+            worksheet.getRow(6).getCell(13).value = `마우스`;
+            worksheet.getRow(6).getCell(14).value = `헤드셋/캠`;
+            worksheet.getRow(6).getCell(15).value = '지급관련 정보 및 전달사항';
             ['B6', 'C6', 'D6', 'E6', 'F6', 'G6', 'H6', 'I6', 'J6', 'K6', 'L6', 'M6', 'N6', 'O6' ].map(key => {
                     worksheet.getCell(key).fill = {
                         type: 'pattern',
@@ -213,35 +234,46 @@ export default function HandOverDetailPage({ data, columns, columns2, doRefresh,
                     worksheet.getCell(key).alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
                 });
             
-            for(let r=7; r<=17; r++) {
-                worksheet.getRow(r).getCell(15).value = columns2[r + 6].Header;
+            worksheet.getRow(7).getCell(15).value = '장비신청자';
+            worksheet.getRow(8).getCell(15).value = '장비신청자 연락처';
+            worksheet.getRow(9).getCell(15).value = '전산담당자';
+            worksheet.getRow(10).getCell(15).value = '전산담당자 연락처';
+            worksheet.getRow(11).getCell(15).value = '실사용자';
+            worksheet.getRow(12).getCell(15).value = '실사용자 연락처';
+            worksheet.getRow(13).getCell(15).value = 'OS 설치 여부';
+            worksheet.getRow(14).getCell(15).value = '메모리 증설';
+            worksheet.getRow(15).getCell(15).value = '디스크 추가1';
+            worksheet.getRow(16).getCell(15).value = '디스크 추가2';
+            worksheet.getRow(17).getCell(15).value = '보관위치';
+
+            for(let r=7; r<=17; r++) {    
                 worksheet.getRow(r).getCell(15).font = { name: '맑은 고딕', size: 9, bold: true };
                 worksheet.getRow(r).getCell(15).alignment = { vertical: 'middle', wrapText: true };
             }
-
-            worksheet.getCell('C2').value = data[0].area;
-            worksheet.getCell('E2').value = data[0].department;
-            worksheet.getCell('H2').value = data[0].writer;
-            worksheet.getCell('O2').value = data[0].extension;
-            worksheet.getCell('O3').value = data[0].hp;
-            worksheet.getCell('C4').value = data[0].reason;
-            worksheet.getCell('H4').value = data[0].provisiondate;
-            worksheet.getCell('O4').value = data[0].quantity;
 
             ['C2', 'E2', 'H2', 'O2', 'O3', 'C4', 'H4', 'O4'].map(key => {
                 worksheet.getCell(key).font = { name: '맑은 고딕', size: 11 };
                 worksheet.getCell(key).alignment = { horizontal: 'center', vertical: 'middle' };
             }); 
-            
-            const keys = Object.keys(data2[0]);
 
-            for(let r=0; r<data2.length; r++)
-            for(let i =0; i<13; i++) {
-                worksheet.getRow(7+r).getCell(i+2).value = data2[r][keys[i]];
+            for (let r = 0; r < data2.length; r++) {
+                // worksheet.getRow(7 + r).getCell(2).value = data2[r]['num'];         // 번호
+                worksheet.getRow(7 + r).getCell(2).value = r+1;                     // 번호
+                worksheet.getRow(7 + r).getCell(3).value = data2[r]['user'];        // 사용자
+                worksheet.getRow(7 + r).getCell(4).value = data2[r]['id'];          // 사번
+                worksheet.getRow(7 + r).getCell(9).value = data2[r]['location'];    // 사무실위치
+                worksheet.getRow(7 + r).getCell(12).value = data2[r]['keyboard'];   // 키보드
+                if (data2[r]['mouse_type'] || data2[r]['mouse_direction'])          // 마우스
+                    worksheet.getRow(7 + r).getCell(13).value = 'O';
+                else
+                    worksheet.getRow(7 + r).getCell(13).value = 'X';
+                worksheet.getRow(7 + r).getCell(14).value = `${data2[r]['headset']}/${data2[r]['webcam']}`; // 헤드셋/캠
             }
 
+            worksheet.getRow(7).getCell(16).value = data[0]['applicant'];
+            worksheet.getRow(9).getCell(16).value = data[0]['it_admin_name'];
+            worksheet.getRow(10).getCell(16).value = data[0]['it_admin_phone'];
             for(let r=7; r<=17; r++) {
-                worksheet.getRow(r).getCell(16).value = data2[0][keys[r+6]];
                 worksheet.getRow(r).getCell(16).font = { name: '맑은 고딕', size: 9, bold: true };
                 worksheet.getRow(r).getCell(16).alignment = { vertical: 'middle', wrapText: true };
             }
@@ -294,6 +326,7 @@ export default function HandOverDetailPage({ data, columns, columns2, doRefresh,
 
             worksheet.mergeCells('D60:F60');
             worksheet.mergeCells('G60:K60');
+            worksheet.getCell('G60').value = data[0]['applicant_team'];    // 장비신청팀
             worksheet.mergeCells('D61:F61');
             worksheet.getCell('D61').value = '(인)';
             worksheet.mergeCells('G61:K61');
@@ -329,7 +362,7 @@ export default function HandOverDetailPage({ data, columns, columns2, doRefresh,
 
             workbook.xlsx.writeBuffer().then((data1) => {
                 const blob = new Blob([data1], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-                saveFile(blob, `PWS 장비 인수/인계 확인서 리스트(${data[0].department}_${data[0].writer}_${data[0].provisiondate})`);
+                saveFile(blob, `PWS 장비 인수/인계 확인서 리스트(${data[0].applicant_team}_${data[0].applicant}_${data[0].applicant_date})`);
             })
 
         } catch (error) {
@@ -351,6 +384,8 @@ export default function HandOverDetailPage({ data, columns, columns2, doRefresh,
         writable.close();
 
     }
+    
+    console.log(data)
     console.log(data2)
     return (
         <div className={isOpen ? "show-page" : "hide-page"}>
@@ -358,7 +393,7 @@ export default function HandOverDetailPage({ data, columns, columns2, doRefresh,
             <SubTable columns={columns} data={data} />
 
             <div style={{width: '100%', overflow: 'auto', margin: '20px 0'}}>
-                <SubTable columns={columns2} data={data2}/>
+                <SubTable columns={columns3} data={data2}/>
             </div>
             <div style={{display: 'flex'}}>
                 <Button variant="contained" color="success" sx={{ width: 80, height: 19, padding: 1, mb: 1, mr: 1 }} onClick={exportHandler}>Export</Button>
