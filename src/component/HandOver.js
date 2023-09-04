@@ -327,12 +327,18 @@ function HandOver({ account }) {
                     console.log(tempDbData[0]);
                     console.log(tempDbData2);
 
+                    const isSameDate = (date1, date2) => {
+                        return date1.getFullYear() === date2.getFullYear()
+                            && date1.getMonth() === date2.getMonth()
+                            && date1.getDate() === date2.getDate();
+                    }
                     // 신청일 불일치 시 import 취소
                     for(let i=0; i<tempDbData2.length; i++) {
-                        if(tempDbData[0].applicant_date !== tempDbData2[i].applicant_date) {                
-                            const date1 = dateFormat(tempDbData[0].applicant_date);
+                        const date1 = dateFormat(tempDbData[0].applicant_date);
+
+                        if(!isSameDate(tempDbData[0].applicant_date, tempDbData2[i].applicant_date)) {                            
                             const lastNum = date1.charAt(date1.length-1);
-                            
+
                             if(lastNum === '2' || lastNum === '4' || lastNum === '5' || lastNum === '9')
                                 getConfirmationOK(`${7+i}행의 신청일이 ${date1}와 일치하지 않습니다. import를 취소합니다.`);    
                             else
