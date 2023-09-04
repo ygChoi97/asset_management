@@ -254,7 +254,7 @@ function ReturnForm({ account }) {
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
-                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                        getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. L2셀 불일치 (${strDB}:${strExcel})`);
                         return;
                     }
 
@@ -263,7 +263,7 @@ function ReturnForm({ account }) {
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
-                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                        getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. Q2셀 불일치 (${strDB}:${strExcel})`);
                         return;
                     }
 
@@ -272,7 +272,7 @@ function ReturnForm({ account }) {
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
-                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                        getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. Q3셀 불일치 (${strDB}:${strExcel})`);
                         return;
                     }
 
@@ -281,7 +281,7 @@ function ReturnForm({ account }) {
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
-                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                        getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. B4셀 불일치 (${strDB}:${strExcel})`);
                         return;
                     }
 
@@ -290,7 +290,7 @@ function ReturnForm({ account }) {
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
-                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                        getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. H4셀 불일치 (${strDB}:${strExcel})`);
                         return;
                     }
 
@@ -299,7 +299,7 @@ function ReturnForm({ account }) {
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
-                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                        getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. J2셀 불일치 (${strDB}:${strExcel})`);
                         return;
                     }
 
@@ -308,7 +308,7 @@ function ReturnForm({ account }) {
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
-                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                        getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. L4셀 불일치 (${strDB}:${strExcel})`);
                         return;
                     }
 
@@ -317,7 +317,7 @@ function ReturnForm({ account }) {
                     strExcel = strExcel.replace(/\n/g, "");
                     strExcel = strExcel.replace(/\s*/g, "");
                     if (strDB !== strExcel) {
-                        getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
+                        getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. P4셀 불일치 (${strDB}:${strExcel})`);
                         return;
                     }
 

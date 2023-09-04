@@ -274,21 +274,11 @@ function HandOver({ account }) {
                         return;
                     }
 
-                    console.log(strTeam)
-                    console.log(arrTeam)
-                    console.log(strApplicant)
-                    console.log(arrApplicant)
-                    console.log(columns2)
-                    // obj[columns2[columns2.length - 2].accessor] = arrTeam[1];         // applicant_team  
-                    // obj[columns2[columns2.length - 1].accessor] = arrApplicant[1];    // applicant
-                    
-                    
-
                     for (let r = 7; r <= 6 + sheet.rowCount; r++) {
                         let obj2 = {};
-                        obj2[columns2[columns2.length - 3].accessor] = (r-6).toString();  // 번호(num)
-                        obj2[columns2[columns2.length - 2].accessor] = arrTeam[1];         // 신청자팀(applicant_team  )
-                        obj2[columns2[columns2.length - 1].accessor] = arrApplicant[1];    // 신청자(applicant)
+                        obj2[columns2[columns2.length - 3].accessor] = (r-6).toString();    // 번호(num)
+                        obj2[columns2[columns2.length - 2].accessor] = arrTeam[1];          // 신청자팀(applicant_team  )
+                        obj2[columns2[columns2.length - 1].accessor] = arrApplicant[1];     // 신청자(applicant)
                         
                         if(sheet.getRow(r).getCell(1).toString() === '') break;
                         for (let c = 1; c <= columns2.length - 3; c++) {
@@ -297,7 +287,7 @@ function HandOver({ account }) {
                             str = str.replace(/\n/g, ""); // 개행문자 제거
                             str = str.trim();             // 양쪽 공백 제거
 
-                            if (str === '' && columns2[c - 1].accessor !== 'mouse_type' && columns2[c-2].accessor !== 'mouse_direction') {  // 마우스타입, 마우스구분 빈칸 허용
+                            if (str === '' && columns2[c - 1].accessor !== 'mouse_type' && columns2[c - 1].accessor !== 'mouse_direction') {  // 마우스타입, 마우스구분 빈칸 허용
                                 const strHeader = columns2[c - 1].Header;
                                 const lastChar = strHeader.charCodeAt(strHeader.length-1);
                                 console.log(`${strHeader} - ${lastChar} : ${parseInt(((lastChar - 44032) % (21 * 28)) % 28)}`)
@@ -312,7 +302,7 @@ function HandOver({ account }) {
                                 if (str !== '')
                                     obj2[columns2[c - 1].accessor] = new Date(sheet.getRow(r).getCell(c));
                                 else
-                                    obj2[columns2[c - 1].accessor] = null;
+                                    obj2[columns2[c - 1].accessor] = null;  
                             }
                             else if (str === '_x000d_' || str === '')
                                 obj2[columns2[c - 1].accessor] = null;
@@ -321,9 +311,7 @@ function HandOver({ account }) {
                                 obj2[columns2[c - 1].accessor] = str;
                         }
 
-                        tempDbData2.push(obj2);
-
-                        
+                        tempDbData2.push(obj2);   
                     }
 
                     for(let i=0; i<columns.length; i++) {
@@ -338,6 +326,20 @@ function HandOver({ account }) {
                     tempDbData.push(obj);
                     console.log(tempDbData[0]);
                     console.log(tempDbData2);
+
+                    // 신청일 불일치 시 import 취소
+                    for(let i=0; i<tempDbData2.length; i++) {
+                        if(tempDbData[0].applicant_date !== tempDbData2[i].applicant_date) {                
+                            const date1 = dateFormat(tempDbData[0].applicant_date);
+                            const lastNum = date1.charAt(date1.length-1);
+                            
+                            if(lastNum === '2' || lastNum === '4' || lastNum === '5' || lastNum === '9')
+                                getConfirmationOK(`${7+i}행의 신청일이 ${date1}와 일치하지 않습니다. import를 취소합니다.`);    
+                            else
+                                getConfirmationOK(`${7+i}행의 신청일이 ${date1}과 일치하지 않습니다. import를 취소합니다.`);
+                            return;
+                        }
+                    }
 
                     fetch(BASE_URL + `/import`, {
                         method: 'POST',

@@ -172,11 +172,9 @@ function RetireeDisk({ account }) {
             let strExcel = sheet.getRow(1).getCell(c).toString();
             strExcel = strExcel.replace(/\n/g, "");
             strExcel = strExcel.replace(/\s*/g, "");
-            if (strDB !== strExcel) {
-                console.log(columns[c - 1].Header, ' : ' ,sheet.getRow(1).getCell(c).toString())
-                console.log(strDB, ' : ' ,strExcel)
-                getConfirmationOK('해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요.');
-                return;
+            if (!strExcel.includes(strDB)) {
+              getConfirmationOK(`해당 파일의 포맷은 import 불가합니다. 파일을 다시 선택해주세요. 1행${c}열 불일치 (${strDB}:${strExcel})`);
+              return;
             }
         }
 
